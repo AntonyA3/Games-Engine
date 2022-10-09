@@ -21,8 +21,11 @@ How can I add an openGL rendering within the SDL Window, then create an abstract
 # Testing Implications
 - Integration Testing 
 - A grey screen is displayed
--
+
+Relevant Test
+![Relevent Tests](tests\SDL_Window_Wrapper)
 # Maintenance Implications
+- I might need a sequence Diagram 
 
 # Next steps
 - ImGUI Implementation

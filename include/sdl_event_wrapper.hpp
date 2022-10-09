@@ -1,5 +1,5 @@
-#ifndef GAMES_ENGINE_SDL_EVENT_WRAPPER
-#define GAMES_ENGINE_SDL_EVENT_WRAPPER
+#ifndef GAMES_ENGINE_SDL_EVENT_WRAPPER_HPP
+#define GAMES_ENGINE_SDL_EVENT_WRAPPER_HPP
 
 #include <SDL2/SDL.h>
 #include <string>
@@ -14,7 +14,4 @@ public:
     SDL_Event& nextEvent();
 
 };
-
-
-
 #endif

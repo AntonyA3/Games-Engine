@@ -8,7 +8,6 @@ int main(int argc, char const *argv[])
 {
     SDLWindowWrapper sdl_window;
     sdl_window.create();
-
     while (sdl_window.isActive())
     {
         while (sdl_window.polledEvent())
@@ -25,6 +24,9 @@ int main(int argc, char const *argv[])
                 break;
             }
         }
+
+        sdl_window.clear();
+        sdl_window.swap();
         
     }
 
