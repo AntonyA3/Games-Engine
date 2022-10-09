@@ -3,7 +3,7 @@
 SDLWindowWrapper::SDLWindowWrapper(/* args */)
 {
     m_window = NULL;
-    m_active = true;
+    m_active = false;
     m_init_flags = SDL_INIT_VIDEO;
     m_title = std::string("Sample Title");
     m_width = 640;

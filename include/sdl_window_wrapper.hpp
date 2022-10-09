@@ -2,6 +2,10 @@
 #ifndef GAMES_ENGINE_SDL_WINDOW_WRAPPER
 #define GAMES_ENGINE_SDL_WINDOW_WRAPPER
 
+#ifndef SDL_MAIN_HANDLED
+#define SDL_MAIN_HANDLED
+#endif
+
 #include <SDL2/SDL.h>
 #include <string>
 #include <sdl_event_wrapper.hpp>
