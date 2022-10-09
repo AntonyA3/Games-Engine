@@ -1,0 +1,85 @@
+Sub Tasks
+None
+
+Summary
+Add the progress tags and the task tags to focalboard
+
+Analysis / Preconditions / Postcondition
+Based on the task template specified in the Breakout Clone Game, Planning document, Which is subject to change if the task if there is reason to suggest that the task template is not optimal compared to another task template
+
+Algorithms / Approach
+N/A
+
+Test Design / Psuedo Implementation / Mathmatical Model
+o Separate Board for Task, Bugs and Axioms, as focal board is only able to have one type of ticket for each board
+§ Axioms
+· Active Axioms
+· Archived Axioms
+· Content
+o Name
+o Description
+o Reasoning
+o Implementation
+§ Tasks
+· Backlog
+· In Progress
+· Analysis
+· Design
+· Implementation
+· Testing
+· Evaluating
+· Done
+· Content
+o Name
+o Summary
+o Category
+§ Dev Process
+§ Low Level Behaviour
+§ High Level Game Rule
+§ Refactor
+§ Behaviour Optimisation
+§ New Abstraction
+§ Extending Abstraction
+o Subtask
+o Approach / Research
+§ Algorithm used
+o Analysis
+o Test Analysis
+§ Test types used
+§ Precondition
+§ Postcondition
+§ Input
+§ Output
+§
+o Design / Mathematical Model / Mathematical Constraints
+o Test Design
+o Pseudo Implementation
+o Implementation Comments
+o Task Evaluation / Post-mortem
+o Completion Status
+§ Bugs
+· Defect
+· Fixed
+· Content
+o Name
+o Description
+o Assumption of Bug Cause
+o How Bug was found
+o Bug Fix Method / Evaluation
+o
+o Distinct colour coded stages
+
+Test Design
+o Precondition: There is a default Kanban board properties that are not the ones that I need
+o Postcondition: I can create new tasks with the correct task properties
+§ Pass condition: It is false that I cannot select a category in the task content : Passed
+§ Pass condition: It is false that I cannot add images into the descriptive sections: Passed
+§ Pass Condition: I have been able to write this setup focal board task: Passed
+o Input: N/A
+o Output: N/A
+
+
+Task Evaluation
+I did not expect any problem to occur with this task, however, this task is an example of the task generation workdflow. Though I should create a default task as a stub, in order to copy the description
+
+
