@@ -17,14 +17,15 @@ What I did or will do
 ## Implementation Implications
 These files are relevant
 
-
 ## Testing Implications
  - By integration testing 
  - It is expected for
  - The demo window to be able to be displayed
+ - I was able to display the demo window
 
 ## Maintenance Implications
 - I will likely be adding a new imgui Window
 
 ## Next steps
+- Flatten the class structure by removing unnessessary compositional dependencies
 - Start trying to create a shader that can render polygons

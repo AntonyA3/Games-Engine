@@ -38,16 +38,14 @@ void SDLWindowWrapper::create(){
     {
         printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
     }    
-    m_sdl_gl_context_wrapper.create(m_window);
     m_active = true;
-    setColor(m_color.r, m_color.g, m_color.b, m_color.a);
-
+    setColor(m_color.r, m_color.g, m_color.b, m_color.a);   
 }
+
 
 void SDLWindowWrapper::setDimensions(int width, int height){
     m_width = width;
     m_height = height;
-    glViewport(0, 0, m_width, m_height);
 }
 
 void SDLWindowWrapper::setColor(float r ,float g, float b, float a){
@@ -59,13 +57,19 @@ void SDLWindowWrapper::setColor(float r ,float g, float b, float a){
 
 }
 
+int SDLWindowWrapper::getWidth(){
+    return m_width;
+}
+
+int SDLWindowWrapper::getHeight(){
+    return m_height;
+}
+
 void SDLWindowWrapper::clear(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void SDLWindowWrapper::swap(){
-    SDL_GL_SwapWindow(m_window);
-}
+
 
 void SDLWindowWrapper::terminate(){
     m_active = false;
@@ -85,6 +89,12 @@ bool SDLWindowWrapper::polledEvent(){
 }
 
 SDL_Event& SDLWindowWrapper::nextEvent(){
-    return m_sdl_event_wrapper.nextEvent();
+    SDL_Event& event = m_sdl_event_wrapper.nextEvent();
+    return event;
 }
+
+SDL_Window *& SDLWindowWrapper::getWindow(){
+    return m_window;
+}
+
 

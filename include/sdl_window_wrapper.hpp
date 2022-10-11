@@ -10,13 +10,12 @@
 #include <string>
 #include <sdl_event_wrapper.hpp>
 #include <sdl_gl_context_wrapper.hpp>
+#include<dear_imgui_wrapper.hpp>
 #include<GL/glew.h>
-class SDLWindowWrapper
+struct SDLWindowWrapper
 {
-private:
     SDL_Window * m_window;
     SDLEventWrapper m_sdl_event_wrapper;
-    SDLGLContextWrapper m_sdl_gl_context_wrapper;
     bool m_active;
     Uint32 m_init_flags;
     std::string m_title;
@@ -37,12 +36,15 @@ public:
     void clear();
     void swap();
     void setDimensions(int width, int height);
+    int getWidth();
+    int getHeight();
     void setColor(float r ,float g, float b, float a);
     void terminate();
     void destroyAndQuit();
     bool isActive();
     bool polledEvent();
     SDL_Event& nextEvent();
+    SDL_Window *& getWindow();
 };
 
 #endif
