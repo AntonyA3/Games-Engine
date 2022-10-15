@@ -1,0 +1,42 @@
+
+
+
+
+
+Sub Tasks
+SDL_Dynamic linking
+
+Summary
+Analysis / Preconditions / Postcondition
+SDL has usuful features for creating simulation software in windows, I have read the documentation and have knowlege of setting it up.
+
+I have set up SDL before, though I will use dynamic linking, so I should tread carefully, since i usually statically link SDL2
+
+-I'm following these instructions https://lazyfoo.net/tutorials/SDL/01_hello_SDL/windows/mingw/index.php
+
+Actually I have always been dynamically linking SDL2
+
+Algorithms / Approach
+Test Design / Psuedo Implementation / Mathmatical Model
+<S>Unistall old SDL2 dependancies in msys2</S>
+Use the msys2 sdl2 pacman installation
+
+Test Design
+Can I see an SDL Window : Done
+
+with a title, Hello SDL2 : Done
+viewport with any colour (likely black) : Done
+can be closed, : Done
+can be minimise, : Done
+has the expand button : Done
+has resize handles : Done
+at a visible size (likely of 640 by 480) : Done
+Task Evaluation
+I have set an include path for SDL2 make sure that this does not change
+There were some unexpected scenarios that occured when I was working on this task
+Consider making an abstraction,for this that will build the window, based on what can be customised
+Resizable
+Title
+minimizable
+Start Size
+

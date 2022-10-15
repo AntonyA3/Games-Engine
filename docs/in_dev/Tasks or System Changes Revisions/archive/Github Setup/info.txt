@@ -1,0 +1,36 @@
+Sub Tasks
+N/A
+
+Summary
+I need to be able to connect my current git repository to a remote github repository
+
+Analysis / Preconditions / Postcondition
+I have a local git repo, I need a remote git repository that I can use as a backup
+
+Algorithms / Approach
+N/A
+
+Test Design / Psuedo Implementation / Mathmatical Mode
+Follow the steps to set up a git repository from my local repository
+
+Test Design
+Description: An engine for a breakout clone game, that will be expanded to create other styles of 2D games.
+git commit "Created Github Repository"
+rename git branch -m "master" "dev"
+git master branch to dev
+verify name change with git branch
+
+git remote add origin https://github.com/AntonyA3/Games-Engine.git
+Add github.com via windows credential manager image 0
+
+get access rights to repo
+pull from git --allow-unrelated-histories
+
+commit "Integrated github"
+push to origin
+
+verify that this commit has been pushed to github
+
+
+Task Evaluation
+The task was low risk, however it was difficult to complete this, than I expected, because I needed to remember to --allow-unrelated-histories and Set up github credentials with credential manager

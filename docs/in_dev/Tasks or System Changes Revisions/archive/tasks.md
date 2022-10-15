@@ -1,0 +1,11 @@
+Tasks
+- Hello Triangle
+- Generate Rectangle Mesh
+    - Define a Mesh
+    - Create a mesh generator abstraction
+    - create a shader program abstraction
+    - Create an Axis aligned rect
+    - Right Hand Rule face culling test
+    - Imgui Cull Switch
+    - Convert the rectangle from a Rectangle to a Mesh
+- DONE

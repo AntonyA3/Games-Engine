@@ -1,0 +1,23 @@
+Sub Tasks
+None
+
+Summary
+Use git init to setup git on the project level folder and make the first commit
+
+Analysis / Preconditions / Postcondition
+A folder structure with at least a single stub file
+
+Algorithms / Approach
+N/A
+
+Test Design / Psuedo Implementation / Mathmatical Model
+git init
+git add .
+git commit -am "Initial Commit"
+
+Test Design
+git log: will show the commit history, I should see the initial commit
+
+
+Task Evaluation
+Setting up version control was low risk

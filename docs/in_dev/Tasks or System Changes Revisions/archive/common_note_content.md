@@ -1,0 +1,13 @@
+
+- Name
+- Task Number
+- Related Requirements
+- Date Created
+- Risk
+- Summary
+- What I did or will do
+- Design Implications
+- Implementation Implications
+- Testing Implications
+- Maintenance Implications
+- Next steps
