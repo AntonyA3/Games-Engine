@@ -12,38 +12,32 @@
 #include <sdl_gl_context_wrapper.hpp>
 #include<dear_imgui_wrapper.hpp>
 #include<GL/glew.h>
+
 struct SDLWindowWrapper
 {
     SDL_Window * m_window;
-    SDLEventWrapper m_sdl_event_wrapper;
     bool m_active;
     Uint32 m_init_flags;
     std::string m_title;
-    int m_width;
-    int m_height;
-    int m_x_position_flag;
-    int m_y_position_flag;
-    int m_other_flags;
+    int m_width,
+    m_height,
+    m_initial_width,
+    m_initial_height,
+    m_x_position_flag,
+    m_y_position_flag,
+    m_other_flags;
     SDL_bool m_resizable;
-    struct{
-        float r = 0.5f, g = 0.5f, b = 0.5f, a = 1.0f;
-    } m_color;
 
 public:
     SDLWindowWrapper();
     ~SDLWindowWrapper();
     void create();
-    void clear();
-    void swap();
     void setDimensions(int width, int height);
     int getWidth();
     int getHeight();
-    void setColor(float r ,float g, float b, float a);
     void terminate();
-    void destroyAndQuit();
+    void destroy();
     bool isActive();
-    bool polledEvent();
-    SDL_Event& nextEvent();
     SDL_Window *& getWindow();
 };
 

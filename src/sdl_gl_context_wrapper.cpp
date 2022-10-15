@@ -2,11 +2,15 @@
 #include <sdl_gl_context_wrapper.hpp>
 
 SDLGLContextWrapper::SDLGLContextWrapper()
-{
+{   
+    this->m_gl_major_version = 3;
+    this->m_gl_minor_version = 3;
     this->m_renderer = NULL;
 }
 
-void SDLGLContextWrapper::create(SDL_Window * window){
+void SDLGLContextWrapper::create(SDL_Window * window, int gl_major_version, int gl_minor_version){
+    m_gl_major_version = gl_major_version;
+    m_gl_minor_version = gl_minor_version;
     if (m_gl_major_version > 3 || (m_gl_major_version == 3 && m_gl_minor_version >= 3))
     {
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
@@ -27,6 +31,10 @@ void SDLGLContextWrapper::create(SDL_Window * window){
         fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
         exit(1);
     }
+}
+
+SDL_GLContext& SDLGLContextWrapper::getGLContext(){
+    return m_gl_context;
 }
 
 SDLGLContextWrapper::~SDLGLContextWrapper()

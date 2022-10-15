@@ -1,7 +1,0 @@
-Sub Tasks
-Summary
-Analysis / Preconditions / Postcondition
-Algorithms / Approach
-Test Design / Psuedo Implementation / Mathmatical Model
-Test Design
-Task Evaluation

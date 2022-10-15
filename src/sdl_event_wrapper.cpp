@@ -10,7 +10,7 @@ SDLEventWrapper::~SDLEventWrapper()
 }
 
 bool SDLEventWrapper::polledEvent(){
-   SDL_PollEvent(&m_event); 
+   return SDL_PollEvent(&m_event); 
 }
 SDL_Event& SDLEventWrapper::nextEvent(){
     return m_event;
