@@ -3,90 +3,131 @@
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
+#include <glm/gtx/string_cast.hpp>
+
+
 #include <sdl_window_wrapper.hpp>
 #include <sdl_gl_context_wrapper.hpp>
 #include <dear_imgui_demo_window.hpp>
 #include <loader/file_reader.hpp>
-#include <glm/glm.hpp>
 #include <loader/program_loader.hpp>
 #include <mesh.hpp>
-#include <mesh_generator.hpp>
 #include <shader_program.hpp>
 #include <aa_rect.hpp>
-#include <mesh_from_rectangle.hpp>
-
+#include <circle.hpp>
+#include <mesh_data_converter.hpp>
+#include <sdl_gl_context_data.hpp>
+#include <sdl_window_data.hpp>
+#include <complete_window.hpp>
+#include <complete_window_data.hpp>
+#include <sub_renderer.hpp>
+#include <vertex_attribute_data.hpp>
+#include <renderer_data.hpp>
+#include <renderer.hpp>
 #ifndef SHADER_FILE_PATH
 #define SHADER_FILE_PATH "./data/shaders/"
 #endif
 int main(int argc, char const *argv[])
 {
-    SDLWindowWrapper sdl_window;
-    SDLEventWrapper sdl_event_wrapper;
-    SDLGLContextWrapper sdl_gl_context;
-    DearImGuiWrapper imgui_wrapper;
-    DearImGuiDemoWindow demo_window;
+    CompleteWindow complete_window;
+    SDLGLContextData sdl_gl_context_data = {
+        3, 
+        3
+    };
+
+    SDLWindowData sdl_window_data ={
+        SDL_INIT_VIDEO, 
+        std::string("Sample Title"),
+        640,
+        480,
+        SDL_WINDOWPOS_CENTERED,
+        SDL_WINDOWPOS_CENTERED,
+        true,
+        true,
+        SDL_TRUE
+    };
+
+    CompleteWindowData complete_window_data = {
+        sdl_window_data,
+        sdl_gl_context_data
+    };
   
+    complete_window.create(complete_window_data);
+    DearImGuiDemoWindow demo_window;
+    glm::mat4 global_matrix = glm::ortho(0.0f, 480.0f, 640.0f, 0.0f);
     
-    sdl_window.create();
-    sdl_gl_context.create(sdl_window.getWindow(), 3, 3);
- 
-    
-    glViewport(0, 0, sdl_window.getWidth(),sdl_window.getHeight());
+    glViewport(0, 0, 
+        complete_window.m_sdl_window_wrapper.m_width,
+        complete_window.m_sdl_window_wrapper.m_height
+    );
     float opengl_color[4] = {0.5f, 0.5f, 0.5f, 1.0f};
     glClearColor(opengl_color[0], opengl_color[1], opengl_color[2], opengl_color[4]);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-    imgui_wrapper.create(sdl_window.getWindow(), sdl_gl_context.getGLContext());
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    //new Flat Shader
-    ShaderProgram shader_program;
-    {
-        std::string vertex_file = std::string(SHADER_FILE_PATH) + "polygon_position_color.vert";
-        std::string fragment_file = std::string(SHADER_FILE_PATH) +"polygon_position_color.frag";
-        ProgramLoader program_loader;
-        program_loader.load(vertex_file, fragment_file, true);
-        shader_program.program = program_loader.m_program;
-        shader_program.uniform_matrix_location = glGetUniformLocation(shader_program.program, "u_view_mat");
-    }
 
-    //Expect shader to compile
+    std::vector<VertexAttributeData> polygon_vertex_attributes;
+    polygon_vertex_attributes.insert(polygon_vertex_attributes.end(),{{3}, {3}});
+    std::vector<VertexAttributeData> circle_vertex_attributes;
+    circle_vertex_attributes.insert(circle_vertex_attributes.end(),{{3}, {3}, {2}});
+    RendererData renderer_data = {
+        // polygon_renderer_data
+        {
+            // shader_program_data
+            {
+                std::string(SHADER_FILE_PATH) + "polygon_position_color.vert",
+                std::string(SHADER_FILE_PATH) + "polygon_position_color.frag",
+                polygon_vertex_attributes
+            }
 
-    Mesh mesh;
-    mesh.create();
+        },
+        // circle_renderer_data
+        {
+            // shader_program_data
+            {
+                std::string(SHADER_FILE_PATH) + "circle_position_color_texcoord.vert",
+                std::string(SHADER_FILE_PATH) +"circle_position_color_texcoord.frag",
+                circle_vertex_attributes
+            }
 
-    MeshGenerator mesh_generator;
-    {
-        int float_count = 6 * 3;
-        int index_count = 3;
-        float position_color[float_count] = {
-            0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
-            0.0f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-            -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f
-        };
-        unsigned int indicies[index_count] = {
-            0, 1, 2
-        };
-        mesh_generator.generate(mesh, &position_color[0], float_count, &indicies[0], index_count);
-    }
-   
+        }
+    };
+    Renderer renderer;
+    renderer.create(renderer_data);
+  
+
+
     bool cull_face_on = true;
 
     AARect render_rectangle;
-    render_rectangle.create(glm::vec2(-0.5f, -0.5f), glm::vec2(0.5f, 0.5f));
-    MeshFromRectangle mesh_from_rectangle;
-    Mesh rectangle_mesh = mesh_from_rectangle.generate(render_rectangle);
-    
-    while (sdl_window.isActive())
+    render_rectangle.create(glm::vec2(0.0f, 0.0f), glm::vec2(100.0f, 100.0f));
+
+    while (complete_window.m_sdl_window_wrapper.m_active == true)
     {
-        while (sdl_event_wrapper.polledEvent())
+        while (complete_window.polledEvent())
         {
-            SDL_Event& event = sdl_event_wrapper.nextEvent();
-            imgui_wrapper.processEvent(event);
+            SDL_Event& event = complete_window.nextEvent();
+            complete_window.m_dear_imgui_wrapper.processEvent(event);
             switch (event.type)
             {
             case SDL_QUIT:
-                SDL_Log("Program quit after %i ticks", event.quit.timestamp);
-                sdl_window.terminate();
+                complete_window.m_sdl_window_wrapper.terminate();
+                break;
+            case SDL_WINDOWEVENT:
+                switch (event.window.event)
+                {
+                case SDL_WINDOWEVENT_RESIZED:
+                    complete_window.m_sdl_window_wrapper.m_width = (int)event.window.data1;
+                    complete_window.m_sdl_window_wrapper.m_height = (int)event.window.data2;
+                    glViewport(0, 0, complete_window.m_sdl_window_wrapper.m_width, complete_window.m_sdl_window_wrapper.m_height);
+                    break;                
+                default:
+                    break;
+                }
                 break;
             default:
                 break;
@@ -94,20 +135,27 @@ int main(int argc, char const *argv[])
         }
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        shader_program.use();
+        
+        renderer.begin();
+        renderer.setMatrix(global_matrix);
+        {            
+            Circle circle;
+            circle.create(glm::vec2(400, 400), 50.0f);
+            renderer.addCircle(circle);            
+            AARect rect0, rect1;
 
-        mesh.bind();
-        shader_program.enableVertexAttributes();
-        shader_program.setMatrix(&mesh.m_matrix[0][0]);
-        mesh.draw();
+            rect0.create(glm::vec2(100, 100), glm::vec2(100, 100));
+            renderer.addRect(rect0);
 
-        rectangle_mesh.bind();
-        shader_program.enableVertexAttributes();
-        shader_program.setMatrix(&rectangle_mesh.m_matrix[0][0]);
-        rectangle_mesh.draw();
-
+            rect1.create(glm::vec2(200, 200), glm::vec2(100, 100));
+            renderer.addRect(rect1);
+ 
+        }
+        renderer.render();
+        
+     
         glUseProgram(0);
-        imgui_wrapper.beginFrame();
+        complete_window.m_dear_imgui_wrapper.beginFrame();
 
         ImGui::Begin("Cull Face Toggle");
         {
@@ -123,11 +171,11 @@ int main(int argc, char const *argv[])
             ImGui::End();
         }
         demo_window.show();
-        imgui_wrapper.renderFrame();
-        SDL_GL_SwapWindow(sdl_window.getWindow());
+        complete_window.m_dear_imgui_wrapper.renderFrame();
+        SDL_GL_SwapWindow(complete_window.m_sdl_window_wrapper.getWindow());
         
     }
-    sdl_window.destroy();
+    complete_window.m_sdl_window_wrapper.destroy();
     SDL_Quit();
 
     return 0;

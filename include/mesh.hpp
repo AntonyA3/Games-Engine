@@ -6,10 +6,9 @@ struct Mesh
 {
     GLuint m_vertex_buffer, m_index_buffer;
     int m_index_count;
-    glm::mat4 m_matrix = glm::mat4(1.0f);
-
     void create();
     void bind();
+    void setData(float * vertex_array, int float_count, unsigned int * index_array, int index_count);
     void draw();
 };
 

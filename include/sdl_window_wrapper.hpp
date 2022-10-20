@@ -12,29 +12,18 @@
 #include <sdl_gl_context_wrapper.hpp>
 #include<dear_imgui_wrapper.hpp>
 #include<GL/glew.h>
-
+#include <sdl_window_data.hpp>
 struct SDLWindowWrapper
 {
     SDL_Window * m_window;
     bool m_active;
-    Uint32 m_init_flags;
-    std::string m_title;
     int m_width,
-    m_height,
-    m_initial_width,
-    m_initial_height,
-    m_x_position_flag,
-    m_y_position_flag,
-    m_other_flags;
-    SDL_bool m_resizable;
+    m_height;
 
 public:
     SDLWindowWrapper();
     ~SDLWindowWrapper();
-    void create();
-    void setDimensions(int width, int height);
-    int getWidth();
-    int getHeight();
+    void create(SDLWindowData& sdl_window_data);
     void terminate();
     void destroy();
     bool isActive();

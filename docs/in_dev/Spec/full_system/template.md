@@ -2,13 +2,22 @@
 # Object Name
 
 ## Summary 
-A short summary
+A class to create a opengl shader program and also get the details related tothe status of loading the shader
 
 | Property | Description |
 | --- | --- |
-| Member name  | Description of the role of the member |
+| property name | It stores this |
 
---psuedocode in header files
-|Function | Description |
+## Dependancies
+| Dependancy | Explaination |
 | --- | --- |
-| The function Name | The function specification | 
+| Dependancy name | it uses this for |
+
+## Functions
+| Function | Description |
+| --- | --- |
+| funcname | It does this |
+
+
+## Test Cases
+- It should act like this
