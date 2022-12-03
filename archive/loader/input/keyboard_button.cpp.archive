@@ -1,0 +1,17 @@
+#include <input/keyboard_button.hpp>
+
+void KeyboardButton::create(SDL_Keycode key_code){
+    this->setKeyCode(key_code);
+    Button::create();
+}
+void KeyboardButton::setKeyCode(SDL_Keycode key_code){
+    m_keycode = key_code;
+}
+
+void KeyboardButton::update(const Uint8 * keyboard_state){
+    Button::update(keyboard_state[m_keycode]);
+}
+
+KeyboardButton::KeyboardButton(SDL_Keycode key_code){
+    this->create(key_code);
+}

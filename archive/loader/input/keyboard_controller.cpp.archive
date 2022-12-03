@@ -1,0 +1,45 @@
+#include <input/keyboard_controller.hpp>
+
+void KeyboardController::create(){
+    m_keyboard_state = SDL_GetKeyboardState(NULL);
+    m_forward.create(SDL_SCANCODE_W);
+    m_left.create(SDL_SCANCODE_A);
+    m_backward.create(SDL_SCANCODE_S);
+    m_right.create(SDL_SCANCODE_D);
+    m_ctrl_left.create(SDL_SCANCODE_LCTRL);
+    m_insp.create(SDL_SCANCODE_I);
+    
+}
+
+void KeyboardController::update(){
+    m_forward.update(m_keyboard_state);
+    m_left.update(m_keyboard_state);
+    m_right.update(m_keyboard_state);
+    m_backward.update(m_keyboard_state);
+    m_ctrl_left.update(m_keyboard_state);
+    m_insp.update(m_keyboard_state);
+}
+
+KeyboardButton& KeyboardController::forwardButton(){
+    return this->m_forward;
+}
+
+KeyboardButton& KeyboardController::leftButton(){
+    return this->m_left;
+}
+
+KeyboardButton& KeyboardController::rightButton(){
+    return this->m_right;
+}
+
+KeyboardButton& KeyboardController::backwardButton(){
+    return m_backward;
+}
+
+KeyboardButton& KeyboardController::ctrlLeftButton(){
+    return m_ctrl_left;
+}
+
+KeyboardButton& KeyboardController::inspectorButton(){
+    return m_insp;
+}

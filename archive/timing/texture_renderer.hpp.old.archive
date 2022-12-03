@@ -1,0 +1,26 @@
+#ifndef GAMES_ENGINE_TEXTURER_RENDERER
+#define GAMES_ENGINE_TEXTURER_RENDERER
+
+#include <GL/glew.h>
+#include <mesh.hpp>
+#include <mesh_data.hpp>
+#include <glutils.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <rect_verticies.hpp>
+struct TextureRenderer{
+    GLuint program = 0;
+    GLint texture_loc = 0;
+    GLint texture_matrix_loc = 0;
+    GLuint texture_rgba = 0;
+    int width = 0, height = 0;
+    float vp_width = 640.0f, vp_height = 480.0f;
+    Mesh mesh;
+    MeshData mesh_data;
+    
+    TextureRenderer();
+    void setTexture(GLint internal_format, GLsizei width, GLsizei height, GLenum format, GLenum type, const void *pixels);
+    void addSprite(AARect draw_area, AARect texture_area, glm::vec3 color);
+    void render(GLuint& texture);
+};
+#endif

@@ -1,0 +1,111 @@
+#include <breakout_game/entity.hpp>
+
+
+Entity::Entity(){}
+
+glm::vec2 Entity::getPosition(){
+    return this->position;
+}
+
+void Entity::setVelocityX(float x){
+    this->velocity.x = x;
+}
+
+void Entity::create(glm::vec2 position, glm::vec2 velocity){
+    this->position = position;
+    this->velocity = velocity;
+}
+
+bool Entity::contains(glm::vec2 point){
+    return this->multi_shape.containsPoint(point);
+}
+
+void Entity::moveXTo(float x){
+    this->moveTo(glm::vec2(x, this->position.y));
+}
+
+void Entity::moveYTo(float y){
+    this->moveTo(glm::vec2(this->position.x, y));
+}
+
+void Entity::moveTo(glm::vec2 point){
+    this->move(point - this->position);
+}
+
+void Entity::moveX(float x){
+    this->move(glm::vec2(x, 0));
+}
+
+void Entity::moveY(float y){
+    this->move(glm::vec2(0, y));
+}
+
+void Entity::move(float dt){
+    glm::vec2 movement = velocity * dt;
+    this->move(movement);
+}
+
+void Entity::move(glm::vec2 movement){
+    this->position += movement; 
+    this->multi_shape.move(movement);
+}
+
+void Entity::setVelocity(glm::vec2 velocity){
+    this->velocity = velocity;
+}
+
+float Entity::getTop(){
+    return this->multi_shape.getTop();
+}
+
+float Entity::getBottom(){
+    return this->multi_shape.getBottom();
+}
+
+float Entity::getLeft(){
+    return this->multi_shape.getLeft();
+}
+
+float Entity::getRight(){
+    return this->multi_shape.getRight();
+}
+
+float Entity::getWidth(){
+    return this->multi_shape.getWidth();
+}
+
+
+Ball::Ball(){}
+
+void Ball::create(glm::vec2 position, float radius, glm::vec2 velocity){
+    Entity::create(position, velocity);
+    Circle circle;
+    circle.create(position, radius);
+    multi_shape.addCircle(circle);
+}
+
+
+Circle& Ball::refCircle(){
+    return this->multi_shape.circles.at(0);
+}
+
+Paddle::Paddle(){}
+
+AARect& Paddle::refRect(){
+    return this->multi_shape.aa_rects.at(0);
+}
+
+void Paddle::create(glm::vec2 position){
+    Entity::create(position, glm::vec2(0, 0));
+    AARect rect;
+    rect.create(position, glm::vec2(80, 8));
+    this->multi_shape.addRect(rect);
+}
+
+glm::vec2 Paddle::bounceOffTop(glm::vec2 velocity, float x){
+    float perc = (x - this->multi_shape.aa_rects.at(0).getCentre().x) / this->multi_shape.aa_rects.at(0).getWidth() * 2.0f;
+    std::cout << perc << std::endl;
+    return glm::normalize(glm::vec2(perc * 10.0f, -1.0f)) * glm::length(velocity);
+}
+
+

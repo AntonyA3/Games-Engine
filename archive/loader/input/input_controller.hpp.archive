@@ -1,0 +1,20 @@
+#ifndef GAMES_ENGINE_INPUT_CONTROLLER
+#define GAMES_ENGINE_INPUT_CONTROLLER
+#include "mouse_controller.hpp"
+#include "keyboard_controller.hpp"
+#include "mouse_controller.hpp"
+class InputController
+{
+private:
+    MouseController m_mouse_controller;
+    KeyboardController m_keyboard_controller;
+public:
+    MouseController& mouseController();
+    KeyboardController& keyboardController();
+    InputController& create();
+    void update();
+
+};
+
+
+#endif

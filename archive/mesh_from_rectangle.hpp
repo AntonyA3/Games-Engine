@@ -11,7 +11,7 @@
 #include <mesh.hpp>
 #include <mesh_generator.hpp>
 #include <mesh_data_converter.hpp>
-#include <aa_rect.hpp>
+#include <shapes/aa_rect.hpp>
 struct MeshFromRectangle
 {
     MeshGenerator mesh_generator;

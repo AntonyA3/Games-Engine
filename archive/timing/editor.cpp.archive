@@ -1,0 +1,56 @@
+#include <editor.hpp>
+
+
+Editor::Editor(){
+    this->propagate_update = &this->scene;
+}
+
+
+void Editor::editPaddle(Paddle& paddle, int i){
+    std::stringstream ss;
+    ss << "Paddle " << i;
+    if(ImGui::TreeNodeEx(ss.str().c_str())){
+        float x = paddle.getPosition().x;
+        if(ImGui::SliderFloat("X", &x, scene.left_wall, scene.right_wall - paddle.getWidth())){
+            paddle.moveXTo(x);
+        }
+        ImGui::TreePop();
+    }
+}
+
+
+void Editor::update(int window_width, int window_height, float dt){
+
+    bool show_demo = true;
+    ImGui::ShowDemoWindow(&show_demo);
+
+ 
+    ImGui::Begin("SideBar", (bool*)__null, 0);
+    {     
+
+        ImGuiID side_bar_id = ImGui::GetID("SideDockSpace");
+        ImGui::DockSpace(side_bar_id, ImVec2(0.0f, 0.0f), 0);
+
+
+        // ImVec2 start_size = ImGui::GetWindowSize();
+        // glm::vec2 position = glm::vec2(window_width, window_height - start_size.y);
+        // ImVec2 window_position = ImVec2(0, position.y);
+        // ImVec2 window_size = ImVec2(window_width, start_size.y);
+        // ImGui::SetWindowPos(window_position);
+        // ImGui::SetWindowSize(window_size);
+        
+
+
+    }
+    ImGui::End();
+
+    ImGui::Begin("Scene");
+    {
+        if(ImGui::CollapsingHeader("Player")){
+        
+        }
+
+    }
+    ImGui::End();
+    scene.update(dt);
+}

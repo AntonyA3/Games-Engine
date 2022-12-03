@@ -2,7 +2,7 @@
 #define GAMES_ENGINE_POLYGON_BATCHER
 
 #include <vector>
-#include <aa_rect.hpp>
+#include <shapes/aa_rect.hpp>
 #include <mesh_data_converter.hpp>
 struct PolygonBatcher
 {

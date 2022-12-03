@@ -48,6 +48,22 @@
         "fstream": "cpp",
         "sstream": "cpp",
         "cstring": "cpp",
-        "ctime": "cpp"
+        "ctime": "cpp",
+        "bitset": "cpp",
+        "chrono": "cpp",
+        "condition_variable": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "optional": "cpp",
+        "ratio": "cpp",
+        "regex": "cpp",
+        "future": "cpp",
+        "iomanip": "cpp",
+        "mutex": "cpp",
+        "semaphore": "cpp",
+        "stop_token": "cpp",
+        "thread": "cpp",
+        "variant": "cpp",
+        "*.d": "cpp"
     }
 }

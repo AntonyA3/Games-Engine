@@ -1,0 +1,15 @@
+#ifndef GAMES_ENGINE_KEYBOARD_BUTTON
+#define GAMES_ENGINE_KEYBOARD_BUTTON
+#include <SDL2/SDL.h>
+#include "button.hpp"
+struct KeyboardButton :public Button
+{
+
+    SDL_Keycode m_keycode;
+    KeyboardButton(SDL_Keycode key_code);
+    void create(SDL_Keycode key_code);
+    void setKeyCode(SDL_Keycode key_code);
+    void update(const Uint8 * keyboard_state);
+};
+
+#endif

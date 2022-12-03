@@ -1,0 +1,20 @@
+#include <input/input_controller.hpp>
+
+InputController& InputController::create(){
+    m_mouse_controller.create();
+    m_keyboard_controller.create();
+    return *this;
+}
+
+void InputController::update(){
+    m_mouse_controller.update();
+    m_keyboard_controller.update();
+}
+
+MouseController& InputController::mouseController(){
+    return this->m_mouse_controller;
+}
+
+KeyboardController& InputController::keyboardController(){
+    return this->m_keyboard_controller;
+}

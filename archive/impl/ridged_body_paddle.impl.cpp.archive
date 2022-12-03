@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <iostream>
+#include <glm/glm.hpp>
+#include <tuple>
+
+// The Main Objects involved
+#include <ridged_body.hpp>
+#include <breakout_game/paddle.hpp>
+
+// This Works as Expected
+int main(int argc, char const *argv[])
+{
+
+    bool active = true;
+    Paddle paddle = Paddle().create(glm::vec2(0.0f, 0.0f));
+    paddle.setVelocityX(100.0f);
+    // Paddle::Movement paddle_movement = Paddle::Movement(paddle);
+    RidgedBody * ridged_body = new RidgedBody();
+    ridged_body->addMovable(&paddle_movement);
+    while (active)
+    {
+
+
+        std::cout <<"--------------------------------" << std::endl;
+        std::cout <<" The Paddle position is at x: " << paddle.position.x << "y: " <<  paddle.position.y << std::endl;
+        float movement_x;
+        std::cout << "How far do you want the paddle to Move Horizontally Based on it's ridged body" << std::endl;
+        std::cin >> movement_x;
+        ridged_body->move(glm::vec2(movement_x, 0));
+        std::cout <<" The Paddle new  position is at x: " << paddle.position.x << "y: " <<  paddle.position.y << std::endl;
+        std::cin >> active;
+
+
+
+
+    }
+    delete ridged_body;
+    
+    
+    return 0;
+}

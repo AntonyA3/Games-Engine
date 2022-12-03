@@ -1,0 +1,58 @@
+#include <texture_renderer.hpp>
+
+TextureRenderer::TextureRenderer(){
+    this->mesh.create();
+    this->program = GLutils().makeProgram("data\\shaders\\texture_color.vert", "data\\shaders\\texture_color.frag");
+    this->texture_loc = glGetUniformLocation(this->program, "uTexture");
+    this->texture_matrix_loc = glGetUniformLocation(this->program, "uViewmat");
+}
+
+void TextureRenderer::addSprite(AARect draw_area, AARect texture_area, glm::vec3 color){
+    RectVerticies rect_verticies;
+    rect_verticies.create(draw_area);
+
+    float left = texture_area.getLeft() / (float)width;
+    float right = texture_area.getRight() / (float)width;
+    float top = texture_area.getTop() / (float)height;
+    float bottom = texture_area.getBottom() / (float)height;
+
+    this->mesh_data.pushPosition(rect_verticies.bottom_left);
+    this->mesh_data.pushColor(color);            
+    this->mesh_data.pushTextureCoordinates(glm::vec2(left, bottom));
+    
+    this->mesh_data.pushPosition(rect_verticies.bottom_right);
+    this->mesh_data.pushColor(color);
+    this->mesh_data.pushTextureCoordinates(glm::vec2(right, bottom));
+
+    this->mesh_data.pushPosition(rect_verticies.top_right);
+    this->mesh_data.pushColor(color);
+    this->mesh_data.pushTextureCoordinates(glm::vec2(right, top));
+
+    this->mesh_data.pushPosition(rect_verticies.top_left);
+    this->mesh_data.pushColor(color);
+    this->mesh_data.pushTextureCoordinates(glm::vec2(left, top));
+
+    this->mesh_data.generateRectIndicies();
+}
+
+void TextureRenderer::render(GLuint& texture){
+    this->mesh.setData(this->mesh_data);
+    this->mesh_data.clear();
+    glUseProgram(this->program);
+    glm::mat4 m = glm::ortho(0.0f, (float)this->vp_width, (float)this->vp_height, 0.0f);
+    glUniformMatrix4fv(this->texture_matrix_loc, 1, GL_FALSE, &m[0][0]);
+    
+    glUniform1i(this->texture_loc, 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(0 * sizeof(float)));
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
+    glDrawElements(GL_TRIANGLES, this->mesh.m_index_count, GL_UNSIGNED_INT, 0);
+
+}

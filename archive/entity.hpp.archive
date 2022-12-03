@@ -1,0 +1,70 @@
+#ifndef GAMES_ENGINE_ENTITY
+#define GAMES_ENGINE_ENTITY
+#include <glm/glm.hpp>
+#include <shapes/multi_shape.hpp>
+#include <i_selectable.hpp>
+#include <i_game_object.hpp>
+class Entity{
+
+public:
+    Entity();
+    glm::vec2 position, velocity;
+    MultiShape multi_shape;
+    void setVelocityX(float x);
+    void setVelocity(glm::vec2 velocity);
+    glm::vec2 getPosition();
+    void create(glm::vec2 position, glm::vec2 velocity);
+    void move(glm::vec2 movement);    
+    void move(float dt);
+    void moveX(float x);
+    void moveY(float y);
+    void moveXTo(float x);
+    void moveYTo(float y);
+
+    void moveTo(glm::vec2 point);
+
+    bool contains(glm::vec2 point);
+    float getTop();
+    float getBottom();
+    float getLeft();
+    float getRight();
+    float getWidth();
+
+
+
+};
+
+struct Ball : public Entity, public IGameObject{
+    Ball();
+    void create(glm::vec2 position, float radius, glm::vec2 velocity);
+    Circle& refCircle();
+
+    template <typename TRenderer>
+    void renderControl(TRenderer& renderer){
+
+    }
+
+    template <typename TInput>
+    void inputControl(TInput& input){
+
+    }
+
+};
+
+struct Paddle : public Entity, public IGameObject{
+    Paddle();
+    void create(glm::vec2 position);
+    AARect& refRect();
+    glm::vec2 bounceOffTop(glm::vec2 velocity, float x);
+
+      template <typename TRenderer>
+    void renderControl(TRenderer& renderer){
+  
+    }
+
+    template <typename TInput>
+    void inputControl(TInput& input){
+
+    }
+};
+#endif

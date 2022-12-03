@@ -1,0 +1,94 @@
+#include <i_game_object.hpp>
+#include <scene.hpp>
+#include <null_game_object.hpp>
+#include <imgui/imgui.h>
+struct Editor : IGameObject{
+    Scene scene;
+    NullGameObject null_game_object;
+
+    BrickGrid brick_grid;
+    RadialBricks radial_bricks;
+    IGameObject * propagate_update;
+    Editor();
+    void startPressed();
+    void leftPressedOrDownAction();
+    void rightPressedOrDownAction();
+    void notLeftOrRightDown();
+    void editPaddle(Paddle& paddle, int i);
+    void update(int window_width, int window_height, float dt);
+
+
+    template <typename TInput>
+    void inputControl(TInput& input){
+        if(input.startPressed()){
+            if(this->propagate_update == &scene){
+                this->propagate_update = &null_game_object;
+            }else{
+                this->propagate_update = &scene;
+            }
+        }
+        this->scene.inputControl(input);
+    }
+
+    template <typename TRenderer>
+    void renderControl(TRenderer& renderer){ 
+        scene.renderControl<TRenderer>(renderer);
+        if(this->scene.isPaused()){
+            brick_grid.renderControl(renderer);
+            this->radial_bricks.renderControl(renderer);
+        }
+    }
+
+    // template <typename IInspector>
+    // void inspectorControl(IInspector& inspector){
+    //     if(this->scene.isPaused()){
+    //         ImGui::SetWindowPos()
+    //         ImGui::Begin("Asset");
+    //         {
+    //             if(ImGui::Selectable("Brick Grid")){
+
+    //             }
+
+    //             if(ImGui::Selectable("Radial Brick")){
+
+    //             }
+
+    //             if(ImGui::Selectable("Snake Block")){
+
+    //             }
+    //         }
+    //         ImGui::End();
+
+    //         // ImGui::Begin("Brick Grid Adding");
+    //         // this->brick_grid.edit();
+    //         // if(ImGui::Button("Add Grid To Scene")){
+    //         //     scene.addBrickGrid(brick_grid);
+    //         // }
+    //         // ImGui::End();
+
+    //         // this->radial_bricks.edit();
+
+
+
+    //         // ImGui::Begin("Hello World");         
+    //         // if(ImGui::TreeNodeEx("Scene")){
+    //         //     if(ImGui::TreeNode("Paddles")){
+    //         //         int i = 0;
+    //         //         for(Paddle& paddle : this->scene.getPaddles()){
+    //         //             this->editPaddle(paddle, i);
+    //         //             i++;
+    //         //         }  
+    //         //         ImGui::TreePop();
+    //         //     } 
+    //         //     ImGui::TreePop();
+    //         // }
+    //         // ImGui::End();
+    //     }else{
+    //         ImGui::Begin("Editor");
+    //         scene.inspectorControl(inspector);
+    //         ImGui::End(); 
+    //     }
+
+        
+    // }
+};

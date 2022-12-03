@@ -1,0 +1,46 @@
+#define ENABLE_DEBUG_LOGGER
+#include <macros/debug_logger.hpp>
+
+#include <stdio.h>
+#include <iostream>
+
+
+
+#include <breakout_game/paddle.hpp>
+#include <game_loop.hpp>
+
+
+// Paddle Movement Using physics Processor
+
+/// This shows why method chaining is problematic, method chaining actually deletes the previous object
+int main(int argc, char const *argv[])
+{
+
+    bool active = true;
+    // Paddle paddle = Paddle();
+    // paddle.create(glm::vec2(0.0f, 0.0f));
+    Paddle paddle = Paddle().create(glm::vec2(0.0f, 0.0f)); // Will Cause a defect
+    std::cout << "the address of the paddle: " << &paddle << std::endl;
+    paddle.setVelocityX(100.0f);
+    GameLoop physics_processor = GameLoop(); 
+    std::cout <<"--------------------------------" << std::endl;
+
+    std::cout << "the address of the inserted body into the physics processor: " << &paddle.refBody() << std::endl;
+    std::cout << "address of the new  paddle movable: " << paddle.external_movement << std::endl;
+    std::cout << "Address of the paddle: " << &paddle << std::endl;
+
+    physics_processor.addBody(&paddle.refBody());
+
+    while (active)
+    {
+        std::cout <<"--------------------------------" << std::endl;
+        std::cout <<" The Paddle position is at x: " << paddle.position.x << "y: " <<  paddle.position.y << std::endl;
+        float time;
+        std::cout << "How much time do yo want to move all physics objects for " << std::endl;
+        std::cin >> time;
+        physics_processor.update(time);
+        std::cout <<" The Paddle new  position is at x: " << paddle.position.x << "y: " <<  paddle.position.y << std::endl;
+        std::cin >> active;
+    }
+    return 0;
+}

@@ -1,0 +1,4 @@
+src/breakout_game/entity.o: src/breakout_game/entity.cpp \
+ src/breakout_game/entity.hpp src/shapes/multi_shape.hpp \
+ src/shapes/aa_rect.hpp src/shapes/circle.hpp src/i_selectable.hpp \
+ src/i_game_object.hpp

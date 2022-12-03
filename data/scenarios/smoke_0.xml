@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Paddle>
+    <Position>
+        <X>40</X>
+        <Y>460</Y>
+    </Position>
+
+</Paddle>
+
+<Ball>
+    <Position>
+        <X>200</X>
+        <Y>200</Y>
+    </Position>
+    <Radius>8</Radius>
+
+</Ball>

@@ -6,17 +6,7 @@ layout (location = 2) in vec2 vcoord;
 uniform mat4 u_view_mat;
 out vec3 fcolor;
 out vec2 fcoord;
-/*
-INPUT
-    - vertex position
-    - vertex color
-    - vertex coordinate
-OUTPUT To fragment shader 
-    - The vertex color
-    - The texture coordinates
 
-PROCESS set the vertex to be transformed by uniform matrix
-*/
 void main(){
     fcolor = vcolor;
     fcoord = vcoord;

@@ -1,0 +1,4 @@
+src/input/keyboard_button.o: src/input/keyboard_button.cpp \
+ src/input/keyboard_button.hpp src/input/button.hpp \
+ src/input/button_state.hpp src/i_game_button.hpp \
+ src/input/button_state.hpp

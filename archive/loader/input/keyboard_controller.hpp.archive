@@ -1,0 +1,24 @@
+#ifndef GAMES_ENGINE_KEYBOARD_CONTROLLER
+#define GAMES_ENGINE_KEYBOARD_CONTROLLER
+
+#include <SDL2/SDL.h>
+#include "keyboard_button.hpp"
+
+class KeyboardController
+{
+private:
+    KeyboardButton m_forward, m_left, m_right, m_backward,
+    m_ctrl_left, m_insp;
+    const Uint8 * m_keyboard_state;
+public:
+    void create();
+    void update();
+    KeyboardButton& forwardButton();
+    KeyboardButton& leftButton();
+    KeyboardButton& rightButton();
+    KeyboardButton& backwardButton();
+    KeyboardButton& ctrlLeftButton();
+    KeyboardButton& inspectorButton();
+    
+};
+#endif

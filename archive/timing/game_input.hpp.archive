@@ -1,0 +1,24 @@
+#include <vector>
+#include <input/keyboard_button.hpp>
+#include <i_input.hpp>
+struct GameInputs : IInput{
+    const Uint8 * keyboard_state = SDL_GetKeyboardState(NULL);
+    KeyboardButton start_button = KeyboardButton(SDL_SCANCODE_ESCAPE);
+    KeyboardButton up_button = KeyboardButton(SDL_SCANCODE_W);
+    KeyboardButton down_button = KeyboardButton(SDL_SCANCODE_S);
+    KeyboardButton left_button = KeyboardButton(SDL_SCANCODE_A);
+    KeyboardButton right_button = KeyboardButton(SDL_SCANCODE_D);
+    KeyboardButton activate_editor_button = KeyboardButton(SDL_SCANCODE_I);
+    std::vector<KeyboardButton *> keyboard_buttons;
+
+    GameInputs();
+    KeyboardButton& leftButton();
+    KeyboardButton& rightButton();
+    KeyboardButton& upButton();
+    KeyboardButton& downButton();
+    bool leftPressedOrDown();
+    bool rightPressedOrDown();
+    bool startPressed();
+    bool pausePressed();
+    void update();
+};

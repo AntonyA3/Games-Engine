@@ -1,0 +1,50 @@
+#include <game_input.hpp>
+
+GameInputs::GameInputs(){
+    this->keyboard_buttons = {
+        &start_button,
+        &left_button,
+        &right_button,
+        &up_button,
+        &down_button,
+        &activate_editor_button
+    };
+}
+
+KeyboardButton& GameInputs::leftButton(){
+    return this->left_button;
+}
+
+KeyboardButton& GameInputs::rightButton(){
+    return this->right_button;
+}
+
+KeyboardButton& GameInputs::upButton(){
+    return this->up_button;
+}
+
+KeyboardButton& GameInputs::downButton(){
+    return this->down_button;
+}
+
+bool GameInputs::leftPressedOrDown(){
+    return this->left_button.isPressedOrDown();
+}
+
+bool GameInputs::rightPressedOrDown(){
+    return this->right_button.isPressedOrDown();
+}
+
+bool GameInputs::startPressed(){
+    return this->start_button.isPressed();
+}
+
+bool GameInputs::pausePressed(){
+    return this->start_button.isPressed();
+}
+
+void GameInputs::update(){
+    for (KeyboardButton * button : keyboard_buttons){
+        button->update(keyboard_state);
+    }
+}
