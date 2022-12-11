@@ -145,9 +145,10 @@ Test for the change and the tag after updating the button later: **Todo**
 - rename update_button_test to update_button_state_test
 
 
-Refactoring Task: Make a hpp file that represents the main file with all headers and a cpp file for all the implementations of whats' in the headers, so that they can be used by any of the testing related executables
-
-- file called breakout_engine.hpp
+**Refactoring Task**: Make a hpp file that represents the main file with all headers and a cpp file for all the implementations of whats' in the headers, so that they can be used by any of the testing related executables
+- With git create a checkpoint: **Done**
+- file called 
+breakout_engine.hpp: **Done**
     - Needs all headers
     - Base Event 
     - Button State
@@ -159,10 +160,17 @@ Refactoring Task: Make a hpp file that represents the main file with all headers
     - toString bool decleration
     - to stringButton Decelration
     - always show demo decleration
-- Comment out all the structs and declerations
-- Insert the header file
-- If the program compiles then this has been done correctly, otherwise the changes must be reverted
-- file for breakout engine.cpp
+- Comment out all the structs and declerations: **Done**
+- Insert the header file: **Done**
+- If the program compiles then this has been done correctly, otherwise the changes must be reverted, or the makefile must be changed so that the header file is in a valid folder:  **Done**
+- Remove all unnessessary comments: **Done**
+
+**Refactor Task**: Move all functions other than main to breakout engine.cpp
+- create a checkpoint to mark that I have created the header file but I am about to move functions to breakout_engine.cpp
+- create a breakout_engine.cpp file which includes breakout engine.hpp file
+- comment out and copy all functions other than main to the file, while maintaing the order that the functions were written
+- Test if the program still works after this, if not it might be a problem with the makefile
+
 
 *Test Design: For the integration of button changed and button tag*
 update_button_test
