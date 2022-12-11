@@ -5,44 +5,44 @@
 #include <GL/glew.h>
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
-
 #include <imgui/imgui_internal.h>
 #include <imgui/imgui.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/backends/imgui_impl_sdl.h>
-
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include <glm/gtx/string_cast.hpp>
 #include <glm/gtx/quaternion.hpp>
-
 #include <rapidxml-1.13/rapidxml_utils.hpp>
 #include <rapidxml-1.13/rapidxml_ext.h>
+
+// Each function has a low level functional requirement all or nothing
 
 /// [Section] Enums
 enum Base_Events_ID {
     No_Event = 0,
     Quit_Event,
     Resize_Window_Event
-};
+}; // migrated
 
-enum FileReadStatus{
-    FileReader_NotRead,
-    FileRead_Success,
-    FileRead_Failed
-};
-
-typedef enum ButtonState{
+enum ButtonState{
     ButtonState_Pressed,
     ButtonState_Down,
     ButtonState_Up,
     ButtonState_Released
-};
+}; // migrated
 
-// [Section] Basic Functions
+//==========================================
+//    BEGIN [SECTION] File Input Output Declerations
+//==========================================
+std::string readFile(std::string filename); // migrated
+//==========================================
+//    END [SECTION] File Input Output Declerations
+//==========================================
 
-std::string readFile(std::string filename);
-
+//==========================================
+//    BEGIN [SECTION] File Input Output Implementation
+//==========================================
 std::string readFile(std::string filename){
     std::stringstream ss;
     std::ifstream my_read_file;
@@ -63,193 +63,234 @@ std::string readFile(std::string filename){
     }
     return ss.str();
 } 
+//==========================================
+//    END [SECTION] File Input Output Implementation
+//==========================================
 
-Base_Events_ID mapToBaseEvent(SDL_Event event){
-    Base_Events_ID base_event = No_Event;
-    base_event = (event.type == SDL_QUIT) ? Quit_Event : base_event;
-    base_event = (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED) ? 
-        Resize_Window_Event : 
-        base_event;
-    return base_event;
+
+//==========================================
+//    BEGIN [SECTION] Boxed Object Template Functions
+//==========================================
+template <typename TBoxedObject>
+void create(TBoxedObject& obj, glm::vec2 position, glm::vec2 size) {
+    obj.position = position;
+    obj.size = size;
 }
 
-struct AARect
-{
-    glm::vec2 position;
-    glm::vec2 size;
-    AARect(){};
-    AARect(glm::vec2 position, glm::vec2 size);
-    void create(glm::vec2 position, glm::vec2 size);
-    float getTop();
-    float getBottom();
-    float getLeft();
-    float getRight();
-    glm::vec2 getTopLeft();
-    glm::vec2 getTopRight();
-    glm::vec2 getBottomLeft();
-    glm::vec2 getBottomRight();
-    glm::vec2 getCentre();
-    float getWidth();
-    float getHeight();
+template <typename TBoxedObject>
+float getTopBoxed(const TBoxedObject& obj) {
+    return obj.position.y;
+}
+
+template <typename TBoxedObject>
+float getBottomBoxed(const TBoxedObject& obj){
+    return obj.position.y + obj.size.y;
+}
+
+template <typename TBoxedObject>
+float getLeftBoxed(const TBoxedObject& obj){
+    return obj.position.x;
+}
+
+template <typename TBoxedObject>
+float getRightBoxed(const TBoxedObject& obj){
+    return obj.position.x + obj.size.x;
+}
+
+template <typename TBoxedObject>
+glm::vec2 getTopLeftBoxed(const TBoxedObject& obj){
+    return obj.position;
+}
+
+template <typename TBoxedObject>
+glm::vec2 getBottomLeftBoxed(const TBoxedObject& obj){
+    glm::vec2 out = obj.position;
+    out.y += obj.size.y;
+    return out;
+}
+
+template <typename TBoxedObject>
+glm::vec2 getTopRightBoxed(const TBoxedObject& obj){
+    glm::vec2 out = obj.position;
+    out.x += obj.size.x;
+    return out;
+}
+
+template <typename TBoxedObject>
+glm::vec2 getBottomRightBoxed(const TBoxedObject& obj){
+    return obj.position + obj.size;
+}
+
+template <typename TBoxedObject>
+glm::vec2 getCentreBoxed(const TBoxedObject& obj){
+    return obj.position + obj.size * 0.5f;
+}
+//==========================================
+//    END [SECTION] Boxed Object Template Functions
+//==========================================
+
+//==========================================
+//    BEGIN [SECTION] Sized Object Template Functions
+//==========================================
+template <typename TSizedObject>
+float getWidth(const TSizedObject& obj) {
+    return obj.size.x;
+}
+
+template <typename TSizedObject>
+float getHeight(const TSizedObject& obj) {
+    return obj.size.y;
+}
+//==========================================
+//    END [SECTION] Sized Object Template Functions
+//==========================================
+
+
+//==========================================
+//    BEGIN [SECTION] Boxed Circle Object Template Functions
+//==========================================
+template <typename TBoxCircleObject>
+float getTopCircular(const TBoxCircleObject& obj) {
+    return obj.position.y - obj.radius;
+}
+
+template <typename TBoxCircleObject>
+float getBottomCircular(const TBoxCircleObject& obj) {
+    return obj.position.y + obj.radius;
+}
+
+template <typename TBoxCircleObject>
+float getLeftCircular(const TBoxCircleObject& obj) {
+    return obj.position.x - obj.radius;
+}
+
+template <typename TBoxCircleObject>
+float getRightCircular(const TBoxCircleObject& obj) {
+    return obj.position.x + obj.radius;
+}
+
+template <typename TBoxCircleObject>
+glm::vec2 getTopPointCircular(const TBoxCircleObject& obj) {
+    glm::vec2 p = obj.position;
+    p.y -= obj.radius;
+    return p;
+}
+
+template <typename TBoxCircleObject>
+glm::vec2 getBottomPointCircular(const TBoxCircleObject& obj) {
+    glm::vec2 p = obj.position;
+    p.y += obj.radius;
+    return p;
+}
+
+template <typename TBoxCircleObject>
+glm::vec2 getLeftPointCircular(const TBoxCircleObject& obj) {
+    glm::vec2 p = obj.position;
+    p.x -= obj.radius;
+    return p;
+}
+
+template <typename TBoxCircleObject>
+glm::vec2 getRightPointCircular(const TBoxCircleObject& obj) {
+    glm::vec2 p = obj.position;
+    p.x += obj.radius;
+    return p;
+}
+//==========================================
+//    END [SECTION] Boxed Circle Object Template Functions
+//==========================================
+
+
+//==========================================
+//    BEGIN [SECTION] 2D Geometric Structs
+//==========================================
+
+/*
+A Linear Res is an object that is used to return
+the results of a linear based operation.
+*/
+struct LinearRes{
+    bool solution; // This object has a boolean to determine whether it has 0 solutions: false or 1 solution: true
+    float value; // This object has a float that represents the value, this should onlybe retrieved if and only if there is a solution
+    float getValue(); // This object has the ability to get the value as long as there is a solution
 };
 
+/*
+A Quadratic is an object that is used to 
+return the results of a quadratic based operation
+*/
+struct QuadraticRes{
+    int solution; // This boolean is true if there are either 1 or 2 solutions, it is false otherwise 
+    float t0, t1; // These are the two solutions, that would returned when the quadratic formula is applied
+    float max(); // This will return the maximum out of the 2 solutions or only one solution 
+    float min(); // This will return the minimum of the two solutions or only one solution
+};
 
-AARect::AARect(glm::vec2 position, glm::vec2 size){
-    this->create(position, size);
-}
-
-void AARect::create(glm::vec2 position, glm::vec2 size){
-    this->position = position;
-    this->size = size;
-}
-
-float AARect::getTop(){
-    return this->position.y;
-}
-
-float AARect::getBottom(){
-    return this->position.y + this->size.y;
-}
-
-float AARect::getLeft(){
-    return this->position.x;
-}
-
-float AARect::getRight(){
-    return this->position.x + this->size.x;
-}
-
-glm::vec2 AARect::getTopLeft(){
-    return this->position;
-}
-glm::vec2 AARect::getTopRight(){
-    glm::vec2 out = this->position;
-    out.x += this->size.x;
-    return out;
-}
-
-glm::vec2 AARect::getBottomLeft(){
-    glm::vec2 out = this->position;
-    out.y += this->size.y;
-    return out;
-}
-
-glm::vec2 AARect::getBottomRight(){
-    return this->position + this->size;
-}
-
-glm::vec2 AARect::getCentre(){
-    return glm::vec2(this->position.x + 0.5f * this->size.x, this->position.y + 0.5f * this->size.y);
-}
-
-float AARect::getWidth()
+/*
+ A Rect is an object that represents a rectangle
+*/
+struct Rect
 {
-    return this->size.x;
-}
+    glm::vec2 position; // The position of the rectangle is the top left corner
+    glm::vec2 size; // the size is the diffrence between the bottom right corner and the top left corner
+    Rect(); // Default
+    Rect(glm::vec2 position, glm::vec2 size); // Maintain
+};
 
-float AARect::getHeight()
-{
-    return this->size.y;
-}
-
-AARect& join(AARect& rect, AARect& other_rect){
-    float x = fminf(rect.position.x, other_rect.position.x);
-    float y = fminf(rect.position.y, other_rect.position.y);
-    float sx = fmaxf(other_rect.getRight(), rect.getRight()) - x;
-    float sy = fmaxf(other_rect.getBottom(), rect.getBottom()) - y;
-    rect.position.x = x;
-    rect.position.y = y;
-    rect.size.x = sx;
-    rect.size.y = sy;
-    return rect;
-}
-
-void move(AARect& rect, glm::vec2 movement){
-    rect.position += movement;
-}
-
-bool contains(AARect& rect, glm::vec2 point){
-    return point.x >= rect.getLeft() && point.x <= rect.getRight() &&
-        point.y >= rect.getTop() && point.y <= rect.getBottom();
-}
 
 struct Circle
 {
     glm::vec2 position;
     float radius;
 
+    Circle();
+    Circle(glm::vec2 position, float radius);
     void create(glm::vec2 position, float radius);
-    AARect toRect();
-    float getTop();
-    float getBottom();
-    float getLeft();
-    float getRight();
-    glm::vec2 getBottomPoint();
-    glm::vec2 getTopPoint();
-    glm::vec2 getLeftPoint(); 
-    glm::vec2 getRightPoint();
 };
 
-void move(Circle& circle, glm::vec2 movement){
-    circle.position += movement;
-}
+struct Capsule
+{
+    glm::vec2 position;
+    float radius;
+    glm::vec2 direction;
+    Capsule();
+    Capsule(glm::vec2 position, float radius, glm::vec2 direction);
+    void create(glm::vec2 position, float radius, glm::vec2 direction);
+};
 
-void move(Circle& circle, glm::vec2 velocity, float delta_time){
-    circle.position += velocity * delta_time;
-}
+struct Polygon
+{
+    std::vector<glm::vec2> verticies;
+    public:
+    Polygon(){}
+};
 
-bool contains(Circle circle, glm::vec2 point){
-    return glm::length2(point - circle.position) <= circle.radius * circle.radius;
-}
+struct Ellipse
+{
+    glm::vec2 position;
+    glm::vec2 size;
+    Ellipse();
+    Ellipse(glm::vec2 position, glm::vec2 size);
+};
 
-void Circle::create(glm::vec2 position, float radius){
-    this->position = position;
-    this->radius = radius;
-}
+struct Edge
+{
+    glm::vec2 p0, p1;
+    Edge& create(glm::vec2 p0, glm::vec2 p1);
+    glm::vec2 asVector();
+    glm::vec2 getNormal();
+};
 
+struct Slice
+{
+    glm::vec2 position;
+    float radius, start_angle, end_angle;
+};
 
-AARect Circle::toRect(){
-    AARect rect;
-    glm::vec2 pos = glm::vec2(this->position.x - this->radius, this->position.y - this->radius);
-    float diameter = 2.0f * this->radius;
-    glm::vec2 size = glm::vec2(diameter, diameter);
-    rect.create(pos, size);
-    return rect;
-}
-
-
-float Circle::getTop(){
-    return this->position.y - this->radius;
-}
-
-float Circle::getBottom(){
-    return this->position.y + this->radius;
-}
-
-float Circle::getLeft(){
-    return this->position.x - this->radius;
-}
-
-float Circle::getRight(){
-    return this->position.x + this->radius;
-}
-
-glm::vec2 Circle::getBottomPoint(){
-    return glm::vec2(this->position.x, getBottom());
-}
-
-glm::vec2 Circle::getTopPoint(){
-    return glm::vec2(this->position.x, getTop());
-}
-
-glm::vec2 Circle::getLeftPoint(){
-    return glm::vec2(getLeft(), this->position.y);
-} 
-
-glm::vec2 Circle::getRightPoint(){
-    return glm::vec2(getRight(), this->position.y);
-}
-
+struct Arc{
+    glm::vec2 position;
+    float start_radius, end_radius, start_angle, end_angle;
+};
 
 struct SweepedRect
 {
@@ -259,19 +300,58 @@ struct SweepedRect
     void create(glm::vec2 start, float half_height, glm::vec2 direction);
 };
 
-void SweepedRect::create(glm::vec2 start, float half_height, glm::vec2 direction){
-    this->start = start;
-    this->hh = half_height;
+struct ShapeGroup
+{    
+    glm::vec2 position;
+    std::vector<Rect> rects;
+    std::vector<Circle> circles;
+    void addCircle(Circle circle);
+    void addRect(Rect rect);
+};
+//==========================================
+//    END [SECTION] 2D Geometric Structs
+//==========================================
+
+//==========================================
+//    BEGIN [SECTION] Member Functions of Geometric Structs
+//==========================================
+float QuadraticRes::max(){ return std::max(this->t0, this->t1);}
+float QuadraticRes::min(){ return std::min(this->t0, this->t1);}
+
+Circle::Circle(){
+    this->position = glm::vec2(0,0);
+    this->radius = 1;
+}
+
+Circle::Circle(glm::vec2 position, float radius){
+    this->position = position;
+    this->radius = radius;
+    assert(this->radius >= 0);
+}
+
+void Circle::create(glm::vec2 position, float radius){
+    this->position = position;
+    this->radius = radius;
+}
+
+Capsule::Capsule(){
+    this->position = glm::vec2(0, 0);
+    this->radius = 1;
+    this->direction = glm::vec2(1, 1);
+}
+
+Capsule::Capsule(glm::vec2 position, float radius, glm::vec2 direction){
+    this->position = position;
+    assert(radius >= 0.0f);
+    this->radius = radius;
     this->direction = direction;
 }
 
-struct Edge
-{
-    glm::vec2 p0, p1;
-    Edge& create(glm::vec2 p0, glm::vec2 p1);
-    glm::vec2 asVector();
-    glm::vec2 getNormal();
-};
+void Capsule::create(glm::vec2 position, float radius, glm::vec2 direction){
+    this->position = position;
+    this->radius = radius;
+    this->direction = direction;
+}
 
 Edge& Edge::create(glm::vec2 p0, glm::vec2 p1){
     this->p0 = p0;
@@ -288,61 +368,28 @@ glm::vec2 Edge::getNormal(){
     return glm::vec2(-vector.y, vector.x);
 }
 
-struct Polygon
-{
-    std::vector<glm::vec2> verticies;
-    AARect rect;
-    public:
-    Polygon(){}
-    AARect toRect();
-    std::vector<glm::vec2>& getVerticies();
-    std::vector<Edge> getEdges();
-    float getLeft();
-    float getRight();
-    float getTop();
-    float getBottom();
-};
-
-struct RectVerticies{
-    glm::vec3 top_left;
-    glm::vec3 top_right;
-    glm::vec3 bottom_left;
-    glm::vec3 bottom_right;
-}; 
-
-void create(RectVerticies& rect_verticies, AARect& rect);
-
-void create(RectVerticies& rect_verticies, AARect& rect){
-    rect_verticies.top_left = glm::vec3(rect.getTopLeft(), 0.0f);
-    rect_verticies.top_right = glm::vec3(rect.getTopRight(), 0.0f);
-    rect_verticies.bottom_left = glm::vec3(rect.getBottomLeft(), 0.0f);
-    rect_verticies.bottom_right = glm::vec3(rect.getBottomRight(), 0.0f);
+void SweepedRect::create(glm::vec2 start, float half_height, glm::vec2 direction){
+    this->start = start;
+    this->hh = half_height;
+    this->direction = direction;
 }
 
-
-void create(Polygon& polygon, AARect& rect){
-    polygon.verticies.clear();
-    RectVerticies rect_verticies;
-    create(rect_verticies, rect);
-    polygon.verticies.clear();
-    polygon.verticies.push_back(glm::vec2(rect_verticies.bottom_left.x, rect_verticies.bottom_left.y));
-    polygon.verticies.push_back(glm::vec2(rect_verticies.bottom_right.x, rect_verticies.bottom_right.y));
-    polygon.verticies.push_back(glm::vec2(rect_verticies.top_right.x, rect_verticies.top_right.y));
-    polygon.verticies.push_back(glm::vec2(rect_verticies.top_left.x, rect_verticies.top_left.y));
-    polygon.rect = rect;
+void ShapeGroup::addCircle(Circle circle){
+    this->circles.push_back(circle);
 }
 
-void create(Polygon& polygon, SweepedRect& rect);
-void move(Polygon& polygon, glm::vec2 movement);
-void move(Polygon& polygon, glm::vec2 velocity, float dt);
-bool contains(Polygon& polygon, glm::vec2 point);
+void ShapeGroup::addRect(Rect rect){
+    this->rects.push_back(rect);
+}
+//==========================================
+//    END [SECTION] Member Functions of Geometric Structs
+//==========================================
 
+//==========================================
+//    BEGIN [SECTION] Extra Math Deceleration
+//==========================================
 namespace ExtraVectorMath{
-    struct VectorMathResult{
-        bool hit;
-        float t;
-    };
-    VectorMathResult pointintersectLineT(glm::vec2 r_line_start, glm::vec2 r_line_velocity, glm::vec2 target_line_point, glm::vec2 target_line_normal);
+    LinearRes pointintersectLineT(glm::vec2 r_line_start, glm::vec2 r_line_velocity, glm::vec2 target_line_point, glm::vec2 target_line_normal);
     float projectionT(glm::vec2 l0, glm::vec2 p, glm::vec2 n);
     glm::vec2 projectionPoint(glm::vec2 l0, glm::vec2 p, glm::vec2 n);
     float pointOnLineT(glm::vec2 point, glm::vec2 start, glm::vec2 end);
@@ -352,59 +399,27 @@ namespace ExtraVectorMath{
     glm::vec2 lineClamp(glm::vec2 line_start, glm::vec2 line_end, glm::vec2 line_point);
     glm::vec2 minPoint(std::vector<glm::vec2>& points, glm::vec2 vector);
     glm::vec2 maxPoint(std::vector<glm::vec2>& points, glm::vec2 vector);
-
 }
+//==========================================
+//    END [SECTION] Extra Math Decelration
+//=========================================
 
-void create(Polygon& polygon, SweepedRect& rect){
-    glm::vec2 normal = glm::normalize(glm::vec2(-rect.direction.y, rect.direction.x));
-    polygon.verticies.clear();
-    polygon.verticies.push_back(rect.start + normal * rect.hh);
-    polygon.verticies.push_back(rect.start + rect.direction + normal * rect.hh);
-    polygon.verticies.push_back(rect.start + rect.direction - normal * rect.hh);
-    polygon.verticies.push_back(rect.start - normal * rect.hh);
-
-    float min_x = ExtraVectorMath::maxPoint(polygon.verticies, glm::vec2(-1.0f, 0.0f)).x;
-    float max_x = ExtraVectorMath::maxPoint(polygon.verticies, glm::vec2(1.0f, 0.0f)).x;
-    float min_y = ExtraVectorMath::maxPoint(polygon.verticies, glm::vec2(0.0f, -1.0f)).y;
-    float max_y = ExtraVectorMath::maxPoint(polygon.verticies, glm::vec2(1.0f, 1.0f)).y;
-    polygon.rect.create(glm::vec2(min_x, min_y), glm::vec2(max_x - min_x, max_y - min_y));
-
-}
-
-bool contains(Polygon& polygon, glm::vec2 point){
-    std::vector<Edge> edges = polygon.getEdges();
-    bool contains = true;
-    for(int i = 0; i < edges.size(); i++){
-        contains = contains && ExtraVectorMath::projectionT(point, edges.at(i).p0, edges.at(i).getNormal()) > 0.0f;
-    }
-    return contains;
-}
-
-void move(Polygon& polygon, glm::vec2 movement){
-    for(int i = 0; i < polygon.verticies.size(); i++){
-        polygon.verticies.at(i) += movement;
-    }
-}
-
-void move(Polygon& polygon, glm::vec2 velocity, float dt){
-    ::move(polygon, velocity * dt);
-}
-
-
-ExtraVectorMath::VectorMathResult ExtraVectorMath::pointintersectLineT(glm::vec2 r_line_start, glm::vec2 r_line_velocity, glm::vec2 target_line_point, glm::vec2 target_line_normal){
-    VectorMathResult vector_math_result;
+//==========================================
+//    BEGIN [SECTION] Extra Math Implementation
+//==========================================
+LinearRes ExtraVectorMath::pointintersectLineT(glm::vec2 r_line_start, glm::vec2 r_line_velocity, glm::vec2 target_line_point, glm::vec2 target_line_normal){
+    LinearRes vector_math_result;
     
     float determinant = glm::dot(target_line_normal, r_line_velocity);
     if(determinant == 0.0f) {
-        vector_math_result.hit = false;
+        vector_math_result.solution = false;
         return vector_math_result;
     };
-    vector_math_result.hit = true;
-    vector_math_result.t = glm::dot(target_line_point - r_line_start, target_line_normal) / determinant;
+    vector_math_result.solution = true;
+    vector_math_result.value = glm::dot(target_line_point - r_line_start, target_line_normal) / determinant;
 
     return vector_math_result;
 }
-
 
 /// @brief Given a point on the line, a line normal and a point not on the line, Calculate
 /// @param l0 The point away from the line
@@ -419,7 +434,6 @@ glm::vec2 ExtraVectorMath::projectionPoint(glm::vec2 l0, glm::vec2 p, glm::vec2 
     float t = projectionT(l0, p, n);
     return l0 + n * t;
 }
-
 
 /// @brief Given a point on a line, the start of the line and the end of the line
 /// @param point The point on the line
@@ -454,8 +468,6 @@ glm::vec2 ExtraVectorMath::lineClamp(glm::vec2 line_start, glm::vec2 line_end, g
     return lineClamp(line_start, line_end, line_point, vector);
 }
 
-
-
 glm::vec2 ExtraVectorMath::maxPoint(std::vector<glm::vec2>& points, glm::vec2 vector){
     float dot_product = std::numeric_limits<float>::lowest();
     int index = 0;
@@ -480,119 +492,390 @@ glm::vec2 ExtraVectorMath::minPoint(std::vector<glm::vec2>& points, glm::vec2 ve
     return points.at(index);
 
 }
+//==========================================
+//    END [SECTION] Extra Math Implementation
+//==========================================
 
-AARect Polygon::toRect(){
-    return rect;
+//==========================================
+//    BEGIN [SECTION] Geometric Free Functions Decleration
+//==========================================
+bool containsPoint(Rect& rect, glm::vec2 point);
+bool containsPoint(Circle circle, glm::vec2 point);
+// bool containsPoint(Polygon& polygon, glm::vec2 point);
+// bool containsPoint(Capsule& slice, glm::vec2 point);
+bool containsPoint(Slice& slice, glm::vec2 point);
+bool containsPoint(Arc& arc, glm::vec2 point);
+// bool containsPoint(ShapeGroup& shape_group, glm::vec2 point);
+Rect& getBoundingRect(Rect& rect, const Circle& circle);
+// Rect& getBoundingRect(Rect& rect, const Polygon& circle);
+// Rect& getBoundingRect(Rect& rect, const Capsule& capsule);
+// Rect& getBoundingRect(Rect& rect, const Slice& polygon);
+// Rect& getBoundingRect(Rect& rect, const Arc& polygon);
+// Rect& getBoundingRect(Rect& rect, const ShapeGroup& polygon);
+Rect& geomUnion(Rect& out_rect, const Rect& rect, const Rect& other_rect);
+// void getStartCircle(Circle& circle, Capsule& capsule);
+// void getEndCircle(Circle& circle, Capsule& capsule);
+// void getMidPolygon(Polygon& polygon, Capsule& capsule);
+void create(Polygon& polygon, SweepedRect& rect);
+float getLeft(Polygon& polygon);
+float getRight(Polygon& polygon);
+float getTop(Polygon& polygon);
+float getBottom(Polygon& polygon);
+void getEdges(std::vector<Edge>& edges, Polygon& polygon);
+
+//==========================================
+//    END [SECTION] Geometric Free Functions Decleration
+//==========================================
+
+
+
+//==========================================
+//    BEGIN [SECTION] Geometric Free Functions Implementation
+//==========================================
+
+
+bool containsPoint(Rect& rect, glm::vec2 point){
+    return point.x >= getLeftBoxed(rect) && point.x <= getRightBoxed(rect) &&
+        point.y >= getTopBoxed(rect) && point.y <= getBottomBoxed(rect);
 }
 
-std::vector<glm::vec2>& Polygon::getVerticies(){
-    return this->verticies;
+bool containsPoint(Circle circle, glm::vec2 point){
+    return glm::length2(point - circle.position) <= circle.radius * circle.radius;
 }
 
+// bool containsPoint(Polygon& polygon, glm::vec2 point){
+//     std::vector<Edge> edges;
+//     getEdges(edges, polygon);
+//     bool contains = true;
+//     for(int i = 0; i < edges.size(); i++){
+//         contains = contains && ExtraVectorMath::projectionT(point, edges.at(i).p0, edges.at(i).getNormal()) > 0.0f;
+//     }
+//     return contains;
+// }
 
-std::vector<Edge> Polygon::getEdges(){
-    std::vector<Edge> edges;
-    for(int i = 0; i < this->verticies.size(); i++){
+
+
+
+
+// bool containsPoint(Capsule& capsule, glm::vec2 point){
+//     Circle start_circle;
+//     getStartCircle(start_circle, capsule);
+//     Circle end_circle;
+//     getEndCircle(end_circle, capsule);
+//     Polygon mid_polygon;
+//     getMidPolygon(mid_polygon, capsule);
+//     return containsPoint(start_circle, point) ||
+//     containsPoint(end_circle, point) ||
+//     containsPoint(mid_polygon, point);
+// }
+
+bool containsPoint(Slice& slice, glm::vec2 point){
+    return false;
+}
+
+bool containsPoint(Arc& arc, glm::vec2 point){
+    return false;
+}
+
+// bool containsPoint(ShapeGroup& shape_group, glm::vec2 point){
+//     for(Circle& circle : shape_group.circles){
+//         if(containsPoint(circle, point)){
+//             return true;
+//         }
+//     }
+
+//     for(Rect& rect : shape_group.rects){
+//         if(containsPoint(rect, point)){
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+
+Rect& getBoundingRect(Rect& out_rect, const Circle& circle){
+    glm::vec2 pos = glm::vec2(circle.position.x - circle.radius, circle.position.y - circle.radius);
+    float diameter = 2.0f * circle.radius;
+    glm::vec2 size = glm::vec2(diameter, diameter);
+    out_rect.position = pos;
+    out_rect.size = size;
+    return out_rect;
+}
+
+Rect& geomUnion(Rect& out_rect, const Rect& rect, const Rect& other_rect){
+    getWidth(rect);
+    float x = fminf(rect.position.x, other_rect.position.x);
+    float y = fminf(rect.position.y, other_rect.position.y);
+    float sx = fmaxf(getRightBoxed(other_rect), getRightBoxed(rect)) - x;
+    float sy = fmaxf(getBottomBoxed(other_rect), getBottomBoxed(rect)) - y;
+    out_rect.position.x = x;
+    out_rect.position.y = y;
+    out_rect.size.x = sx;
+    out_rect.size.y = sy;
+    return out_rect;
+}
+
+void create(Polygon& polygon, SweepedRect& rect){
+    glm::vec2 normal = glm::normalize(glm::vec2(-rect.direction.y, rect.direction.x));
+    polygon.verticies.clear();
+    polygon.verticies.push_back(rect.start + normal * rect.hh);
+    polygon.verticies.push_back(rect.start + rect.direction + normal * rect.hh);
+    polygon.verticies.push_back(rect.start + rect.direction - normal * rect.hh);
+    polygon.verticies.push_back(rect.start - normal * rect.hh);
+
+    // float min_x = ExtraVectorMath::maxPoint(polygon.verticies, glm::vec2(-1.0f, 0.0f)).x;
+    // float max_x = ExtraVectorMath::maxPoint(polygon.verticies, glm::vec2(1.0f, 0.0f)).x;
+    // float min_y = ExtraVectorMath::maxPoint(polygon.verticies, glm::vec2(0.0f, -1.0f)).y;
+    // float max_y = ExtraVectorMath::maxPoint(polygon.verticies, glm::vec2(1.0f, 1.0f)).y;
+
+}
+
+void create(Polygon& polygon, const Rect& rect){
+    // polygon.verticies.clear();
+    // RectVerticies rect_verticies;
+    // create(rect_verticies, rect);
+    // polygon.verticies.clear();
+    // polygon.verticies.push_back(glm::vec2(rect_verticies.bottom_left.x, rect_verticies.bottom_left.y));
+    // polygon.verticies.push_back(glm::vec2(rect_verticies.bottom_right.x, rect_verticies.bottom_right.y));
+    // polygon.verticies.push_back(glm::vec2(rect_verticies.top_right.x, rect_verticies.top_right.y));
+    // polygon.verticies.push_back(glm::vec2(rect_verticies.top_left.x, rect_verticies.top_left.y));
+}
+
+float getLeft(Polygon& polygon){
+    return ExtraVectorMath::maxPoint(polygon.verticies, glm::vec2(-1.0f, 0.0f)).x;
+}
+
+float getRight(Polygon& polygon){
+    return ExtraVectorMath::maxPoint(polygon.verticies, glm::vec2(1.0f, 0.0f)).x;
+}
+
+float getTop(Polygon& polygon){
+    return ExtraVectorMath::maxPoint(polygon.verticies, glm::vec2(0.0f, -1.0f)).y;
+}
+
+float getBottom(Polygon& polygon){
+    return ExtraVectorMath::maxPoint(polygon.verticies, glm::vec2(0.0f, 1.0f)).y;
+}
+
+// void create(RectVerticies& rect_verticies, const Rect& rect){
+//     rect_verticies.top_left = glm::vec3(getTopLeft(rect), 0.0f);
+//     rect_verticies.top_right = glm::vec3(getTopRight(rect), 0.0f);
+//     rect_verticies.bottom_left = glm::vec3(getBottomLeft(rect), 0.0f);
+//     rect_verticies.bottom_right = glm::vec3(getBottomRight(rect), 0.0f);
+// }
+void getEdges(std::vector<Edge>& edges, Polygon& polygon){
+    for(size_t i = 0; i < polygon.verticies.size(); i++){
         Edge edge;
-        edge.create(this->verticies.at(i), this->verticies.at((i + 1) % this->verticies.size()));
+        edge.create(polygon.verticies.at(i), polygon.verticies.at((i + 1) % polygon.verticies.size()));
         edges.push_back(edge);
     }
-    return edges;
+}
+
+//==========================================
+//    END [SECTION] Geometric Free Functions Implementation
+//==========================================
+
+// struct RectVerticies{
+//     glm::vec3 top_left;
+//     glm::vec3 top_right;
+//     glm::vec3 bottom_left;
+//     glm::vec3 bottom_right;
+// }; 
+
+//==========================================
+//    BEGIN [SECTION] Physics Related Free Function Decleration
+//==========================================
+bool resolve(float& dt, glm::vec2& normal, float start, float target, float min_bound, float max_bound, glm::vec2 start_point, glm::vec2 velocity, glm::vec2 new_normal);
+bool resolve(float& dt, glm::vec2& normal, float start, float target, float velocity, glm::vec2 new_normal);
+QuadraticRes resolve(Circle& circle, glm::vec2 line_start, glm::vec2 vector);
+
+//==========================================
+//    END [SECTION] Physics Related Free Function Decleration
+//==========================================
+
+//==========================================
+//    BEGIN [SECTION] Physics Related Free Function Implementation
+//==========================================
+bool resolve(float& dt, glm::vec2& normal, Circle& circle, Rect& rect, glm::vec2 velocity){
+    // For each box points on the circle,find how far it is away from the rectangle
+    bool better = false;
+    // top
+    {
+        float t = (getBottomCircular(circle) - getTopBoxed(rect)) / velocity.y;
+        glm::vec2 point = getBottomPointCircular(circle) - velocity * t;
+
+        if ((velocity.y > 0.0f) && (t > dt) && (point.x >= getLeftBoxed(rect)) && (point.x <= getRightBoxed(rect))){
+            dt =  t;
+            normal = glm::vec2(0.0f, -1.0f);
+            better = true;
+        }
+        
+    }
+    //bottom
+    {
+        float t = (getTopCircular(circle) - getBottomBoxed(rect)) / velocity.y;
+        glm::vec2 point = getTopPointCircular(circle) - velocity * t;
+        if ((velocity.y < 0.0f) && (t > dt) && (point.x >= getLeftBoxed(rect)) && (point.x <= getRightBoxed(rect))){
+            dt = t;
+            normal = glm::vec2(0.0f, 1.0f);
+            better = true;
+
+        }  
+    }
+    //right
+    {
+        float t = (getLeftCircular(circle) - getRightBoxed(rect)) / velocity.x;
+        glm::vec2 point = getLeftPointCircular(circle) - velocity * t;
+        if((velocity.x < 0.0f) && (t > dt) && (point.y >= getTopBoxed(rect)) && (point.y <= getBottomBoxed(rect))){
+            dt = t;
+            normal = glm::vec2(1.0f, 0.0f);
+            better = true;
+
+        }
+    }
+    //left
+    {
+        float t = (getRightCircular(circle) - getLeftBoxed(rect)) / velocity.x;
+        glm::vec2 point = getRightPointCircular(circle) - velocity * t;
+        if((velocity.x > 0.0f) && (t > dt) && (point.y >= getTopBoxed(rect)) && (point.y <= getBottomBoxed(rect))){
+            dt = t;
+            normal = glm::vec2(-1.0f, 0.0f);
+            better = true;
+
+        } 
+    }
+    
+    glm::vec2 rect_verticies[4] = {
+        getTopLeftBoxed(rect),
+        getTopRightBoxed(rect),
+        getBottomLeftBoxed(rect),
+        getBottomRightBoxed(rect)
+    };
+
+    for(int i = 0; i < 4; i++){
+        QuadraticRes circle_intersection = resolve(circle, rect_verticies[i], velocity);
+        if (circle_intersection.solution){
+            float t = circle_intersection.solution ? circle_intersection.max() : 0.0f;
+            if(t > dt){
+                dt = t;
+                normal = glm::normalize(circle.position - (rect_verticies[i] + t * velocity));
+                better = true;
+
+            }   
+        }
+    }
+    return better;
 }
 
 
-float Polygon::getLeft(){
-    return ExtraVectorMath::maxPoint(this->verticies, glm::vec2(-1.0f, 0.0f)).x;
-}
-float Polygon::getRight(){
-    return ExtraVectorMath::maxPoint(this->verticies, glm::vec2(1.0f, 0.0f)).x;
 
-}
-float Polygon::getTop(){
-    return ExtraVectorMath::maxPoint(this->verticies, glm::vec2(0.0f, -1.0f)).y;
-
-}
-float Polygon::getBottom(){
-    return ExtraVectorMath::maxPoint(this->verticies, glm::vec2(0.0f, 1.0f)).y;
-
-}
-
-struct Capsule
-{
-    glm::vec2 position;
-    float radius;
-    glm::vec2 direction;    
-
-    void create(glm::vec2 position, float radius, glm::vec2 direction);
-    Circle getStartCircle();
-    Circle getEndCircle();
-    Polygon getMidSection();
-    glm::vec2 end();
-    std::string toString();
-};
-
-
-
-
-void Capsule::create(glm::vec2 position, float radius, glm::vec2 direction){
-    this->position = position;
-    this->radius = radius;
-    this->direction = direction;
-}
-
-void sweep(Capsule& capsule, glm::vec2 movement){
-    glm::vec2 new_end = capsule.end() + movement;
-    capsule.position = capsule.end();  
-    capsule.direction = new_end - capsule.position;
+bool resolve(float& dt, glm::vec2& normal, float start, float target, float velocity, glm::vec2 new_normal){
+    bool better = false;
+    if(velocity != 0){
+        float t = (start - target) / velocity;
+        better = t > dt;
+        if(better){
+            dt = t;
+            normal = new_normal;
+        }
+    }
+    return better;
 }
 
 
-glm::vec2 Capsule::end(){
-    return this->position + this->direction;
+QuadraticRes resolve(Circle& circle, glm::vec2 line_start, glm::vec2 vector){
+    QuadraticRes res;
+    glm::vec2 circle_to_line_start = line_start - circle.position;
+    float a_val = glm::dot(vector, vector);
+    float b_val = 2.0f * glm::dot(vector, line_start - circle.position);
+    float c_val =  glm::dot(circle.position, circle.position - 2.0f * line_start) + glm::dot(line_start, line_start) - circle.radius * circle.radius;
+    float determinant = b_val * b_val - 4.0f * a_val * c_val;
+    res.solution = determinant >= 0.0f;
+    if (!res.solution){ 
+        return res;
+    }
+    res.t0 = ((-b_val) - sqrtf(determinant)) / (2.0f * a_val);
+    res.t1 = ((-b_val) + sqrtf(determinant)) / (2.0f * a_val);
+    return res;
+}
+//==========================================
+//    END [SECTION] Physics Related Free Function Implementation
+//==========================================
+
+//==========================================
+//    BEGIN [SECTION] Physics Related Template Functions
+//==========================================
+
+template <int axis, int other_axis>
+bool resolve(float& dt, glm::vec2& normal, float start, float target, float min_bound, float max_bound, glm::vec2 start_point, glm::vec2 velocity, glm::vec2 new_normal){
+    
+    float t = (start - target) / velocity[axis];
+    glm::vec2 pp = start_point - velocity * t;
+    bool better = (t > dt) && (pp[other_axis] >= min_bound) && (pp[other_axis] <= max_bound);
+    if(better){
+
+        dt = t;
+        normal = new_normal;
+    }
+    return better;
 }
 
+//==========================================
+//    END [SECTION] Physics Related Template Functions
+//==========================================
 
-Circle Capsule::getStartCircle(){
-    Circle circle;
-    circle.create(this->position, this->radius);
-    return circle;
-}
-
-Circle Capsule::getEndCircle(){
-    Circle circle = this->getStartCircle();
-    move(circle, this->direction);
-    return circle;
-}
-
-Polygon Capsule::getMidSection(){
-    SweepedRect sweep_rect;
-    sweep_rect.create(this->position, this->radius, this->direction);
-    Polygon polygon;
-    ::create(polygon, sweep_rect);
-    return polygon;
-}
-
-std::string Capsule::toString(){
-    std::stringstream ss;
-    ss << "Capsule: {\n";
-    ss << "\tposition: {x:" << this->position.x << ", y: " << this->position.y << "}\n";
-    ss << "\tradius: " << this->radius << "\n"; 
-    ss << "\tdirection: {x:" << this->direction.x << ", y: " << this->direction.y << "}\n";
-    ss << "}";
-    return ss.str();
-}
-
-struct GLutils
+//==========================================
+//    BEGIN [SECTION] GL Utils Decleration
+//==========================================
+namespace GLutils
 {
     GLuint makeProgram(std::string vertex_file, std::string fragment_file);
+    GLuint makeProgram(const char *  vertex_content, const char * fragment_content);
     GLuint makeShader(std::string shader_file, GLenum shader_type);
-    GLuint makeProgramFromContent(const char *  vertex_content, const char * fragment_content);
-    GLuint makeShaderFromContent(const char * shader_content, GLenum shader_type);
-    GLuint attachShadersAndLinkProgram(GLuint& vertex_shader, GLuint& fragment_shader);
+    GLuint makeShader(const char * shader_content, GLenum shader_type);
+    GLuint attachLinkProgram(GLuint& vertex_shader, GLuint& fragment_shader);
 };
+//==========================================
+//    END [SECTION] GL Utils Decleration
+//==========================================
 
+//==========================================
+//    BEGIN [SECTION] GL Utils Implementation
+//==========================================
+GLuint GLutils::makeProgram(std::string vertex_file, std::string fragment_file){
+    GLuint program = glCreateProgram();
+    GLuint vertex_shader = makeShader(vertex_file, GL_VERTEX_SHADER);
+    GLuint fragment_shader = makeShader(fragment_file, GL_FRAGMENT_SHADER);
+    return GLutils::attachLinkProgram(vertex_shader, fragment_shader);
+}
 
-GLuint GLutils::attachShadersAndLinkProgram(GLuint& vertex_shader, GLuint& fragment_shader){
+GLuint GLutils::makeProgram(const char *  vertex_content, const char * fragment_content){
+    GLuint vertex_shader = GLutils::makeShader(vertex_content, GL_VERTEX_SHADER);
+    GLuint fragment_shader = GLutils::makeShader(fragment_content, GL_FRAGMENT_SHADER);
+    return GLutils::attachLinkProgram(vertex_shader, fragment_shader);
+}
+
+GLuint GLutils::makeShader(std::string shader_file, GLenum shader_type){
+    std::string content = readFile(shader_file);
+    const char * shader_src = content.c_str();
+    return makeShader(shader_src, shader_type);
+}
+
+GLuint GLutils::makeShader(const char * shader_content, GLenum shader_type){
+    GLuint shader = glCreateShader(shader_type);
+    glShaderSource(shader, 1, &shader_content, NULL);
+    glCompileShader(shader);
+    int status;
+    GLchar info_log[1000];
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
+    glGetShaderInfoLog(shader, 1000, NULL, &info_log[0]);
+    if(!status){
+        std::cout << "failed to load this vertex shader" << std::endl;
+        std::cout << info_log << '\n';
+    }
+    return shader;
+}
+
+GLuint GLutils::attachLinkProgram(GLuint& vertex_shader, GLuint& fragment_shader){
     GLuint program = glCreateProgram();
 
     glAttachShader(program, vertex_shader);
@@ -612,84 +895,43 @@ GLuint GLutils::attachShadersAndLinkProgram(GLuint& vertex_shader, GLuint& fragm
     return program;
 
 }
+//==========================================
+//    END [SECTION] GL Utils Implementation
+//==========================================
 
-
-GLuint GLutils::makeProgramFromContent(const char *  vertex_content, const char * fragment_content){
-    GLuint vertex_shader = this->makeShaderFromContent(vertex_content, GL_VERTEX_SHADER);
-    GLuint fragment_shader = this->makeShaderFromContent(fragment_content, GL_FRAGMENT_SHADER);
-    return GLutils::attachShadersAndLinkProgram(vertex_shader, fragment_shader);
-}
-
-GLuint GLutils::makeProgram(std::string vertex_file, std::string fragment_file){
-    GLuint program = glCreateProgram();
-    GLuint vertex_shader = makeShader(vertex_file, GL_VERTEX_SHADER);
-    GLuint fragment_shader = makeShader(fragment_file, GL_FRAGMENT_SHADER);
-    return GLutils::attachShadersAndLinkProgram(vertex_shader, fragment_shader);
-}
-
-GLuint GLutils::makeShaderFromContent(const char * shader_content, GLenum shader_type){
-    GLuint shader = glCreateShader(shader_type);
-    glShaderSource(shader, 1, &shader_content, NULL);
-    glCompileShader(shader);
-    int status;
-    GLchar info_log[1000];
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
-    glGetShaderInfoLog(shader, 1000, NULL, &info_log[0]);
-    if(!status){
-        std::cout << "failed to load this vertex shader" << std::endl;
-        std::cout << info_log << '\n';
-    }
-    return shader;
-}
-
-
-GLuint GLutils::makeShader(std::string shader_file, GLenum shader_type){
-    std::string content = readFile(shader_file);
-    const char * shader_src = content.c_str();
-    return makeShaderFromContent(shader_src, shader_type);
-}
-
-
+//==========================================
+//    BEGIN [SECTION] Intersector Decleration
+//==========================================
 namespace Intersector{
-    template <typename ShapeA, typename ShapeB>
-    bool asRectIntersectsAsRect(ShapeA& a, ShapeB& b);
-    bool rectIntersectsRect(AARect& rect_0, AARect& rect_1);
-    bool circleIntersectsRect(Circle& circle, AARect& rect);
+    bool rectIntersectsRect(Rect& rect_0, Rect& rect_1);
+    bool circleIntersectsRect(Circle& circle, Rect& rect);
     bool circleIntersectsPolygon(Circle& circle, Polygon& polygon);
     bool polygonIntersectsPolygon(Polygon& polygon_0, Polygon& polygon_1);
     bool polygonIntersectsPolygonEdgeTest(Polygon& polygon_0, Polygon& polygon_1);
-    bool capsuleIntersectsRect(Capsule& capsule, AARect& rect);
-    bool polygonIntersectsRect(Polygon& polygon, AARect& rect);
+    // bool capsuleIntersectsRect(Capsule& capsule, Rect& rect);
+    bool polygonIntersectsRect(Polygon& polygon, Rect& rect);
 };
+//==========================================
+//    END [SECTION] Intersector Decleration
+//==========================================
 
-
-bool Intersector::rectIntersectsRect(AARect& rect_0, AARect& rect_1){
-    return (fmaxf(rect_0.getRight(), rect_1.getRight()) - fmin(rect_0.getLeft(), rect_1.getLeft())) <= (rect_0.getWidth() + rect_1.getWidth()) &&
-        (fmaxf(rect_0.getBottom(), rect_1.getBottom()) - fmin(rect_0.getTop(), rect_1.getTop())) <= (rect_0.getHeight() + rect_1.getHeight());
-
+//==========================================
+//    BEGIN [SECTION] Intersector Implementation
+//==========================================
+bool Intersector::rectIntersectsRect(Rect& rect_0, Rect& rect_1){
+    return (fmaxf(getRightBoxed(rect_0), getRightBoxed(rect_1)) - fmin(getLeftBoxed(rect_0), getLeftBoxed(rect_1))) <= (getWidth(rect_0) + getWidth(rect_1)) &&
+        (fmaxf(getBottomBoxed(rect_0), getBottomBoxed(rect_1)) - fmin(getTopBoxed(rect_0), getTopBoxed(rect_1))) <= (getHeight(rect_0) + getHeight(rect_1));
 }
 
-bool Intersector::circleIntersectsRect(Circle& circle, AARect& rect){
+bool Intersector::circleIntersectsRect(Circle& circle, Rect& rect){
     Polygon rect_polygon; 
     create(rect_polygon, rect);
     return Intersector::circleIntersectsPolygon(circle, rect_polygon); 
 }
 
-// This should work as long as the shappe has a toRect function
-template <typename ShapeA, typename ShapeB>
-bool Intersector::asRectIntersectsAsRect(ShapeA& a, ShapeB& b){
-    AARect rect_a = a.toRect();
-    AARect rect_b = b.toRect();
-    return Intersector::rectIntersectsRect(rect_a, rect_b);
-}
-
-// This Should Work, but needs testing
 bool Intersector::circleIntersectsPolygon(Circle& circle, Polygon& polygon){
-    if(!Intersector::asRectIntersectsAsRect<Circle, Polygon>(circle, polygon)){
-        return false;
-    }
-
-    std::vector<Edge> polygon_edges = polygon.getEdges();
+    std::vector<Edge> polygon_edges;
+    getEdges(polygon_edges, polygon);
     for(int i = 0; i < polygon_edges.size(); i++){
         glm::vec2 point = ExtraVectorMath::lineClamp(
             polygon_edges.at(i).p0, 
@@ -698,20 +940,32 @@ bool Intersector::circleIntersectsPolygon(Circle& circle, Polygon& polygon){
                 polygon_edges.at(i).getNormal() * 
                 ExtraVectorMath::projectionT(circle.position, polygon_edges.at(i).p0, polygon_edges.at(i).getNormal())
         ); 
-        if(contains(circle, point)){
+        if(containsPoint(circle, point)){
             return true;
         }
     }
     return false;
 }
 
+bool Intersector::polygonIntersectsPolygon(Polygon& polygon_0, Polygon& polygon_1){
 
+    return Intersector::polygonIntersectsPolygonEdgeTest(polygon_0, polygon_1) && 
+    Intersector::polygonIntersectsPolygonEdgeTest(polygon_1, polygon_0);
+    
+}
+
+bool Intersector::polygonIntersectsRect(Polygon& polygon, Rect& rect){
+    Polygon rect_as_polygon;
+    create(rect_as_polygon, rect);
+    return Intersector::polygonIntersectsPolygon(polygon, rect_as_polygon);
+}
 
 bool Intersector::polygonIntersectsPolygonEdgeTest(Polygon& polygon_0, Polygon& polygon_1){
 
-    std::vector<Edge> polygon_0_edges = polygon_0.getEdges();
-    std::vector<glm::vec2>& polygon_0_verticies= polygon_0.getVerticies();
-    std::vector<glm::vec2>& polygon_1_verticies= polygon_1.getVerticies();
+    std::vector<Edge> polygon_0_edges;
+    getEdges(polygon_0_edges, polygon_0);
+    std::vector<glm::vec2>& polygon_0_verticies= polygon_0.verticies;
+    std::vector<glm::vec2>& polygon_1_verticies= polygon_1.verticies;
     bool intersecting = true;
     for(int i = 0; i < polygon_0_edges.size(); i++){
         glm::vec2 vector = polygon_0_edges.at(i).asVector();
@@ -749,172 +1003,26 @@ bool Intersector::polygonIntersectsPolygonEdgeTest(Polygon& polygon_0, Polygon& 
 
 }
 
-bool Intersector::polygonIntersectsPolygon(Polygon& polygon_0, Polygon& polygon_1){
-
-    return Intersector::polygonIntersectsPolygonEdgeTest(polygon_0, polygon_1) && 
-    Intersector::polygonIntersectsPolygonEdgeTest(polygon_1, polygon_0);
+// bool Intersector::capsuleIntersectsRect(Capsule& capsule, Rect& rect){
+//     Circle circle_1;
+//     getStartCircle(circle_1, capsule); 
+//     Circle circle_2;
+//     getEndCircle(circle_2, capsule);
+//     Polygon polygon;
+//     getMidPolygon(polygon, capsule);
     
-}
-
-bool Intersector::polygonIntersectsRect(Polygon& polygon, AARect& rect){
-    Polygon rect_as_polygon;
-    create(rect_as_polygon, rect);
-    return Intersector::polygonIntersectsPolygon(polygon, rect_as_polygon);
-}
-
-bool Intersector::capsuleIntersectsRect(Capsule& capsule, AARect& rect){
-    Circle circle_1 = capsule.getStartCircle(); 
-    Circle circle_2 = capsule.getEndCircle();
-    Polygon polygon = capsule.getMidSection();
-    
-    return Intersector::circleIntersectsRect(circle_2, rect) ||
-        Intersector::polygonIntersectsRect(polygon, rect) || 
-        Intersector::circleIntersectsRect(circle_1, rect);
-}
+//     return Intersector::circleIntersectsRect(circle_2, rect) ||
+//         Intersector::polygonIntersectsRect(polygon, rect) || 
+//         Intersector::circleIntersectsRect(circle_1, rect);
+// }
+//==========================================
+//    END [SECTION] Intersector Implementation
+//==========================================
 
 
-// This will update the time and the normal when the circle hits the rect
-bool resolve(float& dt, glm::vec2& normal, Circle& circle, AARect& rect, glm::vec2 cumu_velocity);
-//This will resolve a point to a bounded line on an axis
-template <int axis, int other_axis>
-bool resolve(float& dt, glm::vec2& normal, float start, float target, float min_bound, float max_bound, glm::vec2 start_point, glm::vec2 velocity, glm::vec2 new_normal);
-// This will update the time and the normal if the circle hits the rect in less time and the circle is travelling towards the rect
-// resolves based on start value of of bect to resolve in one dimension  and velocity in a single dimension.
-bool resolve(float& dt, glm::vec2& normal, float start, float target, float velocity, glm::vec2 new_normal);
-
-
-
-struct CircleLineIntersection{
-    bool hit; 
-    float t0, t1;
-    float max(){
-        return std::max(this->t0, this->t1);
-    }
-};
-
-
-CircleLineIntersection resolve(Circle& circle, glm::vec2 line_start, glm::vec2 vector){
-    CircleLineIntersection res;
-    glm::vec2 circle_to_line_start = line_start - circle.position;
-    float a_val = glm::dot(vector, vector);
-    float b_val = 2.0f * glm::dot(vector, line_start - circle.position);
-    float c_val =  glm::dot(circle.position, circle.position - 2.0f * line_start) + glm::dot(line_start, line_start) - circle.radius * circle.radius;
-    float determinant = b_val * b_val - 4.0f * a_val * c_val;
-    res.hit = determinant >= 0.0f;
-    if (!res.hit){ 
-        return res;
-    }
-    res.t0 = ((-b_val) - sqrtf(determinant)) / (2.0f * a_val);
-    res.t1 = ((-b_val) + sqrtf(determinant)) / (2.0f * a_val);
-    return res;
-}
-
-
-
-
-
-
-
-template <int axis, int other_axis>
-bool resolve(float& dt, glm::vec2& normal, float start, float target, float min_bound, float max_bound, glm::vec2 start_point, glm::vec2 velocity, glm::vec2 new_normal){
-    
-    float t = (start - target) / velocity[axis];
-    glm::vec2 pp = start_point - velocity * t;
-    bool better = (t > dt) && (pp[other_axis] >= min_bound) && (pp[other_axis] <= max_bound);
-    if(better){
-
-        dt = t;
-        normal = new_normal;
-    }
-    return better;
-}
-
-bool resolve(float& dt, glm::vec2& normal, Circle& circle, AARect& rect, glm::vec2 velocity){
-    // For each box points on the circle,find how far it is away from the rectangle
-    bool better = false;
-    // top
-    {
-        float t = (circle.getBottom() - rect.getTop()) / velocity.y;
-        glm::vec2 point = circle.getBottomPoint() - velocity * t;
-
-        if ((velocity.y > 0.0f) && (t > dt) && (point.x >= rect.getLeft()) && (point.x <= rect.getRight())){
-            dt =  t;
-            normal = glm::vec2(0.0f, -1.0f);
-            better = true;
-        }
-        
-    }
-    //bottom
-    {
-        float t = (circle.getTop() - rect.getBottom()) / velocity.y;
-        glm::vec2 point = circle.getTopPoint() - velocity * t;
-        if ((velocity.y < 0.0f) && (t > dt) && (point.x >= rect.getLeft()) && (point.x <= rect.getRight())){
-            dt = t;
-            normal = glm::vec2(0.0f, 1.0f);
-            better = true;
-
-        }  
-    }
-    //right
-    {
-        float t = (circle.getLeft() - rect.getRight()) / velocity.x;
-        glm::vec2 point = circle.getLeftPoint() - velocity * t;
-        if((velocity.x < 0.0f) && (t > dt) && (point.y >= rect.getTop()) && (point.y <= rect.getBottom())){
-            dt = t;
-            normal = glm::vec2(1.0f, 0.0f);
-            better = true;
-
-        }
-    }
-    //left
-    {
-        float t = (circle.getRight() - rect.getLeft()) / velocity.x;
-        glm::vec2 point = circle.getRightPoint() - velocity * t;
-        if((velocity.x > 0.0f) && (t > dt) && (point.y >= rect.getTop()) && (point.y <= rect.getBottom())){
-            dt = t;
-            normal = glm::vec2(-1.0f, 0.0f);
-            better = true;
-
-        } 
-    }
-    
-    glm::vec2 rect_verticies[4] = {
-        rect.getTopLeft(),
-        rect.getTopRight(),
-        rect.getBottomLeft(),
-        rect.getBottomRight()
-    };
-
-    for(int i = 0; i < 4; i++){
-        CircleLineIntersection circle_intersection = resolve(circle, rect_verticies[i], velocity);
-        if (circle_intersection.hit){
-            float t = circle_intersection.hit ? circle_intersection.max() : 0.0f;
-            if(t > dt){
-                dt = t;
-                normal = glm::normalize(circle.position - (rect_verticies[i] + t * velocity));
-                better = true;
-
-            }   
-        }
-    }
-    return better;
-}
-
-
-
-bool resolve(float& dt, glm::vec2& normal, float start, float target, float velocity, glm::vec2 new_normal){
-    bool better = false;
-    if(velocity != 0){
-        float t = (start - target) / velocity;
-        better = t > dt;
-        if(better){
-            dt = t;
-            normal = new_normal;
-        }
-    }
-    return better;
-}
-
+//==========================================
+//    BEGIN [SECTION] Time Related Structs
+//==========================================
 struct TimeController
 {
     float delta_time;
@@ -925,6 +1033,29 @@ struct TimeController
     float getDeltaTime();
 };
 
+template<typename ValueType>
+struct TimeFilter
+{
+    ValueType value;
+    Uint64 time, filter_duration;
+    ValueType getValue();
+};
+//==========================================
+//    END [SECTION] Time Related Structs
+//==========================================
+//==========================================
+//    BEGIN [SECTION] Time Related Free Function Declerations
+//==========================================
+void create(TimeController& time_controller, Uint64 time);
+void update(TimeController& time_controller, Uint64 new_time);
+//==========================================
+//    END [SECTION] Time Related Free Function Declerations
+//==========================================
+
+
+//==========================================
+//    BEGIN [SECTION] Time Related Member Functions
+//==========================================
 Uint64 TimeController::getTime(){
     return this->time;
 }
@@ -933,6 +1064,21 @@ float TimeController::getDeltaTime(){
     return this->delta_time;
 }
 
+TimeController::TimeController(Uint64 time){
+    ::create(*this, time);
+}
+//==========================================
+//    END [SECTION] Time Related Member Functions
+//==========================================
+
+
+//==========================================
+//    BEGIN [SECTION] Time Related Free Function Implementation
+//==========================================
+void create(TimeController& time_controller, Uint64 time){
+    time_controller.delta_time = 1.0f / 60.0f;
+    time_controller.time = time;
+}
 
 
 void update(TimeController& time_controller, Uint64 new_time){
@@ -944,25 +1090,14 @@ void update(TimeController& time_controller, Uint64 new_time){
         time_controller.delta_time =actualElapsed * 0.001f;
     }
     time_controller.time = new_time;
-
 }
+//==========================================
+//    END [SECTION] Time Related Free Function Implementation
+//==========================================
 
-void create(TimeController& time_controller, Uint64 time){
-    time_controller.delta_time = 1.0f / 60.0f;
-    time_controller.time = time;
-}
-
-TimeController::TimeController(Uint64 time){
-    ::create(*this, time);
-}
-
-template<typename ValueType>
-struct TimeFilter
-{
-    ValueType value;
-    Uint64 time, filter_duration;
-    ValueType getValue();
-};
+//==========================================
+//    BEGIN [SECTION] Time Related Template Function Implementations
+//==========================================
 
 template<typename ValueType>
 void create(TimeFilter<ValueType>& time_filter, Uint64 filter_duration){
@@ -981,313 +1116,173 @@ ValueType TimeFilter<ValueType>::getValue(){
     return value;
 }
 
-struct FrameBufferData{
+//==========================================
+//    END [SECTION] Time Related Template Function Implementations
+//==========================================
+
+
+
+
+
+
+//==========================================
+//    BEGIN [SECTION] Move Template Functions
+//==========================================
+template<typename TMovable>
+void move(TMovable& obj, glm::vec2 movement){
+    obj.position += movement;
+}
+
+template<typename TMovable>
+void move(TMovable& obj, glm::vec2 velocity, float dt){
+    obj.position += velocity * dt;
+}
+
+template<typename TVelocityMovable>
+void move(TVelocityMovable& obj, float dt){
+    obj.position += obj.velocity * dt;
+}
+//==========================================
+//    END [SECTION] Move Template Functions
+//==========================================
+
+
+//==========================================
+//    BEGIN [SECTION] MeshGeneration Related Member Function Decleration
+//==========================================
+void addRectangle(std::vector<float>& vertex_batch, std::vector<unsigned int>& index_batch, Rect& rect, glm::vec3& color, unsigned int& index_offset);
+void addCircle(std::vector<float>& vertex_batch, std::vector<unsigned int>& index_batch,
+float x, float y, float w, float h, float r, float g, float b, unsigned int& index_offset);
+void getXYZRGBQuad(float * vertex_data, unsigned int * index_data);
+//==========================================
+//    END [SECTION] MeshGeneration Related Member Function Decleration
+//==========================================
+
+//==========================================
+//    BEGIN [SECTION] MeshGeneration Related Member Function Implementations
+//==========================================
+
+void addRectangle(std::vector<float>& vertex_batch, std::vector<unsigned int>& index_batch, Rect& rect, glm::vec3& color, unsigned int& index_offset){
+    vertex_batch.insert(vertex_batch.end(), {
+        getLeftBoxed(rect), getBottomBoxed(rect), 0.0f, color.r, color.g, color.b,
+        getRightBoxed(rect), getBottomBoxed(rect), 0.0f, color.r, color.g, color.b,
+        getRightBoxed(rect), getTopBoxed(rect), 0.0f, color.r, color.g, color.b,
+        getLeftBoxed(rect), getTopBoxed(rect), 0.0f, color.r, color.g, color.b
+    });
+
+    index_batch.insert(index_batch.end(), {
+        index_offset, index_offset + 1, index_offset + 2,
+        index_offset, index_offset + 2, index_offset + 3
+    });
+
+    index_offset += 4;
+}
+
+
+void addCircle(std::vector<float>& vertex_batch, std::vector<unsigned int>& index_batch,
+float x, float y, float w, float h, float r, float g, float b, unsigned int& index_offset){
+    
+    vertex_batch.insert(vertex_batch.end(),{
+        x, y + h, 0.0f, r, g, b, -1.0f, 1.0f,
+        x + w, y + h, 0.0f, r, g, b, 1.0f, 1.0f,
+        x + w, y, 0.0f, r, g, b, 1.0f, -1.0f,
+        x, y, 0.0f, r, g, b, -1.0f, -1.0f
+    });
+
+    index_batch.insert(index_batch.end(),{                       
+        index_offset, index_offset + 1, index_offset + 2,
+        index_offset, index_offset + 2, index_offset + 3
+    });
+    index_offset += 4;
+}
+
+void getXYZRGBQuad(float * vertex_data, unsigned int * index_data){
+    float vd[] = {
+        0.0f, 480.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        640.0f, 480.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        640.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f
+    }; 
+
+    unsigned int ind[] = {
+        0, 1, 2,
+        0, 2, 3
+    };
+    memcpy(vertex_data, vd, 8 * 4 * sizeof(float));
+    memcpy(vertex_data, ind, 6 * sizeof(unsigned int));
+
+}
+//==========================================
+//    END [SECTION] MeshGeneration Related Member Function Implementations
+//==========================================
+
+//==========================================
+//    BEGIN [SECTION] Renderer Struct Declearations
+//==========================================
+
+struct CommonRenderer{
+    GLuint program = 0, uniform_matrix = 0, vertex_buffer = 0, index_buffer = 0;
+    std::vector<float> vertex_batch;
+    std::vector<unsigned int> index_batch;
+    unsigned int index_offset = 0;    
+    void begin();
+
+};
+
+struct PolygonRenderer : public CommonRenderer{
+    PolygonRenderer();
+    void init();
+};
+
+struct CircleRenderer : public CommonRenderer{
+    CircleRenderer();
+    void init();
+
+};
+
+struct TextureRenderer : public CommonRenderer{
+    GLint u_texture;
+    TextureRenderer();
+    void init();
+
+};
+
+struct FrameColorTextureBuffer{
     GLuint object = 0;
     GLuint color_texture = 0;
 };
 
 
-struct OnHit {
-    virtual void update(glm::vec2 normal) = 0;
-};
+//==========================================
+//    END [SECTION] Renderer Struct Declearations
+//==========================================
 
-
-class IGameObject{};
-
-struct MultiShape
-{
-    std::vector<AARect> aa_rects;
-    std::vector<Circle> circles;
-    AARect bounding_rect;
-    int shape_count = 0;
-    float getLeft();
-    float getRight();
-    float getBottom();
-    float getTop();
-    float getWidth();
-};
-
-
-
-void move(MultiShape& shape_group, glm::vec2 movement){
-    for(AARect& rect : shape_group.aa_rects){
-        ::move(rect, movement);
-    }
-    for(Circle& circle : shape_group.circles){
-        ::move(circle, movement);
-    }
-    ::move(shape_group.bounding_rect, movement);
+//==========================================
+//    BEGIN [SECTION] Renderer Member Functions
+//==========================================
+void CommonRenderer::begin(){
+    this->index_offset = 0;
+    this->vertex_batch.clear();
+    this->index_batch.clear();
 }
 
+PolygonRenderer::PolygonRenderer(){}
 
-void addCircle(MultiShape& shape_group, Circle circle){
-    AARect rect = circle.toRect();
-    shape_group.circles.push_back(circle);
-    if(shape_group.shape_count == 0){
-        shape_group.bounding_rect = circle.toRect();
-    }else{
-        ::join(shape_group.bounding_rect, rect);
-    }
-    shape_group.shape_count++;
-}
-
-void addRect(MultiShape& shape_group, AARect rect){
-    shape_group.aa_rects.push_back(rect);
-    if(shape_group.shape_count == 0){
-        shape_group.bounding_rect = rect;
-    }else{
-        ::join(shape_group.bounding_rect, rect);
-    }
-    shape_group.shape_count++;
-
-}
-
-bool contains(MultiShape& shape_group, glm::vec2 point){
-    for(Circle& circle : shape_group.circles){
-        if(contains(circle, point)){
-            return true;
-        }
-    }
-
-    for(AARect& rect : shape_group.aa_rects){
-        if(contains(rect, point)){
-            return true;
-        }
-    }
-    return false;
-}
-    
-float MultiShape::getLeft(){
-    return this->bounding_rect.getLeft(); 
-}
-
-float MultiShape::getRight(){
-    return this->bounding_rect.getRight();
-}
-
-float MultiShape::getBottom(){
-    return this->bounding_rect.getBottom();
-}
-
-float MultiShape::getTop(){
-    return this->bounding_rect.getTop();
-}
-
-float MultiShape::getWidth(){
-    return this->getRight() - this->getLeft();
-}
-
-struct Entity{
-
-public:
-    Entity();
-    glm::vec2 position, velocity;
-    MultiShape multi_shape;
-    
-    glm::vec2 getPosition();
-    void create(glm::vec2 position, glm::vec2 velocity);
-    float getTop();
-    float getBottom();
-    float getLeft();
-    float getRight();
-    float getWidth();
-};
-
-void move(Entity& entity, glm::vec2 movement);    
-void move(Entity& entity, float dt);
-void moveX(Entity& entity, float x);
-void moveY(Entity& entity, float y);
-void moveXTo(Entity& entity, float x);
-void moveYTo(Entity& entity, float y);
-void moveTo(Entity& entity, glm::vec2 point);
-bool contains(Entity& entity, glm::vec2 point);
-void setVelocityX(Entity& entity, float x);
-void setVelocity(Entity& entity, glm::vec2 velocity);
-
-
-Entity::Entity(){}
-
-glm::vec2 Entity::getPosition(){
-    return this->position;
-}
-
-struct Ball : public Entity, public IGameObject{
-    Ball();
-    void create(glm::vec2 position, float radius, glm::vec2 velocity);
-    Circle& refCircle();
-};
-
-struct Paddle : public Entity, public IGameObject{
-    Paddle();
-    void create(glm::vec2 position);
-    AARect& refRect();
-    glm::vec2 bounceOffTop(glm::vec2 velocity, float x);
-};
-
-void move(Entity& entity, glm::vec2 movement){
-    entity.position += movement; 
-    move(entity.multi_shape, movement);
-}   
-void move(Entity& entity, float dt){
-    glm::vec2 movement = entity.velocity * dt;
-    move(entity, movement);
-}
-void moveX(Entity& entity, float x){move(entity, glm::vec2(x, 0));}
-void moveY(Entity& entity, float y){move(entity, glm::vec2(0, y));}
-void moveXTo(Entity& entity, float x){moveTo(entity, glm::vec2(x, entity.position.y));}
-void moveYTo(Entity& entity, float y){moveTo(entity, glm::vec2(entity.position.x, y));}
-void moveTo(Entity& entity, glm::vec2 point){move(entity, point - entity.position);}
-bool contains(Entity& entity, glm::vec2 point){contains(entity.multi_shape, point);}
-void setVelocityX(Entity& entity, float x){entity.velocity.x = x;}
-void setVelocity(Entity& entity, glm::vec2 velocity){entity.velocity = velocity;}
-
-void Entity::create(glm::vec2 position, glm::vec2 velocity){
-    this->position = position;
-    this->velocity = velocity;
-}
-
-float Entity::getTop(){
-    return this->multi_shape.getTop();
-}
-
-float Entity::getBottom(){
-    return this->multi_shape.getBottom();
-}
-
-float Entity::getLeft(){
-    return this->multi_shape.getLeft();
-}
-
-float Entity::getRight(){
-    return this->multi_shape.getRight();
-}
-
-float Entity::getWidth(){
-    return this->multi_shape.getWidth();
-}
-
-
-Ball::Ball(){}
-
-void Ball::create(glm::vec2 position, float radius, glm::vec2 velocity){
-    Entity::create(position, velocity);
-    Circle circle;
-    circle.create(position, radius);
-    addCircle(multi_shape, circle);
-}
-
-
-Circle& Ball::refCircle(){
-    return this->multi_shape.circles.at(0);
-}
-
-Paddle::Paddle(){}
-
-AARect& Paddle::refRect(){
-    return this->multi_shape.aa_rects.at(0);
-}
-
-void Paddle::create(glm::vec2 position){
-    Entity::create(position, glm::vec2(0, 0));
-    AARect rect;
-    rect.create(position, glm::vec2(80, 8));
-    addRect(this->multi_shape, rect);
-}
-
-glm::vec2 Paddle::bounceOffTop(glm::vec2 velocity, float x){
-    float perc = (x - this->multi_shape.aa_rects.at(0).getCentre().x) / this->multi_shape.aa_rects.at(0).getWidth() * 2.0f;
-    std::cout << perc << std::endl;
-    return glm::normalize(glm::vec2(perc * 10.0f, -1.0f)) * glm::length(velocity);
-}
-
-
-struct BallBounceOfPaddle : OnHit{
-    Ball * ball;
-    Paddle * paddle;
-    void set(Ball * ball, Paddle * paddle);
-    void update(glm::vec2 normal);
-};
-
-void BallBounceOfPaddle::set(Ball * ball, Paddle * paddle){
-    this->ball = ball;
-    this->paddle = paddle;
-}
-
-void BallBounceOfPaddle::update(glm::vec2 normal){
-    if(normal.y == 1.0f){
-        this->ball->velocity = paddle->bounceOffTop(ball->velocity, ball->position.x);
-    }else{
-        this->ball->velocity = glm::reflect(ball->velocity, normal);
-    }
-}
-
-struct BallBounceOfWall : OnHit{
-    Ball * ball;
-    void set(Ball * ball);
-    void update(glm::vec2 normal);
-};
-
-void BallBounceOfWall::set(Ball * ball){
-    this->ball = ball;
-}
-void BallBounceOfWall::update(glm::vec2 normal){
-    ball->velocity = glm::reflect(ball->velocity, normal);
-}
-
-struct PaddleHitsWall : OnHit{
-    Paddle * paddle;
-    void set(Paddle * paddle);
-    void update(glm::vec2 normal);
-};
-
-void PaddleHitsWall::set(Paddle * paddle){
-    this->paddle = paddle;
-}
-void PaddleHitsWall::update(glm::vec2 normal){
-    paddle->velocity.x = 0.0f;
-}
-
-
-
-struct PolygonRenderer{
-    GLuint program = 0, uniform_matrix = 0, vertex_buffer = 0, index_buffer = 0;
-    std::vector<float> vertex_batch;
-    std::vector<unsigned int> index_batch;
-    unsigned int index_offset = 0;
-    PolygonRenderer();
-    void begin();
-};
-
-
-PolygonRenderer::PolygonRenderer(){
-    this->program = GLutils().makeProgram("./data/shaders/polygon_position_color.vert", "./data/shaders/polygon_position_color.frag");
+void PolygonRenderer::init(){
+    this->program = GLutils::makeProgram("./data/shaders/polygon_position_color.vert", "./data/shaders/polygon_position_color.frag");
     this->uniform_matrix = glGetUniformLocation(this->program, "u_view_mat");
     glGenBuffers(1, &this->vertex_buffer);
     glGenBuffers(1, &this->index_buffer);
     this->vertex_batch.clear();
     this->index_batch.clear();
     this->index_offset = 0;
-
 }
 
-void PolygonRenderer::begin(){
-    this->index_offset = 0;
-    this->vertex_batch.clear();
-    this->index_batch.clear();
-}
 
-struct CircleRenderer{
-    GLuint program = 0, vertex_buffer, index_buffer = 0;
-    GLint uniform_matrix = 0;
-    std::vector<float> vertex_batch = std::vector<float>();
-    std::vector<unsigned int> index_batch = std::vector<unsigned int>();
-    unsigned int index_offset = 0;
-    CircleRenderer();
-    void begin();
-};
+CircleRenderer::CircleRenderer(){}
 
-CircleRenderer::CircleRenderer(){
-    program = GLutils().makeProgram("./data/shaders/circle_position_color_texcoord.vert", "./data/shaders/circle_position_color_texcoord.frag");
+void CircleRenderer::init(){
+    program = GLutils::makeProgram("./data/shaders/circle_position_color_texcoord.vert", "./data/shaders/circle_position_color_texcoord.frag");
     uniform_matrix = glGetUniformLocation(program, "u_view_mat");
     glGenBuffers(1, &vertex_buffer);
     glGenBuffers(1, &index_buffer);
@@ -1296,80 +1291,398 @@ CircleRenderer::CircleRenderer(){
     index_offset = 0;
 }
 
-void CircleRenderer::begin(){
-    this->index_offset = 0;
-    this->vertex_batch.clear();
-    this->index_batch.clear();
-}
+TextureRenderer::TextureRenderer(){}
 
-struct TextureRenderer{
-    GLuint program = 0, vertex_buffer = 0, index_buffer = 0;
-    GLint uniform_matrix = 0;
-    std::vector<float> vertex_batch = std::vector<float>();
-    std::vector<unsigned int> index_batch = std::vector<unsigned int>();
-    unsigned int index_offset = 0;
-    GLint u_texture;
-    TextureRenderer();
-    void begin();
-};
-
-
-TextureRenderer::TextureRenderer(){
-    program =  GLutils().makeProgram("data\\shaders\\texture_color.vert", "data\\shaders\\texture_color.frag");
+void TextureRenderer::init(){
+    glGenBuffers(1, &this->vertex_buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vertex_buffer);
+    program =  GLutils::makeProgram("data\\shaders\\texture_color.vert", "data\\shaders\\texture_color.frag");
     u_texture = glGetUniformLocation(program, "uTexture");
     uniform_matrix = glGetUniformLocation(program, "uViewmat");
 }
+//==========================================
+//    END [SECTION] Renderer Member Functions
+//==========================================
 
-void TextureRenderer::begin(){
-    this->index_offset = 0;
-    this->vertex_batch.clear();
-    this->index_batch.clear(); 
+
+//==========================================
+//    BEGIN [SECTION] Renderer Free Function Decleration
+//==========================================
+
+void render(PolygonRenderer& polygon_renderer, glm::mat4 matrix);
+void render(CircleRenderer& circle_renderer, glm::mat4 matrix);
+void addLines(PolygonRenderer& polygon_renderer, Rect& rect, float thickness);
+
+
+//==========================================
+//    END [SECTION] Renderer Free Function Decleration
+//==========================================
+
+//==========================================
+//    BEGIN [SECTION] Renderer Free Function Implementation
+//==========================================
+
+void render(PolygonRenderer& polygon_renderer, glm::mat4 matrix){
+    if(polygon_renderer.index_batch.size() > 0){
+        glBindBuffer(GL_ARRAY_BUFFER, polygon_renderer.vertex_buffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, polygon_renderer.index_buffer);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * polygon_renderer.vertex_batch.size(), &polygon_renderer.vertex_batch.at(0), GL_DYNAMIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * polygon_renderer.index_batch.size(), &polygon_renderer.index_batch.at(0), GL_DYNAMIC_DRAW);
+
+        glUseProgram(polygon_renderer.program);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(0 * sizeof(float)));
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+        glUniformMatrix4fv(polygon_renderer.uniform_matrix, 1, GL_FALSE, &matrix[0][0]);
+        // draw the polygon   
+        glDrawElements(GL_TRIANGLES, polygon_renderer.index_batch.size(), GL_UNSIGNED_INT, 0);
+    }
+}
+
+void render(CircleRenderer& circle_renderer, glm::mat4 matrix){
+    if(circle_renderer.index_batch.size() > 0){
+        glBindBuffer(GL_ARRAY_BUFFER, circle_renderer.vertex_buffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, circle_renderer.index_buffer);
+
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * circle_renderer.vertex_batch.size(), &circle_renderer.vertex_batch.at(0), GL_DYNAMIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * circle_renderer.index_batch.size(), &circle_renderer.index_batch.at(0), GL_DYNAMIC_DRAW);
+        glUseProgram(circle_renderer.program);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(0 * sizeof(float)));
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);  
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
+        glEnableVertexAttribArray(2);     
+                
+        glUniformMatrix4fv(circle_renderer.uniform_matrix, 1, GL_FALSE, &matrix[0][0]);
+        // draw the circle   
+        glDrawElements(GL_TRIANGLES, circle_renderer.index_batch.size(), GL_UNSIGNED_INT, 0);
+    }        
 }
 
 
-struct RadialBrickEditor{
-    bool active = false, central_circle = true;
-    glm::vec3 central_circle_color;
-    int origin_x = 0, origin_y = 0, radius = 10;
-    std::vector<int> brick_thickness = {10, 5, 8, 4};
-    std::vector<int> segment_offsets = {10, 20, 30};
-    std::vector<int> segment_horizontal_gap = {4, 8, 5};
-    // radial_gap = 1;
-    int min_layer = 0, max_layer = 4;
+void render(TextureRenderer& texture_renderer, FrameColorTextureBuffer& frame_buffer, glm::mat4 matrix){
+    glBindBuffer(GL_ARRAY_BUFFER, texture_renderer.vertex_buffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, texture_renderer.index_buffer);    
+    glUseProgram(texture_renderer.program);
+    glm::mat4 m = glm::ortho(0.0f, (float)640.0f, (float)480.0f, 0.0f);
+    glUniformMatrix4fv(texture_renderer.uniform_matrix, 1, GL_FALSE, &m[0][0]);
+    glUniform1i(texture_renderer.u_texture, 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, frame_buffer.color_texture);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(0 * sizeof(float)));
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        
+}
 
-    std::vector<int> segments = {4, 5, 6};
-    std::vector<int> radial_gap = {4, 8};
-    std::vector<float> layer_angular_ranges = {
-        {0.0f, 360.0f}
-    };
-    std::vector<glm::vec3> color_pattern = {
-        glm::vec3(1.0f, 0.0f, 1.0f)
-    };
+void addLines(PolygonRenderer& polygon_renderer, Rect& rect, float thickness){
+    // for(Rect selection_rect : selection_rects){
+        float ht = thickness * 0.5f;
+        polygon_renderer.vertex_batch.insert(polygon_renderer.vertex_batch.end(), {
+            // Outer verticies
+            getLeftBoxed(rect) - ht, getBottomBoxed(rect) + ht, 0.0f, 0.0f, 1.0f, 0.0f,
+            getRightBoxed(rect) + ht, getBottomBoxed(rect) + ht, 0.0f, 0.0f, 1.0f, 0.0f,
+            getRightBoxed(rect) + ht, getTopBoxed(rect) - ht, 0.0f, 0.0f, 1.0f, 0.0f,
+            getLeftBoxed(rect) - ht, getTopBoxed(rect) - ht, 0.0f, 0.0f, 1.0f, 0.0f,
+            // Inner verticies
+            getLeftBoxed(rect) + ht, getBottomBoxed(rect) - ht, 0.0f, 0.0f, 1.0f, 0.0f,
+            getRightBoxed(rect) - ht, getBottomBoxed(rect) - ht, 0.0f, 0.0f, 1.0f, 0.0f,
+            getRightBoxed(rect) - ht, getTopBoxed(rect) + ht, 0.0f, 0.0f, 1.0f, 0.0f,
+            getLeftBoxed(rect) + ht, getTopBoxed(rect) + ht, 0.0f, 0.0f, 1.0f, 0.0f, 
+        });
+
+        std::vector<unsigned int> new_indicies = {
+            0, 1, 4,    1, 5, 4,
+            1, 2, 5,    2, 6, 5,
+            2, 3, 6,    3, 7, 6,
+            3, 0, 7,    0, 4, 7,
+        };
+
+        for(unsigned int& ind : new_indicies ){
+            ind += polygon_renderer.index_offset;
+        }
+
+        polygon_renderer.index_batch.insert(polygon_renderer.index_batch.end(), new_indicies.begin(), new_indicies.end());
+        polygon_renderer.index_offset += 8;   
+    
+}
+
+//==========================================
+//    END [SECTION] Renderer Free Function Implementation
+//==========================================
+
+//==========================================
+//    BEGIN [SECTION] Input Related Structs
+//==========================================
+struct Button{
+    ButtonState state = ButtonState_Released;
+    bool pressedOrDown();
+    bool pressed();
+    bool released();
+    bool releasedOrUp();
 };
 
-struct CircleBrick{
-    int x, y, radius;
+struct KeyboardButton : Button
+{
+    SDL_Scancode scancode;
+    KeyboardButton(SDL_Scancode scancode);
 };
 
-struct ArcBrick{
-    int x, y, radius, sub_radius,
+struct MouseButton : Button{
+    MouseButton();
+};
+
+struct Mouse {
+    glm::vec2 position = glm::vec2(0, 0);
+    glm::vec2 delta = glm::vec2(0, 0);
+};
+
+//==========================================
+//    END [SECTION] Input Related Structs
+//==========================================
+
+//==========================================
+//    BEGIN [SECTION] Input Related Member Functions
+//==========================================
+
+
+
+bool Button::pressedOrDown(){
+    return (this->state == ButtonState_Pressed || this->state == ButtonState_Down); 
+}
+
+bool Button::pressed(){
+    return this->state == ButtonState_Pressed;
+}
+
+bool Button::released(){
+    return this->state == ButtonState_Released;
+}
+
+bool Button::releasedOrUp(){
+    return (this->state == ButtonState_Released || this->state == ButtonState_Up); 
+}
+//==========================================
+//    END [SECTION] Input Related Member Functions
+//==========================================
+
+//==========================================
+//    BEGIN [SECTION] Input Related Template Functions
+//==========================================
+
+// template <typename TButton>
+void updateButton(Button& button, bool down){
+    button.state = down ?
+        button.state == ButtonState_Pressed || button.state == ButtonState_Down ?
+                ButtonState_Down :
+                ButtonState_Pressed
+            : button.state == ButtonState_Pressed || button.state == ButtonState_Down ? 
+                ButtonState_Released : 
+                ButtonState_Up;
+
+}
+
+
+//==========================================
+//    END [SECTION] Input Related Template Functions
+//==========================================
+
+//==========================================
+//    BEGIN [SECTION] Input Related Member Functions
+//==========================================
+KeyboardButton::KeyboardButton(SDL_Scancode scancode){
+    this->scancode = scancode;
+}
+
+MouseButton::MouseButton(){
+}
+
+//==========================================
+//    END [SECTION] Input Related Member Functions
+//==========================================
+
+//==========================================
+//    BEGIN [SECTION] Game Object Related Structs
+//==========================================
+
+struct Entity{
+    glm::vec2 position;
+    glm::vec2 velocity;
+    ShapeGroup shape_group;
+    Entity();
+    void create(glm::vec2 position);
+    void create(glm::vec2 position, glm::vec2 velocity); 
+    glm::vec2 getPosition();
+};
+
+
+struct Ball : Entity {
+    // ShapeGroup shape_group;
+    // glm::vec2 position, velocity;
+    Circle circle;
+    Ball();
+    void create(glm::vec2 position, float radius, glm::vec2 velocity);
+
+    // void create(glm::vec2 position, glm::vec2 velocity); 
+    // glm::vec2 getPosition();
+    // float getTop();
+    // float getBottom();
+    // float getLeft();
+    // float getRight();
+    // Circle& refCircle();
+};
+
+struct Paddle : Entity {
+    // glm::vec2 position, velocity;
+    // ShapeGroup shape_group;
+    Rect rect;
+    Paddle();
+    // void create(glm::vec2 position);
+    // Rect& refRect();
+    // glm::vec2 bounceOffTop(glm::vec2 velocity, float x);
+    glm::vec2 getPosition();
+    float getTop();
+    float getBottom();
+    float getLeft();
+    float getRight();
+};
+
+struct Brick{
+    int x, y;
+};
+
+struct CircleBrick: Brick{
+    int radius;
+};
+
+struct ArcBrick : Brick{
+    int radius, sub_radius,
     start_angle, end_angle;
     float r, g, b;
 };
 
 struct RadialBrickGroup{
+    glm::vec2 position;
     CircleBrick centre_brick;
     std::vector<ArcBrick> arc_bricks;
-    AARect bounding_rect;
 };
 
 struct Game{
+    glm::vec4 bg_color = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
     std::vector<RadialBrickGroup> radial_brick_groups;
 };
 
-// Adds arc with the vertex format of "xyz rgb"
+//==========================================
+//    END [SECTION] Game Object Related Structs
+//==========================================
+
+//==========================================
+//    BEGIN [SECTION] Game Object Related Member Functions
+//==========================================
+
+Entity::Entity(){
+    this->position = glm::vec2();
+    this->velocity = glm::vec2();
+}
+
+
+void Entity::create(glm::vec2 position){
+    this->position = position;
+    this->velocity = glm::vec2(0, 0);
+}
+
+void Entity::create(glm::vec2 position, glm::vec2 velocity){
+    this->position = position;
+    this->velocity = velocity;
+}
+glm::vec2 Entity::getPosition(){
+    return this->position;
+}
+
+
+Ball::Ball(){}
+
+
+// glm::vec2 Ball::getPosition(){
+//     return this->position;
+// }
+
+
+
+// void Ball::create(glm::vec2 position, glm::vec2 velocity){
+//     this->position = position;
+//     this->velocity = velocity;
+// }
+void Ball::create(glm::vec2 position, float radius, glm::vec2 velocity){
+    // this->entity->create(position, velocity);
+    Circle circle;
+    circle.create(position, radius);
+}
+
+
+// Circle& Ball::refCircle(){
+//     return this->shape_group.circles.at(0);
+// }
+
+Paddle::Paddle(){}
+
+
+// glm::vec2 Paddle::getPosition(){
+//     return this->position;
+// }
+
+
+// void Paddle::create(glm::vec2 position, glm::vec2 velocity){
+//     this->position = position;
+//     this->velocity = velocity;
+// }
+
+// Rect& Paddle::refRect(){
+//     return this->shape_group.rects.at(0);
+// }
+
+// void Paddle::create(glm::vec2 position){
+//     this->create(position, glm::vec2(0, 0));
+//     Rect rect = Rect(position, glm::vec2(80, 8));
+// }
+
+// glm::vec2 Paddle::bounceOffTop(glm::vec2 velocity, float x){
+//     float perc = (x - getCentre(this->shape_group.rects.at(0)).x) / getWidth(this->shape_group.rects.at(0)) * 2.0f;
+//     std::cout << perc << std::endl;
+//     return glm::normalize(glm::vec2(perc * 10.0f, -1.0f)) * glm::length(velocity);
+// }
+
+//==========================================
+//    END [SECTION] Game Object Related Member Functions
+//==========================================
+
+
+//==========================================
+//    BEGIN [SECTION] Game Object Related Free Function Decleration
+//==========================================
+
+void addArc(PolygonRenderer& polygon_renderer, float min_degrees, float max_degrees, float steps, float origin_x, float origin_y, float circle_radius, float mask_radius, float r, float g, float b );
+void addSlice(PolygonRenderer& polygon_renderer, float min_degrees, float max_degrees, float steps, float origin_x, float origin_y, float circle_radius);
+void addRectangle(std::vector<float>& vertex_batch, std::vector<unsigned int>& index_batch, Rect& rect, glm::vec3& color, unsigned int& index_offset);
+void addCircle(std::vector<float>& vertex_batch, std::vector<unsigned int>& index_batch,
+float x, float y, float w, float h, float r, float g, float b, unsigned int& index_offset);
+void addRadialBrickGroup(PolygonRenderer& polygon_renderer, RadialBrickGroup& brick_group);
+//==========================================
+//    END [SECTION] Game Object Related Free Function Decleration
+//==========================================
+
+//==========================================
+//    BEGIN [SECTION] Game Object Related Free Function Implementation
+//==========================================
 void addArc(PolygonRenderer& polygon_renderer, float min_degrees, float max_degrees, float steps, float origin_x, float origin_y, float circle_radius, float mask_radius,
-float r = 1.0f, float g = 1.0f, float b = 1.0f){
+float r = 1.0f, float g = 1.0f, float b = 1.0f
+){
     std::vector<float>& vertex_batch = polygon_renderer.vertex_batch;
     std::vector<unsigned int>& index_batch  = polygon_renderer.index_batch;
     unsigned int& index_offset = polygon_renderer.index_offset;
@@ -1396,7 +1709,6 @@ float r = 1.0f, float g = 1.0f, float b = 1.0f){
     index_offset += 2;
 }
 
-// Adds slice with the vertex format of "xyz rgb"
 void addSlice(PolygonRenderer& polygon_renderer, float min_degrees, float max_degrees, float steps, float origin_x, float origin_y, float circle_radius){
     std::vector<float>& vertex_batch = polygon_renderer.vertex_batch;
     std::vector<unsigned int>& index_batch  = polygon_renderer.index_batch;
@@ -1427,73 +1739,7 @@ void addSlice(PolygonRenderer& polygon_renderer, float min_degrees, float max_de
     polygon_renderer.index_offset += 2;
 }
 
-struct BrickArrayEditor{
-    bool active = true;
-    int origin_x = 0, origin_y = 0;
-    int brick_width = 8, brick_height = 8;
-    int vertical_spacing = 1, horizontal_spacing = 1;
-    int row_count = 20, column_count = 20; 
-};
-
-
-struct KeyboardButton
-{
-    ButtonState state = ButtonState_Released;
-    SDL_Keycode keycode;
-    KeyboardButton(SDL_Keycode keycode);
-};
-
-KeyboardButton::KeyboardButton(SDL_Keycode keycode){
-    this->keycode = keycode;
-}
-
-struct MouseButton{
-    int state = ButtonState_Up;
-};
-
-struct Editor{
-    bool pause = false; 
-    std::vector<RadialBrickEditor> radial_brick_group_editor;
-};
-
-
-
-void addRectangle(std::vector<float>& vertex_batch, std::vector<unsigned int>& index_batch, AARect& rect, glm::vec3& color, unsigned int& index_offset){
-    vertex_batch.insert(vertex_batch.end(), {
-        rect.getLeft(), rect.getBottom(), 0.0f, color.r, color.g, color.b,
-        rect.getRight(), rect.getBottom(), 0.0f, color.r, color.g, color.b,
-        rect.getRight(), rect.getTop(), 0.0f, color.r, color.g, color.b,
-        rect.getLeft(), rect.getTop(), 0.0f, color.r, color.g, color.b
-    });
-
-    index_batch.insert(index_batch.end(), {
-        index_offset, index_offset + 1, index_offset + 2,
-        index_offset, index_offset + 2, index_offset + 3
-    });
-
-    index_offset += 4;
-}
-
-
-void addCircle(std::vector<float>& vertex_batch, std::vector<unsigned int>& index_batch,
-float x, float y, float w, float h, float r, float g, float b, unsigned int& index_offset){
-    
-    vertex_batch.insert(vertex_batch.end(),{
-        x, y + h, 0.0f, r, g, b, -1.0f, 1.0f,
-        x + w, y + h, 0.0f, r, g, b, 1.0f, 1.0f,
-        x + w, y, 0.0f, r, g, b, 1.0f, -1.0f,
-        x, y, 0.0f, r, g, b, -1.0f, -1.0f
-    });
-
-    index_batch.insert(index_batch.end(),{                       
-        index_offset, index_offset + 1, index_offset + 2,
-        index_offset, index_offset + 2, index_offset + 3
-    });
-    index_offset += 4;
-}
-
-
-void renderRadialBrickGroup(PolygonRenderer& polygon_renderer, RadialBrickGroup& brick_group){
+void addRadialBrickGroup(PolygonRenderer& polygon_renderer, RadialBrickGroup& brick_group){
     CircleBrick& cb = brick_group.centre_brick;
     std::vector<ArcBrick>& arc_bricks = brick_group.arc_bricks;
     addSlice(polygon_renderer, 0, 360, 5, cb.x, cb.y, cb.radius);      
@@ -1516,104 +1762,62 @@ void renderRadialBrickGroup(PolygonRenderer& polygon_renderer, RadialBrickGroup&
     }
 }
 
+//==========================================
+//    END [SECTION] Game Object Related Free Function Implementation
+//==========================================
 
-void renderLines(PolygonRenderer& polygon_renderer, AARect& rect, float thickness){
-    // for(AARect selection_rect : selection_rects){
-        float ht = thickness * 0.5f;
-        polygon_renderer.vertex_batch.insert(polygon_renderer.vertex_batch.end(), {
-            // Outer verticies
-            rect.getLeft() - ht, rect.getBottom() + ht, 0.0f, 0.0f, 1.0f, 0.0f,
-            rect.getRight() + ht, rect.getBottom() + ht, 0.0f, 0.0f, 1.0f, 0.0f,
-            rect.getRight() + ht, rect.getTop() - ht, 0.0f, 0.0f, 1.0f, 0.0f,
-            rect.getLeft() - ht, rect.getTop() - ht, 0.0f, 0.0f, 1.0f, 0.0f,
-            // Inner verticies
-            rect.getLeft() + ht, rect.getBottom() - ht, 0.0f, 0.0f, 1.0f, 0.0f,
-            rect.getRight() - ht, rect.getBottom() - ht, 0.0f, 0.0f, 1.0f, 0.0f,
-            rect.getRight() - ht, rect.getTop() + ht, 0.0f, 0.0f, 1.0f, 0.0f,
-            rect.getLeft() + ht, rect.getTop() + ht, 0.0f, 0.0f, 1.0f, 0.0f, 
-        });
+//==========================================
+//    BEGIN [SECTION] Editor Related Structs
+//==========================================
 
-        std::vector<unsigned int> new_indicies = {
-            0, 1, 4,    1, 5, 4,
-            1, 2, 5,    2, 6, 5,
-            2, 3, 6,    3, 7, 6,
-            3, 0, 7,    0, 4, 7,
-        };
+struct RadialBrickEditor{
+    bool active = false, central_circle = true;
+    glm::vec3 central_circle_color;
+    int origin_x = 0, origin_y = 0, radius = 10;
+    std::vector<int> brick_thickness = {10, 5, 8, 4};
+    std::vector<int> segment_offsets = {10, 20, 30};
+    std::vector<int> segment_horizontal_gap = {4, 8, 5};
+    // radial_gap = 1;
+    int min_layer = 0, max_layer = 4;
 
-        for(unsigned int& ind : new_indicies ){
-            ind += polygon_renderer.index_offset;
-        }
+    std::vector<int> segments = {4, 5, 6};
+    std::vector<int> radial_gap = {4, 8};
+    std::vector<float> layer_angular_ranges = {
+        {0.0f, 360.0f}
+    };
+    std::vector<glm::vec3> color_pattern = {
+        glm::vec3(1.0f, 0.0f, 1.0f)
+    };
+};
 
-        polygon_renderer.index_batch.insert(polygon_renderer.index_batch.end(), new_indicies.begin(), new_indicies.end());
-        polygon_renderer.index_offset += 8;   
-    
-}
+struct BrickArrayEditor{
+    bool active = true;
+    int origin_x = 0, origin_y = 0;
+    int brick_width = 8, brick_height = 8;
+    int vertical_spacing = 1, horizontal_spacing = 1;
+    int row_count = 20, column_count = 20; 
+};
 
+struct Editor{
+    bool pause = false; 
+    std::vector<RadialBrickEditor> radial_brick_group_editor;
+};
+//==========================================
+//    END [SECTION] Editor Related Structs
+//==========================================
 
+//==========================================
+//    BEGIN [SECTION] Editor Related Free Function Decleration
+//==========================================
+void radialBrickEditor(std::vector<RadialBrickGroup>& radial_brick_groups, RadialBrickGroup& editor_radial_bricks, RadialBrickEditor& radial_brick_editor);
+void radialBrickGroupUpdate(RadialBrickGroup& editor_radial_bricks, RadialBrickEditor& radial_brick_editor);
+//==========================================
+//    END [SECTION] Editor Related Free Functions Decleration
+//==========================================
 
-void renderPolygonBatch(PolygonRenderer& polygon_renderer, glm::mat4 matrix){
-    if(polygon_renderer.index_batch.size() > 0){
-        glBindBuffer(GL_ARRAY_BUFFER, polygon_renderer.vertex_buffer);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, polygon_renderer.index_buffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * polygon_renderer.vertex_batch.size(), &polygon_renderer.vertex_batch.at(0), GL_DYNAMIC_DRAW);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * polygon_renderer.index_batch.size(), &polygon_renderer.index_batch.at(0), GL_DYNAMIC_DRAW);
-
-        glUseProgram(polygon_renderer.program);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(0 * sizeof(float)));
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
-        glEnableVertexAttribArray(1);
-        glUniformMatrix4fv(polygon_renderer.uniform_matrix, 1, GL_FALSE, &matrix[0][0]);
-        // draw the polygon   
-        glDrawElements(GL_TRIANGLES, polygon_renderer.index_batch.size(), GL_UNSIGNED_INT, 0);
-    }
-}
-
-void renderCircleBatch(CircleRenderer& circle_renderer, glm::mat4 matrix){
-    if(circle_renderer.index_batch.size() > 0){
-        glBindBuffer(GL_ARRAY_BUFFER, circle_renderer.vertex_buffer);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, circle_renderer.index_buffer);
-
-        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * circle_renderer.vertex_batch.size(), &circle_renderer.vertex_batch.at(0), GL_DYNAMIC_DRAW);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * circle_renderer.index_batch.size(), &circle_renderer.index_batch.at(0), GL_DYNAMIC_DRAW);
-        glUseProgram(circle_renderer.program);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(0 * sizeof(float)));
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(3 * sizeof(float)));
-        glEnableVertexAttribArray(1);  
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
-        glEnableVertexAttribArray(2);     
-                
-        glUniformMatrix4fv(circle_renderer.uniform_matrix, 1, GL_FALSE, &matrix[0][0]);
-        // draw the circle   
-        glDrawElements(GL_TRIANGLES, circle_renderer.index_batch.size(), GL_UNSIGNED_INT, 0);
-    }
-             
-}
-
-template <typename TButton>
-void updateButton(TButton& button, bool down){
-    button.state = down ?
-        button.state == ButtonState_Pressed || button.state == ButtonState_Down ?
-                ButtonState_Down :
-                ButtonState_Pressed
-            : button.state == ButtonState_Pressed || button.state == ButtonState_Down ? 
-                ButtonState_Released : 
-                ButtonState_Up;
-
-}
-
-template <typename TButton>
-bool pressedOrDown(TButton& button){
-    return (button.state == ButtonState_Pressed || button.state == ButtonState_Down); 
-}
-
-template <typename TButton>
-bool pressed(TButton& button){
-    return button.state == ButtonState_Pressed;
-}
-
-
+//==========================================
+//    BEGIN [SECTION] Editor Related Free Function Implementations
+//==========================================
 void radialBrickEditor(std::vector<RadialBrickGroup>& radial_brick_groups, RadialBrickGroup& editor_radial_bricks, RadialBrickEditor& radial_brick_editor){
     bool& active = radial_brick_editor.active;
     bool& has_circle = radial_brick_editor.central_circle;
@@ -1669,8 +1873,8 @@ void radialBrickEditor(std::vector<RadialBrickGroup>& radial_brick_groups, Radia
         }
         ImGui::PopID();
     }
-
 }
+
 
 void radialBrickGroupUpdate(RadialBrickGroup& editor_radial_bricks, RadialBrickEditor& radial_brick_editor){
     // Update the radial_bricks being edited
@@ -1702,12 +1906,12 @@ void radialBrickGroupUpdate(RadialBrickGroup& editor_radial_bricks, RadialBrickE
                 bounding_radius = bounding_radius + radial_gap.at(l % radial_gap.size());
                 bounding_radius += brick_thickness_array.at(l % brick_thickness_array.size());
             } 
-            AARect rect;
+            Rect rect;
             rect.position.x = x - bounding_radius;
             rect.position.y = y - bounding_radius;
             rect.size.x = 2 * bounding_radius;
             rect.size.y = 2 * bounding_radius;
-            editor_radial_bricks.bounding_rect = rect;
+            // editor_radial_bricks.bounding_rect = rect;
 
         }
         for(int layer = min_layer; layer < max_layer; layer++){
@@ -1746,54 +1950,221 @@ void radialBrickGroupUpdate(RadialBrickGroup& editor_radial_bricks, RadialBrickE
     }
 }
 
+//==========================================
+//    END [SECTION] Editor Related Free Function Implementations
+//==========================================
+
+//==========================================
+//    BEGIN [SECTION] On Hit Virtual Abstract and Concerte Structs
+//==========================================
+
+
+struct OnHit {
+    virtual void update(glm::vec2 normal) = 0;
+};
+
+struct BallBounceOfPaddle : OnHit{
+    Ball * ball;
+    Paddle * paddle;
+    void set(Ball * ball, Paddle * paddle);
+    void update(glm::vec2 normal);
+};
+
+struct BallBounceOfWall : OnHit{
+    Ball * ball;
+    void set(Ball * ball);
+    void update(glm::vec2 normal);
+};
+
+struct PaddleHitsWall : OnHit{
+    Paddle * paddle;
+    void set(Paddle * paddle);
+    void update(glm::vec2 normal);
+};
+
+//==========================================
+//    END [SECTION] On Hit Virtual Function Structs
+//==========================================
+
+
+//==========================================
+//    BEGIN [SECTION] On Hit Virtual Abstract and Concerte Member Functions
+//=====================================
+
+void BallBounceOfPaddle::set(Ball * ball, Paddle * paddle){
+    this->ball = ball;
+    this->paddle = paddle;
+}
+
+// void BallBounceOfPaddle::update(glm::vec2 normal){
+//     if(normal.y == 1.0f){
+//         this->ball->velocity = paddle->bounceOffTop(ball->velocity, ball->position.x);
+//     }else{
+//         this->ball->velocity = glm::reflect(ball->velocity, normal);
+//     }
+// }
+
+void BallBounceOfWall::set(Ball * ball){
+    this->ball = ball;
+}
+// void BallBounceOfWall::update(glm::vec2 normal){
+//     ball->velocity = glm::reflect(ball->velocity, normal);
+// }
+
+void PaddleHitsWall::set(Paddle * paddle){
+    this->paddle = paddle;
+}
+
+// void PaddleHitsWall::update(glm::vec2 normal){
+//     paddle->velocity.x = 0.0f;
+// }
+
+//==========================================
+//    END [SECTION] On Hit Virtual Abstract and Concerte Member Functions
+//=====================================
+
+//==========================================
+//    BEGIN [SECTION] SDL Related Interpretation Related Functions
+//=====================================
+Base_Events_ID mapToBaseEvent(SDL_Event event);
+//==========================================
+//    END [SECTION] SDL Related Interpretation Related Functions
+//=====================================
+
+
+//==========================================
+//    BEGIN [SECTION] SDL Related Interpretation Related Function Implementations
+//=====================================
+Base_Events_ID mapToBaseEvent(SDL_Event event){
+    Base_Events_ID base_event = No_Event;
+    base_event = (event.type == SDL_QUIT) ? Quit_Event : base_event;
+    base_event = (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED) ? 
+        Resize_Window_Event : 
+        base_event;
+    return base_event;
+}
+
+//==========================================
+//    END [SECTION] SDL Related Interpretation Related Function Implementations
+//=====================================
+
 
 int main(int argc, char const *argv[])
 {
-
+    //==========================================
+    //    BEGIN [SECTION] Allocate all the memory
+    //=====================================
+    bool active = true; // To store whether the appplication is active
+    int width = 640, height = 480; // To store the dimensions  of the window 
+    glm::mat4 matrix; // This is the matrix that will be used in all of the renderers
     SDL_Window * window; // An **allocated reference** to the SDLWindow object that created, **on creation**
-    bool active = true; // To store whether the window is **currently** active
-    int width = 640, // To store the **current** width of the window 
-    height = 480; //  To store the **current**  height of the Window  
-    SDL_GLContext gl_context;
-    int gl_major_version = 3;
-    int gl_minor_version = 3;
+    SDL_GLContext gl_context; // To Store the SDL GLContext
+    FrameColorTextureBuffer frame_buffer;
+    PolygonRenderer polygon_renderer;
+    CircleRenderer circle_renderer;
+    TextureRenderer texture_renderer;
+    Mouse mouse;
+    MouseButton left_mouse_button = MouseButton();
+    MouseButton right_mouse_button = MouseButton();
+    Editor editor;
+    std::vector<Button*> buttons;
+    KeyboardButton start_button = KeyboardButton(SDL_SCANCODE_ESCAPE);
+    KeyboardButton forward_button = KeyboardButton(SDL_SCANCODE_W);
+    KeyboardButton down_button = KeyboardButton(SDL_SCANCODE_S);
+    KeyboardButton left_button = KeyboardButton(SDL_SCANCODE_A);
+    KeyboardButton right_button = KeyboardButton(SDL_SCANCODE_D);
+    KeyboardButton inspector_button = KeyboardButton(SDL_SCANCODE_I);
+    Paddle player_paddle = Paddle();
+    Ball primary_ball = Ball();
+    TimeController time_controller = TimeController(SDL_GetTicks64());
+    float left_wall = 40.0f;
+    float right_wall = 640.0f - 40.0f;
+    float top_wall = 0.0f;
+    float bottom_wall = 480.0f;
+    Game game;
+    int score = 0;
+    BallBounceOfPaddle ball_bounce_paddle;
+    BallBounceOfWall ball_bounce_wall;
+    PaddleHitsWall paddle_hits_wall;
 
-    if(SDL_Init( SDL_INIT_VIDEO ) < 0 )
-    {
-        printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
-    }
-
-    window = SDL_CreateWindow(
-        "Breakout Game", 
-        SDL_WINDOWPOS_CENTERED, 
-        SDL_WINDOWPOS_CENTERED, 
-        width, 
-        height, 
-        SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL
-    );
-    SDL_SetWindowResizable(window, SDL_TRUE);
-    SDL_SetWindowMinimumSize(window, 640, 480);
-    if(window == NULL )
-    {
-        printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
-    }    
-
-    if (gl_major_version > 3 || (gl_major_version == 3 && gl_minor_version >= 3))
-    {
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
-    }
+    struct {
+        bool paused = false;
+    }scene;
+    BrickArrayEditor brick_array_editor;
+    RadialBrickEditor radial_brick_editor;
+    RadialBrickGroup editor_radial_bricks;
+    struct {int x, y, w, h;} game_viewport;
     
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, gl_major_version); // GL version is a property
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, gl_minor_version); // GL minor version us a property
+
+    //full screen texture renderer quad
+
+    struct {
+        float vertex_data[8 * 4];
+        unsigned int index_data[6];
+    } frame_quad;
+    GLenum err = glewInit();
+
+    //==========================================
+    //    END [SECTION] Allocate all the memory
+    //=====================================
+
+    //==========================================
+    //    BEGIN [SECTION] Get All the Pointers
+    //=====================================
+    std::vector<KeyboardButton*> keyboard_buttons = {
+        &start_button,
+        &forward_button,
+        &down_button,
+        &left_button,
+        &right_button,
+        &inspector_button    
+    };
+
+    std::vector<MouseButton*> mouse_buttons = {
+        &left_mouse_button,
+        &right_mouse_button 
+    };
+
+
+    std::vector<Paddle*> paddles = {
+        &player_paddle
+    };
+
+    std::vector<Ball*> balls = {
+        &primary_ball
+    };
+
+    
+    std::vector<Ball*> balls_selected;
+    std::vector<Paddle*> paddles_selected;
+    
+    std::vector<RadialBrickGroup*> radial_group_selected;
+    std::vector<Ball*> balls_moving;
+    std::vector<Paddle*> paddles_moving;
+    std::vector<RadialBrickGroup*> radial_group_moving;    
+    //==========================================
+    //    End [SECTION] Get All the Pointers
+    //=====================================
+
+
+    if(SDL_Init( SDL_INIT_VIDEO ) < 0 ) {printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );}
+    window = SDL_CreateWindow("Breakout Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+    SDL_SetWindowResizable(window, SDL_TRUE);
+    SDL_SetWindowMinimumSize(window, width, height); // Set the window with tho current widht and height, which should be the same as the minimum
+    if(window == NULL ){printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );}    
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY); // This is required of the opengl versions are greater than or equal to 3.3
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3); // GL version is a property
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3); // GL minor version us a property
     gl_context = SDL_GL_CreateContext(window);
     SDL_GL_SetSwapInterval(1);
-    GLenum err = glewInit();
     if (GLEW_OK != err)
     {
         fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
         exit(1);
     }
     SDL_GL_MakeCurrent(window, gl_context);
+    const Uint8 * keyboard_state = SDL_GetKeyboardState(NULL);
+
     IMGUI_CHECKVERSION();
     ImGui::CreateContext(NULL);
     ImGuiIO * io = &ImGui::GetIO();
@@ -1805,38 +2176,16 @@ int main(int argc, char const *argv[])
     ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
     ImGui_ImplOpenGL3_Init("#version 150");
 
-    glm::mat4 matrix = glm::ortho(0.0f, (float)width, (float)height, 0.0f);
-    FrameBufferData frame_buffer;
-    PolygonRenderer polygon_renderer = PolygonRenderer();
-    CircleRenderer circle_renderer = CircleRenderer();
-    TextureRenderer texture_renderer = TextureRenderer();
-    
-    glm::vec4 game_bg_color = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
-
-    struct {int x, y, w, h;} game_viewport;
-    struct {float position_x = 0.0f, position_y = 0.0f; float delta_x = 0.0f, delta_y = 0.0f; }game_mouse;
-    
-    glGenBuffers(1, &texture_renderer.vertex_buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, texture_renderer.vertex_buffer);
-    
-    struct {
-        float vertex_data[8 * 4] = {
-            0.0f, 480.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-            640.0f, 480.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-            640.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-            0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f
-        }; 
-        unsigned int index_data[6] {
-            0, 1, 2,
-            0, 2, 3
-        };
-    } frame_quad;
-
+    polygon_renderer.init();
+    circle_renderer.init();
+    texture_renderer.init(); 
+    matrix = glm::ortho(0.0f, (float)width, (float)height, 0.0f);
+    getXYZRGBQuad(frame_quad.vertex_data, frame_quad.index_data);
     glBufferData(GL_ARRAY_BUFFER, 8 * 4 * sizeof(float), frame_quad.vertex_data,  GL_DYNAMIC_DRAW);
     glGenBuffers(1, &texture_renderer.index_buffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, texture_renderer.index_buffer);    
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), frame_quad.index_data,  GL_DYNAMIC_DRAW);
-  
+
     glGenTextures(1, &frame_buffer.color_texture);
     glBindTexture(GL_TEXTURE_2D, frame_buffer.color_texture);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -1847,7 +2196,7 @@ int main(int argc, char const *argv[])
     glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer.object);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, frame_buffer.color_texture, 0);
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
-        std::cout << "Framw buffer failed to generate" << std::endl;
+        std::cout << "Frame buffer failed to generate" << std::endl;
     }
 
     // Initialise the texture renderer
@@ -1856,48 +2205,9 @@ int main(int argc, char const *argv[])
     // Set the Viewport defaults 
     glViewport(0, 0, width, height);
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-    
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-   
-    int window_x, window_y;
-    SDL_GetWindowSize(window, &window_x, &window_y);
-    Editor editor;
 
-    const Uint8 * keyboard_state = SDL_GetKeyboardState(NULL);
-
-    std::vector<KeyboardButton> keyboard_buttons = {
-        KeyboardButton(SDL_SCANCODE_ESCAPE),
-        KeyboardButton(SDL_SCANCODE_W),
-        KeyboardButton(SDL_SCANCODE_S),
-        KeyboardButton(SDL_SCANCODE_A),
-        KeyboardButton(SDL_SCANCODE_D),
-        KeyboardButton(SDL_SCANCODE_I)
-    };
-
-
-    KeyboardButton& start_button = keyboard_buttons.at(0);
-    KeyboardButton& up_button = keyboard_buttons.at(1);
-    KeyboardButton& down_button = keyboard_buttons.at(2);
-    KeyboardButton& left_button = keyboard_buttons.at(3);
-    KeyboardButton& right_button = keyboard_buttons.at(4);
-    KeyboardButton& activate_editor_button = keyboard_buttons.at(5);
-    KeyboardButton& pause_button = keyboard_buttons.at(0);
-    MouseButton left_mouse_button;
-    MouseButton right_mouse_button;    
-    TimeController time_controller = TimeController(SDL_GetTicks64());
-    
-    std::vector<Paddle> paddles;
-    std::vector<Ball> balls;
-    float left_wall = 40.0f;
-    float right_wall = 640.0f - 40.0f;
-    float top_wall = 0.0f;
-    float bottom_wall = 480.0f;
-
-    Game game;
-    int score = 0;
-    
-    
 
     {
         using namespace rapidxml;
@@ -1905,57 +2215,17 @@ int main(int argc, char const *argv[])
         rapidxml::xml_document<> doc;
         doc.parse<0>(xmlFile.data());
         {
-            Paddle paddle;
-            paddle.create(glm::vec2(
-                atof(doc.first_node("Paddle")->first_node("Position")->first_node("X")->value()),
-                atof(doc.first_node("Paddle")->first_node("Position")->first_node("Y")->value()))
-            );
-            setVelocityX(paddle, 300.0f);
-            paddles.push_back(paddle);
+            // Paddle paddle;
+            float x = atof(doc.first_node("Paddle")->first_node("Position")->first_node("X")->value());
+            float y = atof(doc.first_node("Paddle")->first_node("Position")->first_node("Y")->value());
+            player_paddle.create(glm::vec2(x, y));
+            player_paddle.velocity.x = 300.0f;
         
         }
-        {
-            Ball ball = Ball();
-            ball.create(glm::vec2(200.0f, 200.0f), 8.0f, glm::vec2(-300.0f, 300.0f));
-            balls.push_back(ball);
-        }
-
-        {
-            Ball ball = Ball();
-            ball.create(glm::vec2(200.0f, 200.0f), 8.0f, glm::vec2(300.0f, 300.0f));
-            balls.push_back(ball);
-        }
+        primary_ball.create(glm::vec2(200.0f, 200.0f), 8.0f, glm::vec2(-300.0f, 300.0f));
 
     }
-
-    Paddle& player_paddle = paddles.at(0);
-
-    // Selected Objects
-    std::vector<Ball*> balls_selected;
-    std::vector<Paddle*> paddles_selected;
-    std::vector<RadialBrickGroup*> radial_group_selected;
-
-    // Moving Objects
-    std::vector<Ball*> balls_moving;
-    std::vector<Paddle*> paddles_moving;
-    std::vector<RadialBrickGroup*> radial_group_moving;
-
-    int window_mouse_x, window_mouse_y;
     
-    BallBounceOfPaddle ball_bounce_paddle;
-    BallBounceOfWall ball_bounce_wall;
-    PaddleHitsWall paddle_hits_wall;
-
-    struct {
-        bool paused = false;
-    }scene;
-
-    // this is modified with ImGui in order to create Brick grids hat vcan be added to this game
-    BrickArrayEditor brick_array_editor;
-    RadialBrickEditor radial_brick_editor;
-    RadialBrickGroup editor_radial_bricks;
-
-
     while (active)
     {
         SDL_Event event;
@@ -1963,7 +2233,6 @@ int main(int argc, char const *argv[])
         while (SDL_PollEvent(&event))
         {   
             ImGui_ImplSDL2_ProcessEvent(&event);
-            
             switch (mapToBaseEvent(event))
             {
             case Quit_Event:
@@ -1974,13 +2243,17 @@ int main(int argc, char const *argv[])
             }
         }
 
-        Uint32 mouse_button_down_states = SDL_GetMouseState(&window_mouse_x, &window_mouse_y);
-    
+        Uint32 mouse_button_down_states;
+        {
+            int x, y;
+            mouse_button_down_states = SDL_GetMouseState(&x, &y);
+            mouse.position.x = (float)x;
+            mouse.position.y = (float)y;
+        }
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
-        // Create the Editor Window and it's layout
         ImGui::SetNextWindowPos(ImGui::GetMainViewport()->WorkPos);
         ImGui::SetNextWindowSize(ImGui::GetMainViewport()->WorkSize);
         ImGui::Begin("Editor", (bool *)__null, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDocking);
@@ -2025,15 +2298,10 @@ int main(int argc, char const *argv[])
         if(ImGui::DockBuilderGetNode(ImGui::GetID("editor_left_dockspace")) == NULL){
             ImGui::DockBuilderAddNode(ImGui::GetID("editor_left_dockspace"), 0);
             ImGui::DockBuilderDockWindow("Assets", ImGui::GetID("editor_left_dockspace"));
-
             ImGui::DockBuilderFinish(ImGui::GetID("editor_left_dockspace"));
-        
         }
-        
         ImGui::DockSpace(ImGui::GetID("editor_left_dockspace"));
         ImGui::End();
-
-   
 
         ImGui::Begin("Slot1", (bool*)__null, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar);
         if(ImGui::DockBuilderGetNode(ImGui::GetID("slot_1_dockspace")) == NULL){
@@ -2068,8 +2336,7 @@ int main(int argc, char const *argv[])
         ImGui::End();
 
         ImGui::Begin("Inspector", (bool*)__null, ImGuiWindowFlags_NoMove);
-        ImGui::Text("window mouse position x: %f y: %f", (float)window_mouse_x, (float)window_mouse_y);
-        ImGui::Text("game mouse position x: %f y: %f", game_mouse.position_x, game_mouse.position_y);
+        ImGui::Text("window mouse position x: %f y: %f", (float)mouse.position.x, (float)mouse.position.y);
         ImGui::End();
 
 
@@ -2079,14 +2346,14 @@ int main(int argc, char const *argv[])
             glm::vec2 position = player_paddle.position;
             if(ImGui::CollapsingHeader("Player")){
                 if(ImGui::DragFloat2("Position", &position.x)){
-                    moveTo(player_paddle, position);
+                    // player_paddle.position = position;
                 }
             }
         }
         {
             std::string ball_string = "Ball #";
             for (int i = 0; i < balls.size(); i++){
-                Ball& ball = balls.at(i);
+                Ball& ball = *balls.at(i);
                 ImGui::CollapsingHeader((ball_string + std::to_string(i)).c_str());
             }
         }
@@ -2119,12 +2386,12 @@ int main(int argc, char const *argv[])
 
             //update the game mouse position as something that is scaled to a 640, 480 screen
             
-            float old_position_x = game_mouse.position_x;
-            float old_posiition_y = game_mouse.position_y;
-            game_mouse.position_x = ((float)window_mouse_x - game_viewport.x) / game_viewport.w * width;
-            game_mouse.position_y = ((float)window_mouse_y - game_viewport.y) / game_viewport.h * height;
-            game_mouse.delta_x = game_mouse.position_x - old_position_x ;
-            game_mouse.delta_y = game_mouse.position_y - old_posiition_y;
+            // float old_position_x = mouse.position_x;
+            // float old_posiition_y = game_mouse.position_y;
+            // game_mouse.position_x = ((float)window_mouse_x - game_viewport.x) / game_viewport.w * width;
+            // game_mouse.position_y = ((float)window_mouse_y - game_viewport.y) / game_viewport.h * height;
+            // game_mouse.delta_x = game_mouse.position_x - old_position_x ;
+            // game_mouse.delta_y = game_mouse.position_y - old_posiition_y;
 
         }
         ImGui::End();
@@ -2145,77 +2412,85 @@ int main(int argc, char const *argv[])
             ImGui::End();
 
         }
-    
+
         updateButton(left_mouse_button, (mouse_button_down_states & SDL_BUTTON_LMASK) != 0);
         updateButton(right_mouse_button, (mouse_button_down_states & SDL_BUTTON_RMASK) != 0);
-
-        for (KeyboardButton& button : keyboard_buttons){
-            updateButton(button, keyboard_state[button.keycode]);
+        
+        for (KeyboardButton * keyboard_button : keyboard_buttons){
+            updateButton(*keyboard_button, keyboard_state[keyboard_button->scancode]);
         }
 
         // consider the various game objects for selection
         
 
         // clear existing selection 
-        if(pressed(left_mouse_button)){
+        if(left_mouse_button.pressed()){
             balls_selected.clear();
             paddles_selected.clear();
             radial_group_selected.clear();
         }
 
         // add balls to selection, 
-        for(Ball& ball : balls){
-            AARect rect = ball.refCircle().toRect();
-            if(contains(rect, glm::vec2(game_mouse.position_x, game_mouse.position_y))){
-                if(left_mouse_button.state == ButtonState_Pressed){
+        for(Ball * ball_ptr : balls){
+            Rect rect;
+            Ball& ball = *ball_ptr;
+            Circle ball_circle = ball.getCircle();
+            getBoundingRect(rect, ball_circle);
+            if(containsPoint(rect, glm::vec2(mouse.position.x, mouse.position.y))){
+                if(left_button.pressed()){
                     balls_selected.push_back(&ball);
                 }
             }
         }
 
         // add paddles to selection, clear existing selection
-        for (Paddle& paddle: paddles){
-            if(contains(paddle.refRect(), glm::vec2(game_mouse.position_x, game_mouse.position_y))){
+        for (Paddle * paddle_ptr: paddles){
+            Paddle& paddle = *paddle_ptr;
+            if(containsPoint(paddle.refRect(), glm::vec2(mouse.position.x, mouse.position.y))){
                 paddles_selected.push_back(&paddle);
             }
         }
         // add radial group to selection, clear existing selection
-        for(RadialBrickGroup& radial_brick: game.radial_brick_groups){
-            if(contains(radial_brick.bounding_rect, glm::vec2(game_mouse.position_x, game_mouse.position_y))){
-                radial_group_selected.push_back(&radial_brick);
-            }    
-        }
+        // for(RadialBrickGroup& radial_brick: game.radial_brick_groups){
+        //     if(contains(radial_brick.bounding_rect, glm::vec2(game_mouse.position_x, game_mouse.position_y))){
+        //         radial_group_selected.push_back(&radial_brick);
+        //     }    
+        // }
 
         // move the movable balls
-        for(Ball * ball : balls_moving){
-            if(left_mouse_button.state == ButtonState_Pressed || left_mouse_button.state == ButtonState_Down){
-                move(*ball, glm::vec2(game_mouse.delta_x, game_mouse.delta_y));
+        for(Ball * ball_ptr : balls_moving){
+            Ball& ball = *ball_ptr;
+            if(left_mouse_button.pressedOrDown()){
+                move(ball, glm::vec2(mouse.delta.x, mouse.delta.y));
             }
         }
 
         // move the movable paddles
-        for(Paddle * paddle : paddles_moving) {
-            if(left_mouse_button.state == ButtonState_Pressed || left_mouse_button.state == ButtonState_Down){
-                move(*paddle, glm::vec2(game_mouse.delta_x, game_mouse.delta_y));
+        for(Paddle * paddle_ptr : paddles_moving) {
+            Paddle paddle = *paddle_ptr;
+            if(left_mouse_button.pressedOrDown()){
+                move(paddle, glm::vec2(mouse.delta.x, mouse.delta.y));
             }
         }
 
         // move the radial bricks paddles
-        for(RadialBrickGroup * group : radial_group_moving) {
-            if(left_mouse_button.state == ButtonState_Pressed || left_mouse_button.state == ButtonState_Down){
-                move(group->bounding_rect, glm::vec2((int)game_mouse.delta_x, (int)game_mouse.delta_y));
-                group->centre_brick.x += (int)game_mouse.delta_x;
-                group->centre_brick.y += (int)game_mouse.delta_y;
-                for(ArcBrick& arcs : group->arc_bricks){
-                    arcs.x += (int)game_mouse.delta_x;
-                    arcs.y += (int)game_mouse.delta_y;
-                }   
+        for(RadialBrickGroup * group_ptr : radial_group_moving) {
+            RadialBrickGroup& group = *group_ptr;
+            if(left_mouse_button.pressedOrDown()){
+                move(group, glm::vec2((int)mouse.delta.x, (int)mouse.delta.y));
+                // group->centre_brick.x += (int)game_mouse.delta_x;
+                // group->centre_brick.y += (int)game_mouse.delta_y;
+                // for(ArcBrick& arcs : group->arc_bricks){
+                //     arcs.x += (int)game_mouse.delta_x;
+                //     arcs.y += (int)game_mouse.delta_y;
+                // }   
             }
         }
 
 
         // clear moving  if the mouse is up or released
-        if(left_mouse_button.state == ButtonState_Released || left_mouse_button.state == ButtonState_Up){
+        
+        if(left_mouse_button.releasedOrUp()){
             balls_moving.clear();
             paddles_moving.clear();
             radial_group_selected.clear();
@@ -2223,34 +2498,35 @@ int main(int argc, char const *argv[])
 
         // add selected balls to moving balls is met
         for(Ball * ball : balls_selected){
-            if(left_mouse_button.state == ButtonState_Pressed && 
-                contains(ball->refCircle(), glm::vec2(game_mouse.position_x, game_mouse.position_y))){
+            Circle ball_circle = ball.getCircle();
+            if(left_mouse_button.pressed() && 
+                containsPoint(ball_circle, glm::vec2(mouse.position.x, mouse.position.y))){
                 balls_moving.push_back(ball);
             }
         // Move move the selected balls if the mouse is down      
         }
 
         // add selected paddles to moving paddles
-        for(Paddle * paddle : paddles_selected){
-            if(left_mouse_button.state == ButtonState_Pressed &&
-                contains(paddle->refRect(), glm::vec2(game_mouse.position_x, game_mouse.position_y))){
+        for(Paddle * paddle_ptr : paddles_selected){
+            Paddle& paddle = *paddle_ptr;
+            Rect paddle_rect = paddle.getRect();
+            if(left_mouse_button.pressed() &&
+                containsPoint(paddle_rect, glm::vec2(mouse.position.x, mouse.position.y))){
                 paddles_moving.push_back(paddle);
             }
         }
 
         // add selected radial to moving radial group
-        for(RadialBrickGroup * radial_group : radial_group_selected){
-            if(left_mouse_button.state == ButtonState_Pressed &&
-                contains(radial_group->bounding_rect, glm::vec2(game_mouse.position_x, game_mouse.position_y))){
-                radial_group_moving.push_back(radial_group);
-            }
-        }
+        // for(RadialBrickGroup * radial_group : radial_group_selected){
+        //     if(left_mouse_button.state == ButtonState_Pressed &&
+        //         contains(radial_group->bounding_rect, glm::vec2(game_mouse.position_x, game_mouse.position_y))){
+        //         radial_group_moving.push_back(radial_group);
+        //     }
+        // }
 
-        player_paddle.velocity.x = pressedOrDown(left_button) ?
-            -400.0f :
-            pressedOrDown(right_button) ?
-                400.0f :
-                0.0f;
+        // player_paddle.velocity.x = (left_button.releasedOrUp() && right_button.releasedOrUp()) ? 0.0f : player_paddle.velocity.x;
+        // player_paddle.velocity.x = left_button.pressedOrDown() ? 400.0f : player_paddle.velocity.x;
+        // player_paddle.velocity.x = right_button.pressedOrDown() ? -400.0f : player_paddle.velocity.x;
   
         {
             // Radial Brick rule
@@ -2271,19 +2547,20 @@ int main(int argc, char const *argv[])
                 float dt = time_controller.getDeltaTime();
                 while (dt > 0.0f) {
                     OnHit * on_hit = NULL;
-                    for (Ball& ball : balls){
-                        move(ball, dt);
+                    for (Ball * ball : balls){
+                        move(*ball, dt);
                     }
-                    for(Paddle& paddle : paddles){
-                        move(paddle, dt);                           
+                    for(Paddle * paddle : paddles){
+                        move(*paddle, dt);                           
                     }    
 
                     dt = 0.0f;
                     glm::vec2 normal = glm::vec2(0.0f, 0.0f);
 
-                    for (Ball& ball : balls){
-                       
-                        for(Paddle& paddle : paddles){
+                    for (Ball * ball_ptr : balls){
+                        Ball& ball = *ball_ptr;
+                        for(Paddle * paddle_ptr : paddles){
+                            Paddle& paddle = *paddle_ptr;
                             if(Intersector::circleIntersectsRect(ball.refCircle(), paddle.refRect())){
                                 if(resolve(dt, normal, ball.refCircle(), paddle.refRect(), ball.velocity - paddle.velocity)){
                                     ball_bounce_paddle.set(&ball, &paddle);
@@ -2292,7 +2569,7 @@ int main(int argc, char const *argv[])
                             }
                         }
 
-                        if((ball.getTop() < top_wall) && (ball.velocity.y < 0.0f)){
+                        if((getTopCircular(ball) < top_wall) && (ball.velocity.y < 0.0f)){
                             if(resolve(dt, normal, ball.getTop(), top_wall, ball.velocity.y, glm::vec2(0.0f, 1.0f))){
                                 ball_bounce_wall.set(&ball);
                                 on_hit = &ball_bounce_wall;
@@ -2300,31 +2577,32 @@ int main(int argc, char const *argv[])
                             }
                         }
                         
-                        if((ball.getBottom() > bottom_wall) && (ball.velocity.y > 0.0f)){
-                            if(resolve(dt, normal, ball.getBottom(), bottom_wall, ball.velocity.y, glm::vec2(0.0f, -1.0f))){
+                        if((getBottomCircular(ball) > bottom_wall) && (ball.velocity.y > 0.0f)){
+                            if(resolve(dt, normal, getBottomCircular(ball), bottom_wall, ball.velocity.y, glm::vec2(0.0f, -1.0f))){
                                 ball_bounce_wall.set(&ball);
                                 on_hit = &ball_bounce_wall;
 
                             }
                         }
 
-                        if((ball.getLeft() < left_wall) && (ball.velocity.x < 0.0f)){
-                            if(resolve(dt, normal, ball.getLeft(), left_wall, ball.velocity.x, glm::vec2(1.0f, 0.0f))){
+                        if((getLeftCircular(ball) < left_wall) && (ball.velocity.x < 0.0f)){
+                            if(resolve(dt, normal, getLeftCircular(ball), left_wall, ball.velocity.x, glm::vec2(1.0f, 0.0f))){
                                 ball_bounce_wall.set(&ball);
                                 on_hit = &ball_bounce_wall;
 
                             }
                         }
 
-                        if((ball.getRight() > right_wall) && (ball.velocity.x > 0.0f)){
-                            if(resolve(dt, normal, ball.getRight(), right_wall, ball.velocity.x, glm::vec2(-1.0f, 0.0f))){
+                        if((getRightCircular(ball) > right_wall) && (ball.velocity.x > 0.0f)){
+                            if(resolve(dt, normal, getRightCircular(ball), right_wall, ball.velocity.x, glm::vec2(-1.0f, 0.0f))){
                                 ball_bounce_wall.set(&ball);
                                 on_hit = &ball_bounce_wall; 
                             }
                         }
                     }     
 
-                    for(Paddle& paddle : paddles){
+                    for(Paddle * paddle_ptr : paddles){
+                        Paddle& paddle = *paddle_ptr;
                         if((paddle.getLeft() < left_wall) && (paddle.velocity.x < 0.0f)){
                             dt = fmaxf(dt, (paddle.getLeft() - left_wall) / paddle.velocity.x);
                             paddle_hits_wall.set(&paddle);
@@ -2338,11 +2616,11 @@ int main(int argc, char const *argv[])
                         }
                     }
 
-                    for (Ball& ball : balls){
-                        move(ball, -dt);
+                    for (Ball * ball : balls){
+                        move(*ball, -dt);
                     }
-                    for (Paddle& paddle : paddles){
-                        move(paddle, -dt);
+                    for (Paddle * paddle : paddles){
+                        move(*paddle, -dt);
                     }
 
                     if(on_hit){
@@ -2361,39 +2639,42 @@ int main(int argc, char const *argv[])
         /// [ Rendering ]
         glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer.object);
         glViewport(0, 0, width, height);
-        glClearColor(game_bg_color.r, game_bg_color.g, game_bg_color.b, game_bg_color.a);
+        glClearColor(game.bg_color.r, game.bg_color.g, game.bg_color.b, game.bg_color.a);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         circle_renderer.begin();
-        for(Ball& ball : balls){
+        for(Ball * ball : balls){
             glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
-            AARect rct = ball.refCircle().toRect();
-            addCircle(circle_renderer.vertex_batch, circle_renderer.index_batch, rct.getLeft(), rct.getRight(), rct.getWidth(), rct.getHeight(), color.r, color.g, color.b, circle_renderer.index_offset);            
+            Rect rct;
+            getBoundingRect(rct, (*ball).refCircle());
+            addCircle(circle_renderer.vertex_batch, circle_renderer.index_batch, getLeftBoxed(rct), getRightBoxed(rct), getWidth(rct), getHeight(rct), color.r, color.g, color.b, circle_renderer.index_offset);            
         }
         // render with the polygon renderer
         polygon_renderer.begin();
         {
-            AARect rect = player_paddle.refRect();
+            Rect rect = player_paddle.refRect();
             glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
             addRectangle(polygon_renderer.vertex_batch, polygon_renderer.index_batch, rect, color, polygon_renderer.index_offset);                
         }
         // left wall render
         {
-            AARect rect = AARect(glm::vec2(left_wall - 4, 0), glm::vec2(4, 480));
+            Rect rect = Rect(glm::vec2(left_wall - 4, 0), glm::vec2(4, 480));
             glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
             addRectangle(polygon_renderer.vertex_batch, polygon_renderer.index_batch, rect, color, polygon_renderer.index_offset);                
         }
         // right wall render
         {            
-            AARect rect = AARect(glm::vec2(right_wall, 0),glm::vec2(4, 480));
+            Rect rect = Rect(glm::vec2(right_wall, 0),glm::vec2(4, 480));
             glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
             addRectangle(polygon_renderer.vertex_batch, polygon_renderer.index_batch, rect, color, polygon_renderer.index_offset);                
         }
         //get rects that can be selected
-        std::vector<AARect> selection_rects;
+        std::vector<Rect> selection_rects;
         // add selection box for selected balls render
         for(Ball * ball : balls_selected){
-           selection_rects.push_back(ball->refCircle().toRect()); 
+           Rect rect = getBoundingRect(rect, ball->refCircle());
+           selection_rects.push_back(rect); 
+           
         }
 
         // add selection box for paddles
@@ -2402,19 +2683,19 @@ int main(int argc, char const *argv[])
         }
 
         // add selection box for radial group
-        for (RadialBrickGroup * radial_group : radial_group_selected){
-            selection_rects.push_back(radial_group->bounding_rect); 
-        }
+        // for (RadialBrickGroup * radial_group : radial_group_selected){
+        //     selection_rects.push_back(radial_group->bounding_rect); 
+        // }
         
         // render for rectangles to represent the outline of the selection box of the ball
-        for(AARect selection_rect : selection_rects){
-            renderLines(polygon_renderer, selection_rect, 2.0f);
+        for(Rect selection_rect : selection_rects){
+            addLines(polygon_renderer, selection_rect, 2.0f);
         }
 
         // Render brick_array if it is active
         if(brick_array_editor.active){
 
-            AARect rect = AARect(
+            Rect rect = Rect(
                 glm::vec2(brick_array_editor.origin_x, brick_array_editor.origin_y),
                 glm::vec2(brick_array_editor.brick_width, brick_array_editor.brick_height)
             );
@@ -2431,15 +2712,15 @@ int main(int argc, char const *argv[])
         //render all radial bricks
         
         for(RadialBrickGroup& bricks : game.radial_brick_groups){
-            renderRadialBrickGroup(polygon_renderer, bricks);
+            addRadialBrickGroup(polygon_renderer, bricks);
         }
 
         // render editor radial bricks
     
         if(radial_brick_editor.active){
-            renderRadialBrickGroup(polygon_renderer, editor_radial_bricks);
+            addRadialBrickGroup(polygon_renderer, editor_radial_bricks);
             // render it's bounding box
-            renderLines(polygon_renderer, editor_radial_bricks.bounding_rect, 2.0f );
+            // renderLines(polygon_renderer, editor_radial_bricks.bounding_rect, 2.0f );
         }
 
         if(!scene.paused){
@@ -2447,8 +2728,8 @@ int main(int argc, char const *argv[])
         }
 
         // Get ready to draw polygon
-        renderPolygonBatch(polygon_renderer, matrix);
-        renderCircleBatch(circle_renderer, matrix);
+        render(polygon_renderer, matrix);
+        render(circle_renderer, matrix);
 
         
         // Default Render off screen frame as a texture
@@ -2456,27 +2737,18 @@ int main(int argc, char const *argv[])
         glViewport(0, 0, 640, 480);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        // glBindBuffer(GL_ARRAY_BUFFER, texture_renderer.vertex_buffer);
-        // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, texture_renderer.index_buffer);    
-        // glUseProgram(texture_program);
-        // glm::mat4 m = glm::ortho(0.0f, (float)640.0f, (float)480.0f, 0.0f);
-        // glUniformMatrix4fv(texture_renderer.u_matrix, 1, GL_FALSE, &m[0][0]);
-        // glUniform1i(texture_renderer.u_texture, 0);
-        // glActiveTexture(GL_TEXTURE0);
-        // glBindTexture(GL_TEXTURE_2D, frame_buffer.color_texture);
-        // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(0 * sizeof(float)));
-        // glEnableVertexAttribArray(0);
-        // glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(3 * sizeof(float)));
-        // glEnableVertexAttribArray(1);
-        // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
-        // glEnableVertexAttribArray(2);
-        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        
+       
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         SDL_GL_SwapWindow(window);
-        update(time_controller, SDL_GetTicks64());       
+        update(time_controller, SDL_GetTicks64());    
+        // Reset all buttons at the End of frame
+
+        for(Button * button: buttons){
+            button->state = (button->state == ButtonState_Pressed) ? ButtonState_Down : button->state;
+            button->state = (button->state == ButtonState_Released) ? ButtonState_Up : button->state;
+        }   
     }
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
