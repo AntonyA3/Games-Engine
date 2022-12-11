@@ -1477,7 +1477,7 @@ bool Button::releasedOrUp(){
 //==========================================
 
 // template <typename TButton>
-void updateButton(Button& button, bool down){
+void update(Button& button, bool down){
     button.state = down ?
         button.state == ButtonState_Pressed || button.state == ButtonState_Down ?
                 ButtonState_Down :
@@ -2413,11 +2413,11 @@ int main(int argc, char const *argv[])
 
         }
 
-        updateButton(left_mouse_button, (mouse_button_down_states & SDL_BUTTON_LMASK) != 0);
-        updateButton(right_mouse_button, (mouse_button_down_states & SDL_BUTTON_RMASK) != 0);
+        update(left_mouse_button, (mouse_button_down_states & SDL_BUTTON_LMASK) != 0);
+        update(right_mouse_button, (mouse_button_down_states & SDL_BUTTON_RMASK) != 0);
         
         for (KeyboardButton * keyboard_button : keyboard_buttons){
-            updateButton(*keyboard_button, keyboard_state[keyboard_button->scancode]);
+            update(*keyboard_button, keyboard_state[keyboard_button->scancode]);
         }
 
         // consider the various game objects for selection

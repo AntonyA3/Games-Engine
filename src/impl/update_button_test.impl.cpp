@@ -21,7 +21,7 @@ int main(int argc, char const *argv[])
         test_dependancy.update(active); 
         if(accumulated_time >= tick_time){
             accumulated_time -= tick_time;
-            updateButton(test_button, keyboard_states);
+            update(test_button, keyboard_states);
             std::cout << "=========Next State========" << std::endl;
             std::cout << toString(test_button) << std::endl;
 

@@ -57,8 +57,8 @@ std::string readFile(std::string filename); // given a file return the file cont
 | ButtonState_Up       | false   | ButtonState_Up       |
 | ButtonState_Released | false   | ButtonState_Up       |
  */
-void updateButtonState(ButtonState& new_state, ButtonState state, bool down);
-void updateButton(Button& button, const Uint8 * keyboard_state);
+ButtonState update(ButtonState state, bool down);
+void update(Button& button, const Uint8 * keyboard_state);
 
 /*
 | value | string  |

@@ -60,7 +60,7 @@ std::string readFile(std::string filename){
     return ss.str();
 } 
 
-ButtonState updateButtonState(ButtonState state, bool down){
+ButtonState update(ButtonState state, bool down){
     ButtonState new_state;
     new_state = (state == ButtonState_Pressed && down) ? ButtonState_Down : new_state;
     new_state = (state == ButtonState_Down && down) ? ButtonState_Down : new_state;
@@ -73,8 +73,8 @@ ButtonState updateButtonState(ButtonState state, bool down){
     return new_state;
 }
 
-void updateButton(Button& button, const Uint8 * keyboard_state){
-    ButtonState new_state = updateButtonState(button.state, keyboard_state[button.scancode]);
+void update(Button& button, const Uint8 * keyboard_state){
+    ButtonState new_state = update(button.state, keyboard_state[button.scancode]);
     button.state_change = new_state != button.state;
     button.state = new_state;
 }

@@ -100,7 +100,7 @@ int main(int argc, char const *argv[])
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         // update buttons
         for (Button& button : buttons){
-            updateButton(button, keyboard_states);
+            update(button, keyboard_states);
             if(button.state_change){
                 std::cout << button.tag << " Button State: " << toString(button.state)<< std::endl;
             }

@@ -253,7 +253,15 @@ Expected Output: Expect
 **A Refactor Task**: 
 - Make a checkpoint
 The function updateButton and updateButtonState should be renamed to update in both the header file and implementation file, also change any instances of this in the update_button_state test and update_button_test 
- the executables: breakout_game_2.impl.exr, update_button_test, update_button_state_test is able to run this has been complete
+ the executables: breakout_game_2.impl.exe**Done**, update_button_test **Done**, update_button_state_test is able to run this has been complete
+- The update Function for button state's decleraration should match the implementation: **Done**
+- The update function in updateButtonState no longer has a toString method to show a psuedo truth table, create this method at the top of the file**Done**.
+- Update Button_state_test uses it's own implementation of the function so it failed to compile Remove the implementations,
+and test if the executable: update_button_state_test works as intended**Done**.
+- End Checkpoint: **ToDo**.
+
+
+**Potential Task**: A function for printing a truth table **ToDo**
 
 **A New Task**:  In the breakout Game and Engine, the user can use the Cursor to interract with things: **ToDo**
 - The current position of the mouse should be known
