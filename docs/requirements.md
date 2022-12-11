@@ -166,18 +166,31 @@ breakout_engine.hpp: **Done**
 - Remove all unnessessary comments: **Done**
 
 **Refactor Task**: Move all functions other than main to breakout engine.cpp
-- create a checkpoint to mark that I have created the header file but I am about to move functions to breakout_engine.cpp
-- create a breakout_engine.cpp file which includes breakout engine.hpp file
-- comment out and copy all functions other than main to the file, while maintaing the order that the functions were written
-- Test if the program still works after this, if not it might be a problem with the makefile
+- create a checkpoint to mark that I have created the header file but I am about to move functions to breakout_engine.cpp : **Done**
+- create a breakout_engine.cpp file which includes breakout engine.hpp file : **Done**
+- comment out and copy all functions other than main to the file, while maintaing the order that the functions were written: **Done**
+- Test if the program still works after this, if not it might be a problem with the makefile: **Done**
+- I found an error  with the function signature that was implemented therefore in the updateButtonFunction in breakout_game.hpp I need to add the parametre const Uint8 * keyboard_state: **Done**
+- Test again if the program still works after this, if not it might be a problem with the makefile: **Done**
+
+**Isolate the SDL Sequence loop for testing purposes
+
 
 
 *Test Design: For the integration of button changed and button tag*
 update_button_test
 Dependancies: SDL Headers included
 
-Button_State copy, Button Copy: Update Button Functions, UpdateButtonState toString(bool) toString(ButtonState)
+Button_State , Button : UpdateButton, UpdateButtonState, toString(bool), toString(ButtonState), SDL keyboard state,
 
+Sequence Dependancies: The SDL Update loop
+- Make  checkpoint
+- In there is a section at line 11 For the Window
+- Line 39 to initialise SDL in video mode
+- Line 42 for initialising the window
+- Line 52 for swap interval
+- Line 79-80 Polling the SDL Event
+- Line 85 Process the Quit Event
 Inputs: Button(Scancode: SDL_Scancode_A, Tag: "test key") where the default state is up
 Action: (Update with A button Down)
 Expected Output: Expect 
