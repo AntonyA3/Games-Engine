@@ -44,9 +44,31 @@ struct Button{
 
 typedef glm::vec4 Color;
 std::string readFile(std::string filename); // given a file return the file content
+
+/*
+| State                | is Down | New state            |
+| ---                  | ---     | ---                  |
+| ButtonState_Pressed  | true    | ButtonState_Down     |
+| ButtonState_Down     | true    | ButtonState_Down     |
+| ButtonState_Up       | true    | ButtonState_Pressed  |
+| ButtonState_Released | true    | ButtonState_Pressed  |
+| ButtonState_Pressed  | false   | ButtonState_Released |
+| ButtonState_Down     | false   | ButtonState_Released |
+| ButtonState_Up       | false   | ButtonState_Up       |
+| ButtonState_Released | false   | ButtonState_Up       |
+ */
 void updateButtonState(ButtonState& new_state, ButtonState state, bool down);
 void updateButton(Button& button, const Uint8 * keyboard_state);
+
+/*
+| value | string  |
+| true  | "true"  |
+| false | "false" |
+*/
 std::string toString(bool value);
+
 std::string toString(ButtonState value);
+
+std::string toString(Button& button);
 void alwaysShowDemo();
 #endif

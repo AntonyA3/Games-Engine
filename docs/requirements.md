@@ -130,6 +130,28 @@ Based on the semantics it might be better to have a: **Done**
 
 I don't need to peint the button name, but I will need to eventually detect the change event of a button, this should occur within update: **Done**
 
+Print a button 
+- There is another to String method for button, so at line 51 declare a button toString operation, in the cpp file after buttonState implement the toString function :
+It should look like this exactly
+Button: {
+    state_change: boolean_value,
+    tag: string_value,
+    scancode: scancode_to_string
+    button_state: button_state_to_string
+}
+ **Done**
+- it depends on the toString for bool for state change: **ToDo**
+- the tag can be easily printed: **Done**
+- the state can be printed based on the toString for button state: **Done**
+- Check whether scancode has a toString method, if it doesn't then create my own toString method, There is a way to get the scancode name but I will need to get the name , then print it: **Done**
+- Test this in a file that just prints an example button called button_to_string.impl.test: **Done**
+- I forgot to add the & from button reference in the implementation file so test again: **Done**
+- But it spat out random results so try to see if it works without the tostring method: **Done**
+- I noticed that I printed the string rather than returne the string, Therefore replace std::cout with the sstring stream insertion and create a temporary variable for a stringstream return the string, then build and run teh test fire again: **Done**
+- It works: **Done**
+
+
+
 Adding change detection within a button and the tag within a button
 - In a button there is a new bool for change
 - There is a tag that is a string for storing it's name
@@ -140,7 +162,7 @@ Adding change detection within a button and the tag within a button
 - the value of the button change is equal to whether the new button state is equl to the old buttonState
 - The button tag will be set in the constructor which means I need to change the Constructor decleration and implementation and call
 - Test whther the button update is correct by
-Test for the change and the tag after updating the button later: **Todo**
+Test for the change and the tag after updating the button later use the working tostring method: **Done**
 - Rename function updateButton to updateButtonState in the integration test: **Done**
 - rename update_button_test to update_button_state_test
 
@@ -184,13 +206,72 @@ Dependancies: SDL Headers included
 Button_State , Button : UpdateButton, UpdateButtonState, toString(bool), toString(ButtonState), SDL keyboard state,
 
 Sequence Dependancies: The SDL Update loop
-- Make  checkpoint
+- Make checkpoint: **Done**
 - In there is a section at line 11 For the Window
 - Line 39 to initialise SDL in video mode
 - Line 42 for initialising the window
 - Line 52 for swap interval
 - Line 79-80 Polling the SDL Event
 - Line 85 Process the Quit Event
+
+Maybe there should be an abstraction for testing with minimum viable SDL2 the problem is that this abstraction would be leaky in other circumstances.
+Therefore
+- Create a header file for objects that are only useful for testing: **Done**
+- There should be a cpp object that goes with this as well: **Done**
+- There should be a function for create BasicSDLTest (But with comments that notify the leaks in the abstraction): **Done**
+- This abstraction could be stored in an Object a member of a class called BasicSDLTest **Done**
+    - Initialising the window with a width of 640 height of 480 and window name of Test
+    - The update function for polling events and quitting the program with the input for the active variable
+    - The test setup should work: **Done**
+- Test the update button Function: **Done**
+- Since the test is dependant on events that happens many times per second, it would be too fast to measure: How about I create a small system to delay something within a faster loop:
+for example do something every second within a loop that happend every 1/60th of a second:  **Done**
+    -  I will need to store a value for accumulated time for time, as an unsigned int, this variable will increase until until 1000 milliseconds
+    - And I will need to store the current time
+    - I then get the new time at the end of the frame and the diffrence between the new time and the current time, should be added to the deltatime.
+    - There is an if statement to chech if the accumulated time is over 1000 (therefore one second has elapsed), if it is then the button is printed then Updated and the accumulated time is subtrated by a second
+    - Considers how I would formalise these ideas for later usage
+
+
 Inputs: Button(Scancode: SDL_Scancode_A, Tag: "test key") where the default state is up
 Action: (Update with A button Down)
 Expected Output: Expect 
+
+
+
+**A New Task**: Within the context of the Button Object button states can be expanded into multiple boolean values, for when the change of the state of something within the loop relies on the button state because only one button state can occur at a time for a button it is based on a predicate
+| Action | States |
+| --- | --- |
+| pressed | ButtonState_Pressed |
+| down | ButtonState_Down |
+| pressedOrDown | ButtonState_Pressed OR ButtonState_Down |
+| released | ButtonState_Released |
+| up | ButtonState_Up |
+| releasedOrUp | ButtonState_Released OR ButtonState_Up |
+| flippling | ButtonState_Pressed OR ButtonState_Released |
+
+**A Refactor Task**: 
+- Make a checkpoint
+The function updateButton and updateButtonState should be renamed to update in both the header file and implementation file, also change any instances of this in the update_button_state test and update_button_test 
+ the executables: breakout_game_2.impl.exr, update_button_test, update_button_state_test is able to run this has been complete
+
+**A New Task**:  In the breakout Game and Engine, the user can use the Cursor to interract with things: **ToDo**
+- The current position of the mouse should be known
+- The mouse's delta position, how much the user has moved the mouse in the frame
+- They are operated on together so these properties can be combined into an object
+- The mouse would need to be able to be converted to a string for testing purposes: **ToDo**
+
+**Implementation**
+- After button define a struct called Cursor, it will have the variables position and delta, with the types glm::vec2,
+- 
+
+**Testing**: 
+- Formalise the method of delaying an update 
+- Test that this works by creating a console application using the basic imgui setup, every second the mouse should be updated, this will display the current position of the mouse and the change in position of the mouse
+
+
+**A New Task**: A polygon renderer is required for the user to see things
+
+**A new Task**: Formalise the idea of ticks that happen between the frames.
+
+**A new Task:** I will expect to have a test abstraction that would include Work for An SDL Test that requires both SDL and ImGui with OpenGl

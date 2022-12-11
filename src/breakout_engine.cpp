@@ -27,6 +27,18 @@ std::string toString(ButtonState value){
     }
 }
 
+std::string toString(Button& button){
+    std::stringstream ss;
+    ss <<"Button: {\n";
+    ss <<"   state_change: " << toString(button.state_change) << "\n";
+    ss <<"   tag: " << button.tag << "\n";
+    ss <<"   scancode: " << SDL_GetScancodeName(button.scancode) << "\n";
+    ss <<"   button_state: " << toString(button.state) << "\n";
+    ss << "}\n";
+    return ss.str();
+}
+
+
 std::string readFile(std::string filename){
     std::stringstream ss;
     std::ifstream my_read_file;
