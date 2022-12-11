@@ -41,6 +41,10 @@ struct Button{
     Button(SDL_Scancode scancode, std::string tag); // Constructor takes a scancode
 };
 
+struct Cursor{
+    glm::vec2 position;
+    glm::vec2 delta;
+};
 
 typedef glm::vec4 Color;
 std::string readFile(std::string filename); // given a file return the file content
@@ -59,6 +63,7 @@ std::string readFile(std::string filename); // given a file return the file cont
  */
 ButtonState update(ButtonState state, bool down);
 void update(Button& button, const Uint8 * keyboard_state);
+void update(Cursor& cursor);
 
 /*
 | value | string  |

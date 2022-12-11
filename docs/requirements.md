@@ -258,25 +258,37 @@ The function updateButton and updateButtonState should be renamed to update in b
 - The update function in updateButtonState no longer has a toString method to show a psuedo truth table, create this method at the top of the file**Done**.
 - Update Button_state_test uses it's own implementation of the function so it failed to compile Remove the implementations,
 and test if the executable: update_button_state_test works as intended**Done**.
-- End Checkpoint: **ToDo**.
+- End Checkpoint: **Done**.
 
 
 **Potential Task**: A function for printing a truth table **ToDo**
 
-**A New Task**:  In the breakout Game and Engine, the user can use the Cursor to interract with things: **ToDo**
+**A New Task**:  In the breakout Game and Engine, the user can use the Cursor to interract with things: 
 - The current position of the mouse should be known
 - The mouse's delta position, how much the user has moved the mouse in the frame
 - They are operated on together so these properties can be combined into an object
-- The mouse would need to be able to be converted to a string for testing purposes: **ToDo**
+- The mouse would need to be able to be converted to a string for testing purposes:
 
 **Implementation**
-- After button define a struct called Cursor, it will have the variables position and delta, with the types glm::vec2,
-- 
+- After button define a struct called Cursor, it will have the variables position and delta, with the types glm::vec2: **Done**
+- declare an updateFunction that takes the cursor as an input: **Done**
+-Mark a checkpoint if I have to revert to this then delete the class for cursor and the update cursor decleration: **ToDo**
+- Withtin the update function implementation get the new mouse position, then calculate the mouse delta, then set the mouse position to the new 
+value: **ToDo**
+
+- A to String method
+The output should look like this
+
+Mouse: {</br>
+    position: [x: pos_x, y: pos_y]</br>
+    delta: [x: x, y: y]</br>
+}</br>
 
 **Testing**: 
 - Formalise the method of delaying an update 
 - Test that this works by creating a console application using the basic imgui setup, every second the mouse should be updated, this will display the current position of the mouse and the change in position of the mouse
 
+**Integrating into BreakoutGame 2**
 
 **A New Task**: A polygon renderer is required for the user to see things
 
