@@ -25,8 +25,14 @@ std::string toString(ButtonState value){
     case ButtonState_Released:
         return "ButtonState_Released";    
     }
+    return "";
 }
 
+std::string toString(glm::ivec2& obj){
+    std::stringstream ss;
+    ss << "[x: " << obj.x << ", y: " << obj.y << "]";
+    return ss.str();
+}
 std::string toString(Button& button){
     std::stringstream ss;
     ss <<"Button: {\n";
@@ -38,6 +44,14 @@ std::string toString(Button& button){
     return ss.str();
 }
 
+std::string toString(Cursor& cursor){
+    std::stringstream ss;
+    ss << "Cursor: {\n";
+    ss << "   position: " << toString(cursor.position) << "\n";
+    ss << "   delta: " << toString(cursor.delta) << "\n";
+    ss << "}\n";
+    return ss.str();
+}
 
 std::string readFile(std::string filename){
     std::stringstream ss;
@@ -61,8 +75,7 @@ std::string readFile(std::string filename){
 } 
 
 ButtonState update(ButtonState state, bool down){
-    ButtonState new_state;
-    new_state = (state == ButtonState_Pressed && down) ? ButtonState_Down : new_state;
+    ButtonState new_state = (state == ButtonState_Pressed && down) ? ButtonState_Down : state;
     new_state = (state == ButtonState_Down && down) ? ButtonState_Down : new_state;
     new_state = (state == ButtonState_Up && down) ? ButtonState_Pressed : new_state;
     new_state = (state == ButtonState_Released && down) ? ButtonState_Pressed : new_state;
@@ -77,6 +90,19 @@ void update(Button& button, const Uint8 * keyboard_state){
     ButtonState new_state = update(button.state, keyboard_state[button.scancode]);
     button.state_change = new_state != button.state;
     button.state = new_state;
+}
+
+Cursor::Cursor(){
+    this->position = glm::ivec2(0, 0);
+    this->delta = glm::ivec2(0, 0);
+}
+
+
+void update(Cursor& cursor){
+    glm::ivec2 new_position;
+    SDL_GetMouseState(&new_position.x, &new_position.y);
+    cursor.delta = new_position - cursor.position;
+    cursor.position = new_position;
 }
 
 void alwaysShowDemo(){

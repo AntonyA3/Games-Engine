@@ -270,27 +270,53 @@ and test if the executable: update_button_state_test works as intended**Done**.
 - The mouse would need to be able to be converted to a string for testing purposes:
 
 **Implementation**
-- After button define a struct called Cursor, it will have the variables position and delta, with the types glm::vec2: **Done**
+- After button define a struct called Cursor, it will have the variables position and delta, with the types glm::vec2(integers): **ToDo**
 - declare an updateFunction that takes the cursor as an input: **Done**
--Mark a checkpoint if I have to revert to this then delete the class for cursor and the update cursor decleration: **ToDo**
-- Withtin the update function implementation get the new mouse position, then calculate the mouse delta, then set the mouse position to the new 
-value: **ToDo**
+-Mark a checkpoint if I have to revert to this then delete the class for cursor and the update cursor decleration: **Done**
+- Withtin the update function implementation get the new Cursor position, then calculate the Cursor delta, then set the Cursor position to the new 
+value: **Done**
+- A to String method for glm::ivec2 before Button toString **Done**
+- A to String method for Cursor after Button tostring **Done**
 
-- A to String method
-The output should look like this
-
-Mouse: {</br>
-    position: [x: pos_x, y: pos_y]</br>
-    delta: [x: x, y: y]</br>
-}</br>
 
 **Testing**: 
-- Formalise the method of delaying an update 
-- Test that this works by creating a console application using the basic imgui setup, every second the mouse should be updated, this will display the current position of the mouse and the change in position of the mouse
+- test that the toString(glm::ivec2) method returns the expected output. The output should look like this: **Done**
 
+[x: x, y: y] 
+- test that the toString(Cursor) method returns the expected output. The output should look like this**Done**
+<code>
+
+    Cursor: {</br>
+    &nbsp;position: [x: pos_x, y: pos_y]</br>
+    &nbsp;delta: [x: x, y: y]</br>
+    }</br>
+</code>
+
+- Formalise the method of delaying an update, the first place this will be implemented is update_button_test.impl.cpp, call it TimeTicker
+**Done**
+    - This should be put in test abstractions since it is not yet needed in the game. then tested again **Done**
+- The Cursor is 0 initialised:  therefore add constructor to decleration file and implement it after Button implementations in the cpp file **Done**
+- Test that the Cursor Constructor is zero initialised: **Done**
+- Test that a Cursor can update in an SDL environment,  this works by creating a console application using the basic SDL setup, every second the Cursor should be updated, this will display the current position of the Cursor and the delta of the Cursor: **Done**
+
+Remove Compiler Warnings at breakout_engine lines 28 and 78: **Done**
+I changed the update button state function retest to verify correctness **Done**
 **Integrating into BreakoutGame 2**
 
-**A New Task**: A polygon renderer is required for the user to see things
+
+
+***I should be able to relie on the checkpoint that is created at the end of each task, rather than create one at the beginning***
+
+**A Refactor Task**: 
+Align the function declerations with their implementation order
+    - Button constructor
+    - Cursor Constructor
+    - readfile
+    - update(ButtonState)
+    - update(Cursor)
+**A New Task**: A polygon renderer is required for the user to see things within the game/editor
+- A shader is required, which is plain text that is able to be interpreted by graphics hardware with openGL support
+**Implementation**
 
 **A new Task**: Formalise the idea of ticks that happen between the frames.
 

@@ -42,8 +42,9 @@ struct Button{
 };
 
 struct Cursor{
-    glm::vec2 position;
-    glm::vec2 delta;
+    glm::ivec2 position;
+    glm::ivec2 delta;
+    Cursor();
 };
 
 typedef glm::vec4 Color;
@@ -71,9 +72,13 @@ void update(Cursor& cursor);
 | false | "false" |
 */
 std::string toString(bool value);
-
+/**/
 std::string toString(ButtonState value);
-
+/**/
+std::string toString(glm::ivec2& obj);
+/**/
 std::string toString(Button& button);
+/**/
+std::string toString(Cursor& mouse);
 void alwaysShowDemo();
 #endif

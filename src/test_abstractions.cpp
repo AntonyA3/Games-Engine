@@ -31,4 +31,21 @@ void BasicSDLTest::update(bool& active){
     }
 }
 
+TimeTicker::TimeTicker(Uint64 tick_time, Uint64 current_time){
+    this->tick_time = tick_time;
+    this->current_time = current_time;
+    this->accumulated_time = 0;
+}
+
+bool TimeTicker::tick(){
+    bool will_tick = this->accumulated_time >= this->tick_time;
+    this->accumulated_time = (will_tick) ? this->accumulated_time - this->tick_time : this->accumulated_time;
+    return will_tick; 
+}
+
+void TimeTicker::addTime(Uint64 new_time){
+    Uint64 delta_time = new_time - this->current_time;
+    this->accumulated_time += delta_time;
+    this->current_time = new_time;
+}
 

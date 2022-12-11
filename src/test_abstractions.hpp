@@ -13,3 +13,11 @@ struct BasicSDLTest
     void update(bool& active);
 
 };
+
+struct TimeTicker{
+    Uint64 current_time, tick_time, 
+    accumulated_time;// This variable is designed to reset every tick which marks a tick
+    TimeTicker(Uint64 tick_time, Uint64 current_time);
+    bool tick();
+    void addTime(Uint64 new_time);
+};
