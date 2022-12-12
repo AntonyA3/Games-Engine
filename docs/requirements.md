@@ -444,20 +444,24 @@ Check whether these two files work as expected
     - update_button_test
 **Done**
 
-Create a checkpoint **ToDo**
+Create a checkpoint **Done**
 
 The BasicSDLTest and BasicSDLOpenGLTest cleanupFunctions are exactly the same, consider creating a common function for both **Done**
 
 
 
 **Implementation**
-Create a struct called CommonSDLTest, before all the structs, it should contain the cleanup function, both BasicSDLOpenGLTest and BasicSDLTest inherite the cleanup function  at line 34-37 and line 65-68 remove the cleanup functions then, create a copy of the cleanup function before BasicSDLTest::initialise(), but call the cleanup function CommonSDLTest::cleanup();**ToDo**
 
+
+Create a struct called CommonSDLTest, before all the structs, it should contain the cleanup function, both BasicSDLOpenGLTest and BasicSDLTest inherite the cleanup function  at line 34-37 and line 65-68 remove the cleanup functions then, create a copy of the cleanup function before BasicSDLTest::initialise(), but call the cleanup function CommonSDLTest::cleanup();**Done**
+
+A common SDLTeststruct contains the window, therefore remove it from the BasicSDLTest and BasicSDLOpenGLTest **Done**
 
 See if nothing wrong happended by running 'cursor_update_test'
-**ToDo**
+**Done**
 
 
+Add then commit **ToDo**
 
 Update the comments int test abstraction header **ToDo**
 

@@ -1,5 +1,9 @@
 #include <test_abstractions.hpp>
 
+void CommonSDLTest::cleanup(){
+    SDL_DestroyWindow(this->window);
+    SDL_Quit();
+}
 
 void BasicSDLTest::initialise(){
      bool active = true;
@@ -31,10 +35,7 @@ void BasicSDLTest::update(bool& active){
     }
 }
 
-void BasicSDLTest::cleanup(){
-    SDL_DestroyWindow(this->window);
-    SDL_Quit();
-}
+
 
 
 void BasicSDLOpenGLTest::initialise(){
@@ -62,10 +63,6 @@ void BasicSDLOpenGLTest::initialise(){
     SDL_GL_MakeCurrent(this->window, this->gl_context);
 }
 
-void BasicSDLOpenGLTest::cleanup(){
-    SDL_DestroyWindow(this->window);
-    SDL_Quit();
-}
 
 TimeTicker::TimeTicker(Uint64 tick_time, Uint64 current_time){
     this->tick_time = tick_time;
