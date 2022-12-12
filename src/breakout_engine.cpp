@@ -112,6 +112,16 @@ std::string toString(Cursor& cursor){
     return ss.str();
 }
 
+std::string toString(Mesh& mesh){
+    std::stringstream ss;
+    ss << "Mesh: {\n";
+    ss << "   vertex_buffer: " << std::to_string(mesh.vertex_buffer) << "\n";
+    ss << "   index_buffer: " << std::to_string(mesh.index_buffer) << "\n";
+    ss << "}\n";
+    return ss.str();
+}
+
+
 void alwaysShowDemo(){
     bool show = true;
     ImGui::ShowDemoWindow(&show);

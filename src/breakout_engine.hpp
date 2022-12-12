@@ -84,5 +84,7 @@ std::string toString(glm::ivec2& obj);
 std::string toString(Button& button);
 /**/
 std::string toString(Cursor& mouse);
+/**/
+std::string toString(Mesh& mesh);
 void alwaysShowDemo();
 #endif

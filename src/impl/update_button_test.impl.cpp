@@ -7,7 +7,7 @@ int main(int argc, char const *argv[])
 {    
     bool active = true;
 
-    BasicSDLTest test_dependancy;
+    BasicSDLApplicationLoopTest test_dependancy;
     test_dependancy.initialise();
    
     Button test_button = Button(SDL_SCANCODE_A, std::string("Test Button"));

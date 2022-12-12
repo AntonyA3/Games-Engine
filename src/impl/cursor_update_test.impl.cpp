@@ -6,7 +6,7 @@ int main(int argc, char const *argv[])
 {
    bool active = true;
 
-    BasicSDLTest test_dependancy;
+    BasicSDLApplicationLoopTest test_dependancy;
     test_dependancy.initialise();
     
     Cursor test_cursor = Cursor();

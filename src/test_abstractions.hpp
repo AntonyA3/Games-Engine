@@ -11,7 +11,7 @@ struct CommonSDLTest{
 However is  useful for creating an SDL application that will
 be useful for testing whether the Input is functioning correctly,
 However this does not create any video */
-struct BasicSDLTest : public CommonSDLTest
+struct BasicSDLApplicationLoopTest : public CommonSDLTest
 {
     int width, height;
     void initialise();

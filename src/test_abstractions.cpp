@@ -5,7 +5,7 @@ void CommonSDLTest::cleanup(){
     SDL_Quit();
 }
 
-void BasicSDLTest::initialise(){
+void BasicSDLApplicationLoopTest::initialise(){
      bool active = true;
 
     // The Window Dependancy
@@ -21,7 +21,7 @@ void BasicSDLTest::initialise(){
     window = SDL_CreateWindow(window_name.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 }
 
-void BasicSDLTest::update(bool& active){
+void BasicSDLApplicationLoopTest::update(bool& active){
     // The Poll Event Dependancy
     SDL_Event event; // The current SDL event to process
     while (SDL_PollEvent(&event))

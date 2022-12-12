@@ -461,25 +461,35 @@ See if nothing wrong happended by running 'cursor_update_test'
 **Done**
 
 
-Add then commit **ToDo**
-
-Update the comments int test abstraction header **ToDo**
-
-
-
-BasicSDLTest to BasicSDLApplicationLoopTest, for better naming **ToDo**
-
-Create a to string function for the mesh **ToDo**
-
-Implement this in test_abstractions.cpp **ToDo**
+Add then commit **Done**
+---
 
 **Testing**
 
-In a seperate executable test if the Mesh Constructor initialises the Mesh buffers to an non zero value **ToDo**
+In a seperate executable test if the Mesh Constructor initialises the Mesh buffers to an non zero value **Done**
+
+BasicSDLTest to BasicSDLApplicationLoopTest, for better naming **Done**
+
+Commit to task to create a to string function for the mesh **Done**
+
+**Implementation and Expectation**
+- Declare mesh toString after Cursor toSting **ToDo**
+- Implement after cursor toString **Done**
 
 
+Mesh: {</br>
+&nbsp;vertex_buffer: #value</br>
+&nbsp;index_buffer: #value</br>
+}</br>
 
 
+**Testing** replace the mesh print in the mesh constructor test with a proper toString function, this also tests the mesh toString function rerun the tests: **Done**
+
+Add then Commit **ToDo**
+
+--- 
+
+Update the comments int test abstraction header **ToDo**
 
 
 

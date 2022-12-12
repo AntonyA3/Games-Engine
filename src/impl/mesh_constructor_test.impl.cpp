@@ -5,8 +5,7 @@ int main(int argc, char const *argv[])
     BasicSDLOpenGLTest test_dependancy;
     test_dependancy.initialise();
     Mesh test_mesh = Mesh();
-    std::cout << "vertex_buffer_id: " << test_mesh.vertex_buffer << "\n";
-    std::cout << "index_buffer_id: " << test_mesh.index_buffer << "\n";
+    std::cout << toString(test_mesh) << "\n";
     test_dependancy.cleanup();
     return 0;
 }
