@@ -301,23 +301,120 @@ value: **Done**
 
 Remove Compiler Warnings at breakout_engine lines 28 and 78: **Done**
 I changed the update button state function retest to verify correctness **Done**
-**Integrating into BreakoutGame 2**
 
 
 
 ***I should be able to relie on the checkpoint that is created at the end of each task, rather than create one at the beginning***
 
 **A Refactor Task**: 
-Align the function declerations with their implementation order
+Align the function declerations with their implementation order: **Done**
     - Button constructor
     - Cursor Constructor
     - readfile
     - update(ButtonState)
+    - update(Button)
     - update(Cursor)
-**A New Task**: A polygon renderer is required for the user to see things within the game/editor
+    - toString(bool)
+    - toString(ButtonState)
+    - toString(ivec2)
+    - toString(Button)
+    - toString(Cursor)
+    - alwaysShowDemo
+- Test this by running the breakout_game_2 file, since it incorporated most of the functionality of the breakoutengine: **Done**
+
+**Requirement**: Given a context for rendering, such as a rendering context that is 640 x 480 pixels, it should be possible of a user to see objects on the screen.
+- Using openGL the drawable entities must be stored in a vertex, and an index.
+
+**Rendering Epic**
+
+
+| Order | Task |
+| --- | --- |
+| 1 | In the breakout engine create a function that will convert the matrix to an orthographic matrix given the screen height and the screen width **Test:** THe orthographic matrix function is able to create a matrix that will convert opengl coordinates to screen coordinate 
+
+**Design**
+Expect this matrix when given an orthographic matric for a  640 by 480 screen
+
+NotThis below
+| | | | |
+| --- | --- | --- | --- |
+| 320 | 0 | 0 | 0 |</br>
+| 0 | 240 | 0 | 0 |</br>
+| 0 | 0 | 0 | 0 |</br>
+| 320 | 240 | 0 | 0 |</br>
+
+But this is what it looks like in column matrix order
+| | | | |
+| --- | --- | --- | --- |
+| 0.003125 | 0 | 0 | 0 |</br>
+| 0 | -0.004167  | 0 | 0 |</br>
+| 0 | 0 | -1 | 0 |</br>
+| -1 | 1 | 0 | 1 |</br>
+
+0.003125 = 1/320
+-0.004167 = -1/240 because the y axis is flipped
+
+-1, 1 in the last row makes sure that after scaling the 640 x 480 to a window in an area starting at [x: 0, y: 0] [x: 2, y: -2] the position of the window is translated to [x: -1, y: -1] [x: 1, y: 1]
+
+**Implementation**
+- In breakout engine.hpp create a function for transform(Matrix) immediately after readfile **Done**
+- In breakout engine.cpp implement this **Done**
+- Test this in transform_matrix.impl.cpp and check if this matrix is returned when given the width 640 and given the height 480 **Done**
+
+| Task |
+| --- |
+| **ToDo** |
+| Every time that the width and height of the screen changes in breakout game, the render matrix must be changed, including at initialisation, Verify this within the imgui insepector window |
+|**Implementation**:  checkpoint the previous task of transform function|
+ 
+
+
+| Task |
+| --- |
+| **ToDo** |
+| Rename transform as it is doesn't explain what the function does well enough |
+
+
+| Task |
+| --- |
+| Create a data type called mesh, this will store a vertex_buffer and an index_buffer  on Initialisation, these objects should be created, test this by verifying that these properties are not 0 **ToDo**|
+
+| Task |
+| --- |
+| In breakout engine include the string related functions for glm, se if it doesn't cause errors: , it is done already **Done** |
+
+
+| Task |
+| --- |
+| A shader does not need to be stored, but there needs to be a function to compile the shader based on the shader text content called make shader **ToDo** |
+
+| Task |
+| --- |
+| The polygon shader text content had two files, the vertex shader and the fragment shader **ToDo** |
+
+| Task |
+| --- |
+| Every time that the width and height of the screeen changes, the render matrix must be changed, including at initialisation **ToDo** |
+
+| Task |
+| --- |
+| The verticies should have a matrix that scale the objects to be viewed on a screen that matches the current width and current height of the screen.  **Done** |
+
+| Task |
+| --- |
+| It should be possible to make a shader when just given the filename,  given the filename it is possible to read the shader content from the file, then make the shader  **ToDo** |
+
+- Checking whether the shader compiled successfully is a seperate function that will be used to test whether the shader has been written correctly **ToDo**
+- Create a datatype called polygon renderer, it should have a variable for the program with a default value of 0 **ToDo**
+
+**A New Task**:  Needs to see things within the game/editor
+- Most objects should be rendered as polygons
 - A shader is required, which is plain text that is able to be interpreted by graphics hardware with openGL support
+- A mesh has a vertex buffer and an index buffer
 **Implementation**
 
 **A new Task**: Formalise the idea of ticks that happen between the frames.
 
 **A new Task:** I will expect to have a test abstraction that would include Work for An SDL Test that requires both SDL and ImGui with OpenGl
+
+**Integrating Cursor into BreakoutGame 2**

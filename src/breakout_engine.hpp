@@ -4,7 +4,6 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-
 #include <GL/glew.h>
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
@@ -49,7 +48,7 @@ struct Cursor{
 
 typedef glm::vec4 Color;
 std::string readFile(std::string filename); // given a file return the file content
-
+void transform(glm::mat4& matrix, int width, int height);
 /*
 | State                | is Down | New state            |
 | ---                  | ---     | ---                  |
@@ -61,7 +60,7 @@ std::string readFile(std::string filename); // given a file return the file cont
 | ButtonState_Down     | false   | ButtonState_Released |
 | ButtonState_Up       | false   | ButtonState_Up       |
 | ButtonState_Released | false   | ButtonState_Up       |
- */
+*/
 ButtonState update(ButtonState state, bool down);
 void update(Button& button, const Uint8 * keyboard_state);
 void update(Cursor& cursor);
