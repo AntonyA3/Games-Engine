@@ -59,6 +59,7 @@ int main(int argc, char const *argv[])
     }
 
     SDL_GL_MakeCurrent(window, gl_context);
+    Mesh polygon_batch_mesh;
     // Initialise Imgui
     IMGUI_CHECKVERSION();
     ImGui::CreateContext(NULL);

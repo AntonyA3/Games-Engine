@@ -12,6 +12,11 @@ Cursor::Cursor(){
     this->delta = glm::ivec2(0, 0);
 }
 
+Mesh::Mesh(){
+    glGenBuffers(1, &this->vertex_buffer);
+    glGenBuffers(1, &this->index_buffer);
+}
+
 std::string readFile(std::string filename){
     std::stringstream ss;
     std::ifstream my_read_file;

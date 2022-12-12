@@ -387,9 +387,68 @@ But this is what it looks like in column matrix order
 Display the mouse position in the imgui windoe **Done**|
 
 
-| Task |
-| --- |
-| Create a data type called mesh, this will store a vertex_buffer and an index_buffer  on Initialisation, these objects should be created, test this by verifying that these properties are not 0 **ToDo**|
+Task
+
+---
+
+Create a data type called mesh, this will store a vertex_buffer and an index_buffer  on Initialisation, these objects should be created, test this by verifying that these properties are not 0 **ToDo**
+
+--- 
+
+**Sub Requirement**
+
+The exact datatype for a vertex buffer object or index buffer object should be *GLuint*
+
+Before testing find out the minimum required functionality to create a mesh within the mesh_constructor_test file**ToDo**
+
+---
+
+**Implementation**
+
+In breakout engine hpp after Cursor, declare struct Mesh with a varible of type GLuint for vertex_buffer and index_buffer both of types GLuint and declare an Constructor **Done**
+
+In breakout engine cpp after all implementation of Cursor functions implement the Mesh Constructor **Done**
+
+In the breakout game 2 make sure that the Mesh is constructed after line 61 as this is after openGL initialised call it polygon_batch_mesh **Done** (at line 62)
+
+Create a file for testing the mesh constructor **Done**
+
+By trial and error find the test dependancies of the Mesh **Done**
+
+
+For testing create a function or a class to encapsulate the test dependancies for testing a Mesh. in test_abstractions.hpp call it BasicSDLOpenGLTest, it only needs an initialise and cleanup function to be declared **Done**
+
+Include OpenGl into test_abstraction.hpp **Done**
+
+Implement the initialise and clean up function in test_abstactions implementation file after BasicsSDLTest implementations **Done**
+
+Implement the BasicOpenGLSDL test absttraction in the mesh test **Done**
+Check whether the mesh_constructor_test works **Done**
+
+Add then make a commit **ToDo**
+
+Basic SDL test needs a function for cleanup aswell **ToDO**
+
+
+Update the comments int test abstraction header **ToDo**
+
+Add cleanup function in all tiles that use BasicSDLTest for testing
+**Todo**
+
+BasicSDLTest to BasicSDLApplicationLoopTest, for better naming **ToDo**
+
+Create a to string function for the mesh **ToDo**
+
+Implement this in test_abstractions.cpp **ToDo**
+
+**Testing**
+
+In a seperate executable test if the Mesh Constructor initialises the Mesh buffers to an non zero value **ToDo**
+
+
+
+
+
 
 
 

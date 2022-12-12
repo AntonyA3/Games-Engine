@@ -46,6 +46,11 @@ struct Cursor{
     Cursor();
 };
 
+struct Mesh{
+    GLuint vertex_buffer, index_buffer;
+    Mesh();
+};
+
 typedef glm::vec4 Color;
 std::string readFile(std::string filename); // given a file return the file content
 void update(glm::mat4& matrix, int width, int height);
