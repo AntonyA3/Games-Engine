@@ -364,15 +364,25 @@ But this is what it looks like in column matrix order
 | Task |
 | --- |
 | **ToDo** |
-| Every time that the width and height of the screen changes in breakout game, the render matrix must be changed, including at initialisation, Verify this within the imgui insepector window |
-|**Implementation**:  checkpoint the previous task of transform function|
- 
+| Every time that the width and height of the screen changes in breakout game, the render matrix must be changed, including at initialisation | 
+|**Implementation**:  checkpoint the previous task of transform function, then at line 74 & line 95 use the transform function on the render matrix: **Done** (Changes applied at line 75 and line 97)|
+**Testing**: Verify this within the imgui insepector window act about line 117 ImGui::Text call for height create an imgui text called render matrix*, the matrix should change aalong with the width and height of the window. **Done**: (A new task will be created to improve the format by creating my own matrix to String method, a checkpoint is made) |
+
+
 
 
 | Task |
 | --- |
 | **ToDo** |
 | Rename transform as it is doesn't explain what the function does well enough |
+| **Implementation**: Search for all transform implementations and declerations, 
+
+
+| Task |
+| --- |
+| **ToDo** |
+| A new to string method for glm::mat4 |
+
 
 
 | Task |

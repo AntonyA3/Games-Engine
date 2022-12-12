@@ -72,6 +72,7 @@ int main(int argc, char const *argv[])
     ImGui_ImplOpenGL3_Init("#version 150");
     // end the initialisation of opengl
     glViewport(0, 0, width, height);
+    transform(render_matrix, width, height);
     background_color = grey;
     glClearColor(background_color.r, background_color.g, background_color.b, background_color.a);
     while (active) // app loop
@@ -93,6 +94,8 @@ int main(int argc, char const *argv[])
                 width = event.window.data1; // this sets the width
                 height = event.window.data2; // this sets the height
                 glViewport(0, 0, width, height);
+                transform(render_matrix, width, height);
+
                 break;
 
             }
@@ -115,6 +118,7 @@ int main(int argc, char const *argv[])
         ImGui::Begin("Inspector");
         ImGui::Text("width: %d", width);
         ImGui::Text("height: %d", height);
+        ImGui::Text("render matrix: %s", glm::to_string(render_matrix).c_str());
         ImGui::End();
 
         alwaysShowDemo();
