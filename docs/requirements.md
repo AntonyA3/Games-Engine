@@ -140,7 +140,7 @@ Button: {
     button_state: button_state_to_string
 }
  **Done**
-- it depends on the toString for bool for state change: **ToDo**
+- it depends on the toString for bool for state change: **Done**
 - the tag can be easily printed: **Done**
 - the state can be printed based on the toString for button state: **Done**
 - Check whether scancode has a toString method, if it doesn't then create my own toString method, There is a way to get the scancode name but I will need to get the name , then print it: **Done**
@@ -261,7 +261,7 @@ and test if the executable: update_button_state_test works as intended**Done**.
 - End Checkpoint: **Done**.
 
 
-**Potential Task**: A function for printing a truth table **ToDo**
+**Potential Task**: A function for printing a truth table
 
 **A New Task**:  In the breakout Game and Engine, the user can use the Cursor to interract with things: 
 - The current position of the mouse should be known
@@ -270,7 +270,7 @@ and test if the executable: update_button_state_test works as intended**Done**.
 - The mouse would need to be able to be converted to a string for testing purposes:
 
 **Implementation**
-- After button define a struct called Cursor, it will have the variables position and delta, with the types glm::vec2(integers): **ToDo**
+- After button define a struct called Cursor, it will have the variables position and delta, with the types glm::vec2(integers): **Done**
 - declare an updateFunction that takes the cursor as an input: **Done**
 -Mark a checkpoint if I have to revert to this then delete the class for cursor and the update cursor decleration: **Done**
 - Withtin the update function implementation get the new Cursor position, then calculate the Cursor delta, then set the Cursor position to the new 
@@ -363,7 +363,7 @@ But this is what it looks like in column matrix order
 
 | Task |
 | --- |
-| **ToDo** |
+| **Done** |
 | Every time that the width and height of the screen changes in breakout game, the render matrix must be changed, including at initialisation | 
 |**Implementation**:  checkpoint the previous task of transform function, then at line 74 & line 95 use the transform function on the render matrix: **Done** (Changes applied at line 75 and line 97)|
 **Testing**: Verify this within the imgui insepector window act about line 117 ImGui::Text call for height create an imgui text called render matrix*, the matrix should change aalong with the width and height of the window. **Done**: (A new task will be created to improve the format by creating my own matrix to String method, a checkpoint is made) |
@@ -373,25 +373,29 @@ But this is what it looks like in column matrix order
 
 | Task |
 | --- |
-| **ToDo** |
+| **Done** |
 | Rename transform as it is doesn't explain what the function does well enough |
-| **Implementation**: Search for all transform implementations and declerations, 
+| **Implementation**: Search for all transform implementations and declerations, then rename it to update, in only cpp an hpp files, add some comments above to explain what is does **Done** |
+| **Testing**: Expect the matrix to update correctly, therefore no logic change in the breakout_game_2 executable **Done** |
 
 
 | Task |
 | --- |
-| **ToDo** |
-| A new to string method for glm::mat4 |
-
+| Integrating Cursor into BreakoutGame 2 **Done**|
+| **Implementation**: At line 23 create a cursor variable **Done**, at line 111 update the cursor **Done**, at line 122 call a to string for the cursor position **Done**, at line 123 call a to_string method for the cursor delta **Done**
+| **Testing** :Check whether the cursor updates are displayed in the imgui window for position and delta **Done**
+Display the mouse position in the imgui windoe **Done**|
 
 
 | Task |
 | --- |
 | Create a data type called mesh, this will store a vertex_buffer and an index_buffer  on Initialisation, these objects should be created, test this by verifying that these properties are not 0 **ToDo**|
 
+
+
 | Task |
 | --- |
-| In breakout engine include the string related functions for glm, se if it doesn't cause errors: , it is done already **Done** |
+| In breakout engine include the string related functions for glm::mat4, see if it doesn't cause errors **Done** |
 
 
 | Task |
@@ -401,10 +405,6 @@ But this is what it looks like in column matrix order
 | Task |
 | --- |
 | The polygon shader text content had two files, the vertex shader and the fragment shader **ToDo** |
-
-| Task |
-| --- |
-| Every time that the width and height of the screeen changes, the render matrix must be changed, including at initialisation **ToDo** |
 
 | Task |
 | --- |
@@ -427,4 +427,3 @@ But this is what it looks like in column matrix order
 
 **A new Task:** I will expect to have a test abstraction that would include Work for An SDL Test that requires both SDL and ImGui with OpenGl
 
-**Integrating Cursor into BreakoutGame 2**

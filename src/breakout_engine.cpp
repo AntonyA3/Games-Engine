@@ -33,7 +33,7 @@ std::string readFile(std::string filename){
     return ss.str();
 } 
 
-void transform(glm::mat4& matrix, int width, int height){
+void update(glm::mat4& matrix, int width, int height){
     matrix = glm::ortho(0.0f, (float)width, (float)height, 0.0f);
 }
 

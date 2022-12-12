@@ -48,7 +48,7 @@ struct Cursor{
 
 typedef glm::vec4 Color;
 std::string readFile(std::string filename); // given a file return the file content
-void transform(glm::mat4& matrix, int width, int height);
+void update(glm::mat4& matrix, int width, int height);
 /*
 | State                | is Down | New state            |
 | ---                  | ---     | ---                  |

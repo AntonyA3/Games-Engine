@@ -20,7 +20,7 @@ int main(int argc, char const *argv[])
     opengl_minor_version = 3; // To store the open gl minor version
     Color background_color; // To store the background color
     glm::mat4 render_matrix; // This is the matrix that will be used in all of the renderers
-    
+    Cursor cursor;
     std::vector<Button> buttons = {
         Button(SDL_SCANCODE_A, "Left"),
         Button(SDL_SCANCODE_D, "Right")
@@ -72,7 +72,7 @@ int main(int argc, char const *argv[])
     ImGui_ImplOpenGL3_Init("#version 150");
     // end the initialisation of opengl
     glViewport(0, 0, width, height);
-    transform(render_matrix, width, height);
+    update(render_matrix, width, height);
     background_color = grey;
     glClearColor(background_color.r, background_color.g, background_color.b, background_color.a);
     while (active) // app loop
@@ -94,7 +94,7 @@ int main(int argc, char const *argv[])
                 width = event.window.data1; // this sets the width
                 height = event.window.data2; // this sets the height
                 glViewport(0, 0, width, height);
-                transform(render_matrix, width, height);
+                update(render_matrix, width, height);
 
                 break;
 
@@ -108,7 +108,7 @@ int main(int argc, char const *argv[])
                 std::cout << button.tag << " Button State: " << toString(button.state)<< std::endl;
             }
         }
-
+        update(cursor);
 
         // Beginning a new ImGui Frame
         ImGui_ImplOpenGL3_NewFrame();
@@ -119,6 +119,9 @@ int main(int argc, char const *argv[])
         ImGui::Text("width: %d", width);
         ImGui::Text("height: %d", height);
         ImGui::Text("render matrix: %s", glm::to_string(render_matrix).c_str());
+        ImGui::Text("cursor position: %s", glm::to_string(cursor.position).c_str());
+        ImGui::Text("cursor delta: %s", glm::to_string(cursor.delta).c_str());
+
         ImGui::End();
 
         alwaysShowDemo();
