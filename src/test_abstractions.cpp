@@ -31,6 +31,12 @@ void BasicSDLTest::update(bool& active){
     }
 }
 
+void BasicSDLTest::cleanup(){
+    SDL_DestroyWindow(this->window);
+    SDL_Quit();
+}
+
+
 void BasicSDLOpenGLTest::initialise(){
     if(SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
         printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );

@@ -21,8 +21,8 @@ int main(int argc, char const *argv[])
             std::cout << toString(test_cursor) << std::endl;
         }
         time_ticker.addTime(SDL_GetTicks64());
-
     }
+    test_dependancy.cleanup();
    
     return 0;
 }

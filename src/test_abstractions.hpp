@@ -2,6 +2,8 @@
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
 
+
+
 /* Thes Object should not be used in the application
 However is  useful for creating an SDL application that will
 be useful for testing whether the Input is functioning correctly,
@@ -13,6 +15,7 @@ struct BasicSDLTest
 
     void initialise();
     void update(bool& active);
+    void cleanup();
 
 };
 

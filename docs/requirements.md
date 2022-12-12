@@ -425,15 +425,43 @@ Implement the initialise and clean up function in test_abstactions implementatio
 Implement the BasicOpenGLSDL test absttraction in the mesh test **Done**
 Check whether the mesh_constructor_test works **Done**
 
-Add then make a commit **ToDo**
+Add then make a commit **Done**
 
-Basic SDL test needs a function for cleanup aswell **ToDO**
+Basic SDL test needs a function for cleanup aswell **Done**
+
+Implement the cleanup function after BasicSDLTest::update **ToDo**
+
+Find files were BasicSDLTest is used: **Done**
+**Result**
+    (These files are)
+    - cursor_update_test
+    - update_button_test
+Add cleanup function in the relevant locations in files using BasicSDLTest for testing
+**Done**
+
+Check whether these two files work as expected
+    - cursor_update_test
+    - update_button_test
+**Done**
+
+Create a checkpoint **ToDo**
+
+The BasicSDLTest and BasicSDLOpenGLTest cleanupFunctions are exactly the same, consider creating a common function for both **Done**
+
+
+
+**Implementation**
+Create a struct called CommonSDLTest, before all the structs, it should contain the cleanup function, both BasicSDLOpenGLTest and BasicSDLTest inherite the cleanup function  at line 34-37 and line 65-68 remove the cleanup functions then, create a copy of the cleanup function before BasicSDLTest::initialise(), but call the cleanup function CommonSDLTest::cleanup();**ToDo**
+
+
+See if nothing wrong happended by running 'cursor_update_test'
+**ToDo**
+
 
 
 Update the comments int test abstraction header **ToDo**
 
-Add cleanup function in all tiles that use BasicSDLTest for testing
-**Todo**
+
 
 BasicSDLTest to BasicSDLApplicationLoopTest, for better naming **ToDo**
 
