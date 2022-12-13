@@ -566,11 +566,11 @@ Task
 clean the object files and make all .o files, .d files and .exe and files ignored by git
 
 **Implementation**
-- Run the clean command **ToDo**
-- commit the new git ignore changed **ToDo**
+- Run the clean command **Done**
+- commit the new git ignore changed **Done**
 - add the relevant file types to gitignore **ToDo**
 - rebuild the project **ToDo**
-- Check if the relevant files have been ignored **ToDo**
+- Check if the relevant files have been ignored with git check-ignore 'file_path' **ToDo**
 
 
 ---
