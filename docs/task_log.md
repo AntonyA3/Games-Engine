@@ -551,6 +551,34 @@ Based on some of the properties in the move the test to seperate folders
 
 
 Tests are organises **Done**
+
+--- Note **New Strategy**
+- I have mostly been doing unit testing for making sure things havs been implemented correctly, It is probably better to 
+    1. Set a checkpoint to revert the code base in case something major goes wrong
+    2. Formulate the task, 
+    3. Commit for task formulation
+    4. Implement the changes and anything that is needed to verify the correctness of these changes, within the same program itself,
+    5. Check whether the changes had been successfully make
+    6. Commit to mark the end of the task
+
+---
+Task
+clean the object files and make all .o files, .d files and .exe and files ignored by git
+
+**Implementation**
+- Run the clean command **ToDo**
+- commit the new git ignore changed **ToDo**
+- add the relevant file types to gitignore **ToDo**
+- rebuild the project **ToDo**
+- Check if the relevant files have been ignored **ToDo**
+
+
+---
+Task
+
+The polygon shader text content had two files, the vertex shader and the fragment shader **ToDo** |
+
+
 ---
 Task
 **Test Gap**
@@ -567,13 +595,6 @@ Consider this, many executables use the breakout engine, since two shader files 
 Task
 
 In breakout engine include the string related functions for glm::mat4, see if it doesn't cause errors
-
-
-
----
-Task
-
-The polygon shader text content had two files, the vertex shader and the fragment shader **ToDo** |
 
 ---
 Task

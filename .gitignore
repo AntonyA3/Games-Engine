@@ -1,6 +1,6 @@
-
-*.o 
-*.exe
+**/*.d
+**/*.o
+**/*.exe
 sqlite
 vendors/imgui
 vendors/libcester-0.4
