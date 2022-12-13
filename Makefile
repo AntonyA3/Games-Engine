@@ -1,4 +1,4 @@
-
+SHELL := powershell.exe
 CC = g++
 COMPILER_FLAGS = -Wall -g -MD
 INCLUDE_PATHS = -I.
@@ -38,8 +38,7 @@ SRC_HEADER_FILES += $(patsubst %.hpp,%.hpp,$(wildcard ./vendors/imgui/*.hpp))
 	$(CC) $*.impl.o $(SRC_OBJECT_FILES) $(INCLUDE_PATHS) $(LINKER_FLAGS) $(COMPILER_FLAGS) -o $@ -DSHADER_FILE_PATH=\"./data/shaders/\" -DTEST_DATA_DIRECTORY=\"./tests/data/\"
 
 clean:
-	rm -f -r *.o
-	rm -f -r *.d
+	powershell -ExecutionPolicy Bypass -File .\src\clean.ps1
 
 .RETAIN : $(SRC_OBJECT_FILES) $(TEST_OBJECT_FILES) $(SRC_HEADER_FILES)
 

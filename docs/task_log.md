@@ -537,9 +537,20 @@ Based on some of the properties in the move the test to seperate folders
 
 - Add then Commit **ToDo**
 
-- Alter the makefile so that when I do make clean, starting from the head of root folder of the project all the object files and dependancy files are removed **ToDO**
+- Alter the makefile so that when I do make clean, starting from the head of root folder of the project all the object files and dependancy files are removed, revert if files that shouldn't be deleted are deleted, try to recompile breakout_game_2.impl.cpp to make sure that the entire build process works correctly **ToDO**
+    - Try a find file command ** I expect for it to find only .exe .d and .o files within this root **Done**
+    - Get-ChildItem -Path . -Name -Recurse - Include *.[do] **Done** *This command is used to find the files*
+    - See if I can do something for each of these file that is not yet deleting the, such as printing it's size **Done**
+    - I can actually set the result of the Get-ChildItem to a variable called $found_files**Done**
+    - Remember to remove the variable after execution **Done**
+    - Replace the print file size function with a remove file function **Done**
+    - Change the shell of the makefile to powershell, change the SHELL variable **Done**
+    I added (SHELL := powershell.exe)
+    - try to run a batch file for cleaning, test if it works by removing the files after cleaning **Done**
+    - Create a variable in makefile which takes an input from a shell command at line 13, check that the variable contains all d files and o files **Done**
 
-Tests are organises **ToDo**
+
+Tests are organises **Done**
 ---
 Task
 **Test Gap**
