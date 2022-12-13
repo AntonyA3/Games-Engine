@@ -568,9 +568,9 @@ clean the object files and make all .o files, .d files and .exe and files ignore
 **Implementation**
 - Run the clean command **Done**
 - commit the new git ignore changed **Done**
-- add the relevant file types to gitignore **ToDo**
-- rebuild the project **ToDo**
-- Check if the relevant files have been ignored with git check-ignore 'file_path' **ToDo**
+- add the relevant file types to gitignore **Done**
+- rebuild the project **Done**
+- Check if the relevant files have been ignored with git check-ignore 'file_path' **Done**
 
 
 ---
