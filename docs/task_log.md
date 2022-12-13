@@ -505,6 +505,7 @@ in breakout_engine.cpp
     - create compile_shader_unsucessfully_test make sure random text is not compiled to a shader I expect an error log to be printed  **Done**
 
 - commit **Done**
+
 ---
 Task
 
@@ -522,6 +523,23 @@ Based on some of the properties in the move the test to seperate folders
 
 - add then commit **ToDo**
 
+- Based on the tests create the folders  and move them based on what is rational**Todo**
+    - rename button to button_tests -try a test **Done**
+    - compile_shader_tests
+    - cursor_tests - try a test **Done**
+    - to_string_tests - try a test **Done**
+    - make_shader_tests
+    - file_io_tests
+    - mesh_test
+    - matrix_vector_test
+
+- for all to_string tests cpp files make to_string prepend the object **Done**
+
+- Add then Commit **ToDo**
+
+- Alter the makefile so that when I do make clean, starting from the head of root folder of the project all the object files and dependancy files are removed **ToDO**
+
+Tests are organises **ToDo**
 ---
 Task
 **Test Gap**

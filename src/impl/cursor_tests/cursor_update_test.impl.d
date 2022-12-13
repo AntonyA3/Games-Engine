@@ -1,4 +1,5 @@
-src\impl\cursor_update_test.impl.o: src\impl\cursor_update_test.impl.cpp \
+src\impl\cursor_tests\cursor_update_test.impl.o: \
+ src\impl\cursor_tests\cursor_update_test.impl.cpp \
  src/breakout_engine.hpp \
  C:/msys64/mingw64/x86_64-w64-mingw32/include/stdio.h \
  C:/msys64/mingw64/x86_64-w64-mingw32/include/corecrt_stdio_config.h \
