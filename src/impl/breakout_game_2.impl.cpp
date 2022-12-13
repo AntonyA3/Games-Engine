@@ -6,7 +6,8 @@
 
 int main(int argc, char const *argv[])
 {
-    const Color grey = Color(0.5f, 0.5f, 0.5f, 1.0f);
+    const Color3 red = Color3(1.0f, 0.0f, 0.0f);
+    const Color4 grey = Color4(0.5f, 0.5f, 0.5f, 1.0f);
     bool active = true; // To store whether the appplication is active
     SDL_Window * window; // An **allocated reference** to the SDLWindow object that created, **on creation**
     SDL_GLContext gl_context; // To Store the SDL GLContext
@@ -18,7 +19,7 @@ int main(int argc, char const *argv[])
     height = default_height, // this value id the current window height, it is initialised to the default
     opengl_major_version = 3, // To store the open gl major version
     opengl_minor_version = 3; // To store the open gl minor version
-    Color background_color; // To store the background color
+    Color4 background_color; // To store the background color
     glm::mat4 render_matrix; // This is the matrix that will be used in all of the renderers
     Cursor cursor;
     std::vector<Button> buttons = {
@@ -59,7 +60,13 @@ int main(int argc, char const *argv[])
     }
 
     SDL_GL_MakeCurrent(window, gl_context);
-    Mesh polygon_batch_mesh;
+    Mesh polygon_batch_mesh; // The mesh that will be used in the polygon renderer
+    std::vector<float> polygon_batch_verticies; // New Line: Stores the verticies that will be used, by the polygon batch renderer
+    assert(polygon_batch_verticies.size() == 0); // assert a size of 0
+    std::vector<unsigned int> polygon_batch_indicies; //  New Line: Stores the indicies that will be used, by the polygon batch renderer
+    assert(polygon_batch_indicies.size() == 0); // assert indicies size of 0
+    unsigned int polygon_batch_index_offset = 0;
+
     // Initialise Imgui
     IMGUI_CHECKVERSION();
     ImGui::CreateContext(NULL);
@@ -78,6 +85,10 @@ int main(int argc, char const *argv[])
     glClearColor(background_color.r, background_color.g, background_color.b, background_color.a);
     while (active) // app loop
     {
+        assert(polygon_batch_verticies.size() == 0);
+        assert(polygon_batch_indicies.size() == 0);
+        assert(polygon_batch_index_offset == 0);
+
         SDL_Event event; // The current SDL event to process
         while (SDL_PollEvent(&event))
         {   
@@ -122,14 +133,66 @@ int main(int argc, char const *argv[])
         ImGui::Text("render matrix: %s", glm::to_string(render_matrix).c_str());
         ImGui::Text("cursor position: %s", glm::to_string(cursor.position).c_str());
         ImGui::Text("cursor delta: %s", glm::to_string(cursor.delta).c_str());
-
         ImGui::End();
-
         alwaysShowDemo();
+
+
+        //  New Lines: Add a red rectangle
+        {
+            Color3 red = Color3(1.0f, 0.0f, 0.0f);
+            polygon_batch_verticies.insert(polygon_batch_verticies.end(),{
+                0.0f, 128.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+                128.0f, 128.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+                128.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+                0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+            });
+
+            polygon_batch_indicies.insert(polygon_batch_indicies.end(), {
+                0, 1, 2,
+                0, 2, 3
+            });
+
+            polygon_batch_index_offset += 4;
+        }
+
+        // Assert previous
+        assert(polygon_batch_verticies.size() == 24);
+        {
+            float values[24] = {
+                0.0f, 128.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+                128.0f, 128.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+                128.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+                0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+            };
+            bool values_match = true;
+            for(size_t i = 0; i < 24; i++){
+                values_match = values_match && (polygon_batch_verticies.at(i) == values[i]);
+            }
+            assert(values_match);
+        }
+        assert(polygon_batch_indicies.size() == 6);
+        {
+            bool values_match = true;
+            unsigned int values[6] = {
+                0, 1, 2,
+                0, 2, 3
+            };
+            for(size_t i = 0; i < 6; i++){
+                values_match = values_match && (polygon_batch_indicies.at(i) == values[i]);
+            }
+            assert(values_match);
+        }
+        assert(polygon_batch_index_offset == 4);
+
+        polygon_batch_verticies.clear();
+        polygon_batch_indicies.clear();
+        polygon_batch_index_offset = 0;
         // Ending an imgui Frame
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         SDL_GL_SwapWindow(window);
+
+    
 
     }
     ImGui_ImplOpenGL3_Shutdown();

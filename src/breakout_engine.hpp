@@ -51,7 +51,8 @@ struct Mesh{
     Mesh();
 };
 
-typedef glm::vec4 Color;
+typedef glm::vec3 Color3;
+typedef glm::vec4 Color4;
 std::string readFile(std::string filename); // given a file return the file content
 void update(glm::mat4& matrix, int width, int height);
 /*

@@ -572,14 +572,66 @@ clean the object files and make all .o files, .d files and .exe and files ignore
 - rebuild the project **Done**
 - Check if the relevant files have been ignored with git check-ignore 'file_path' **Done**
 
-
+**Done**
 ---
 Task
 
-The polygon shader text content had two files, the vertex shader and the fragment shader **ToDo** |
+Modify the breakout_game_2 so that polygon rendering is able to occur
 
+in the file breakout_game_2.impl.cpp
+
+- In breakout engine make Color3 an alias of glm::vec3 before color4 **Done**
+
+- Replace all usages of Color with Color4 within src files **Done**
+
+
+
+- At line 62 + 1, add a variable to store a a float vector called polygon_batch_verticies, to store verticies that will be later used by the polygon_batch_mesh: assert that the size of the polygon_batch_verticies should be 0: **Done**
+
+- At line 62 + 2 add a variable to store a float vector called polygon_batch_indicies, for the poylgon_renderer to store index data that will later be added to the polygon_batch_mesh: After assert that the current size of the polygon_batch_verticies is 0: **Done**
+- In the first line of the while active loop assert that the 
+    - (polygon_batch_verticies and polygon_batch_indicies) has a size of 0
+    - the polygon_batch_index_offset is 0
+
+
+
+- After previous: if the polygon_batch_offset is not 0, then set the Mesh data based on the data that is in polygon_batch_verticies and the polygon_batch_indicies: **Done**
+
+- After line 128: Add a red rectangle starting at opsition (0,0) with a size of (128,128) for a batch that will accept stores a 3d position and an rgb color, and where the rectangle wil be anti clockwise based on a matrix where the top-left of the viewport is the origin, and the bottom-right of the viewport is a positive on both axis. **Done**
+
+- After assert these values
+    - polygon_batch_verticies.size() == 24 **Done**
+        - data is in the correct vertex order **Done**
+    - polygon_batch_indicies.size() == 6 **Done**
+        - data in correct index draw order **Done**
+    - polygon_batch_index_offset == 4 **Done**
+
+- After clear the polygon_batch_verticies, indicies, and index_offset **Done**
+
+- Run breakout_game_2.exe to see if the changes were successful **Done**
+
+
+
+**Done**
+--- 
+Task
+
+A constant for the Color3 Red **Done**
 
 ---
+Task 
+since polygon_batch_vetrticies, polygon_batch_indicies and polygon_index_offset are used together.
+
+Create an object called VertexIndexBatch to store the three values ** ToDo
+
+<!-- ---
+Task
+
+Encapsulate the previous task, into functions
+ -->
+
+---
+
 Task
 **Test Gap**
 
