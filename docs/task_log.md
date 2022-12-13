@@ -74,13 +74,13 @@ File Reading
 - Test whether a copy of this function works within the circumstances I need it in a read file test file: **Done**
 
 
-A player can move the paddle using the left key
+**Epic:** A player will eventually need to be able to move the paddle using the left key
 - I need a variable to state of the left button: **Done**
 - A variable to store the key that is assigned to the left button: **Done**
 - Declare update button after read file implement it after read file implementation: **Done**
-- I need to be able to update the left button state based on the previous logic for updating a button. This can occur before Beginning a new imgui frame,  I can create a function to update the button to a new button state Given whether the button is down and it's current state: **Done**
+- I need to be able to u before Beginning a new imgui frame,  I can create a function to update the button to a new button state Given whether the button is down and it's current state: **Done**
 
-It will match this Table when implemented
+It will match this Table when implementedpdate the left button state based on the previous logic for updating a button. This can occur
 | State | is Down | New state |
 | --- | --- | --- |
 | ButtonState_Pressed | true | ButtonState_Down |
@@ -239,16 +239,6 @@ Expected Output: Expect
 
 
 
-**A New Task**: Within the context of the Button Object button states can be expanded into multiple boolean values, for when the change of the state of something within the loop relies on the button state because only one button state can occur at a time for a button it is based on a predicate
-| Action | States |
-| --- | --- |
-| pressed | ButtonState_Pressed |
-| down | ButtonState_Down |
-| pressedOrDown | ButtonState_Pressed OR ButtonState_Down |
-| released | ButtonState_Released |
-| up | ButtonState_Up |
-| releasedOrUp | ButtonState_Released OR ButtonState_Up |
-| flippling | ButtonState_Pressed OR ButtonState_Released |
 
 **A Refactor Task**: 
 - Make a checkpoint
@@ -462,6 +452,7 @@ See if nothing wrong happended by running 'cursor_update_test'
 
 
 Add then commit **Done**
+
 ---
 
 **Testing**
@@ -485,46 +476,152 @@ Mesh: {</br>
 
 **Testing** replace the mesh print in the mesh constructor test with a proper toString function, this also tests the mesh toString function rerun the tests: **Done**
 
-Add then Commit **ToDo**
+Add then Commit **Done**
 
 --- 
+Task 
 
-Update the comments int test abstraction header **ToDo**
+**Todo**
+
+A shader does not need to be stored, but there needs to be a function to compile the shader based on the shader text content called make shader 
+
+**Implementation**
+in breakout_engine.hpp
+- at line 88+1 declare the function make shader which takes a GLenum for shader_type and a const char* for shader_content and returns a GLuint for the ShaderObject: **Done**
+- At line 89 + 1, declare a function to displayShaderCompileStatus given a shaderObject as input no output: **Done**
+- Declare the makeShader function that take a shaderType and a filename after the previous makeShader function: **ToDo**
+
+in breakout_engine.cpp
+- at line 123 implement this function based on a previous implementation of the same function **Done**
+- Implement the function to display shaderCompileStatus after the function to makeShader **Done**
+- Given that the readFile function has been shown to be correct, implement after the previous makeShader function that takes a filename rather than a shader text: **Done**
+
+**Tests**
+- Create a test to check whether a shader object has been successfully created after making the shader from the filename based function, which uses the shader_text based function, read it from the existing file data/shaders/polygon_position_color.vert **Done**
+
+- Create the shader compiled test to determine whether the vertex shader for rendering objects where the verticies have a 3d position and an rgb color has compiled successfully, and also try seeing if a failure occured when an odviously invalid shader has been compiled **ToDo**
+    - create compile_shader_successful_test.impl.cpp **Done**
+    - implement the valid file shader test it should print nothing if the shader successfully compiled, If the vertex shader fails to compile then fix the program based on what has been revielled in the compile status, this will test the polygon_related shaders **Done**
+    - create compile_shader_unsucessfully_test make sure random text is not compiled to a shader I expect an error log to be printed  **Done**
+
+- commit **ToDo**
+---
+Task
+
+Organise my tests into seperate folders
+Based on some of the properties in the move the test to seperate folders
+- 
+
+---
+Task
+**Test Gap**
+
+Consider testing the makeShader(const char *) function since it probably works correctly but it's not certain that it works correctly
+
+
+---
+Task
+
+Consider this, many executables use the breakout engine, since two shader files can be concatenated with each other, maybe it is possible to put common shader functions in a shader file that is appended to every other shader file
+
+--- 
+Task
+
+In breakout engine include the string related functions for glm::mat4, see if it doesn't cause errors
 
 
 
+---
+Task
 
-| Task |
-| --- |
-| In breakout engine include the string related functions for glm::mat4, see if it doesn't cause errors **Done** |
+The polygon shader text content had two files, the vertex shader and the fragment shader **ToDo** |
+
+---
+Task
+
+The verticies should have a matrix that scale the objects to be viewed on a screen that matches the current width and current height of the screen. 
+
+---
+Task 
+
+Render a triangle as a test of the polygon renderer
+
+---
+Task 
+
+Define a paddle
+
+---
+
+Task 
+
+Edit a paddle's x and y position
+
+---
 
 
-| Task |
-| --- |
-| A shader does not need to be stored, but there needs to be a function to compile the shader based on the shader text content called make shader **ToDo** |
+Task 
 
-| Task |
-| --- |
-| The polygon shader text content had two files, the vertex shader and the fragment shader **ToDo** |
+Edit a paddle's color
 
-| Task |
-| --- |
-| The verticies should have a matrix that scale the objects to be viewed on a screen that matches the current width and current height of the screen.  **Done** |
+---
 
-| Task |
-| --- |
-| It should be possible to make a shader when just given the filename,  given the filename it is possible to read the shader content from the file, then make the shader  **ToDo** |
+Task 
 
-- Checking whether the shader compiled successfully is a seperate function that will be used to test whether the shader has been written correctly **ToDo**
-- Create a datatype called polygon renderer, it should have a variable for the program with a default value of 0 **ToDo**
+Edit a paddle's width
 
-**A New Task**:  Needs to see things within the game/editor
+---
+
+Task 
+
+Edit a paddle's height 
+
+---
+
+Task 
+
+Render a paddle
+
+---
+
+
+Task
+
+Create a datatype called polygon renderer, it should have a variable for the program with a default value of 0 **ToDo**
+
+---
+
+Task
+
+Needs to see things within the game/editor
 - Most objects should be rendered as polygons
 - A shader is required, which is plain text that is able to be interpreted by graphics hardware with openGL support
 - A mesh has a vertex buffer and an index buffer
 **Implementation**
 
-**A new Task**: Formalise the idea of ticks that happen between the frames.
+---
+Task
 
-**A new Task:** I will expect to have a test abstraction that would include Work for An SDL Test that requires both SDL and ImGui with OpenGl
+Formalise the idea of ticks that happen between the frames.
 
+---
+
+Task
+
+I will expect to have a test abstraction that would include Work for An SDL Test that requires both SDL and ImGui with OpenGl
+
+Update the comments int test abstraction header **ToDo**
+
+---
+Task
+
+Within the context of the Button Object button states can be expanded into multiple boolean values, for when the change of the state of something within the loop relies on the button state because only one button state can occur at a time for a button it is based on a predicate
+| Action | States |
+| --- | --- |
+| pressed | ButtonState_Pressed |
+| down | ButtonState_Down |
+| pressedOrDown | ButtonState_Pressed OR ButtonState_Down |
+| released | ButtonState_Released |
+| up | ButtonState_Up |
+| releasedOrUp | ButtonState_Released OR ButtonState_Up |
+| flippling | ButtonState_Pressed OR ButtonState_Released |

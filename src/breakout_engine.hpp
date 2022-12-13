@@ -86,5 +86,8 @@ std::string toString(Button& button);
 std::string toString(Cursor& mouse);
 /**/
 std::string toString(Mesh& mesh);
+GLuint makeShader(GLenum shader_type, const char * shader_text);
+GLuint makeShader(GLenum shader_type, std::string filename);
+void displayShaderCompileStatus(GLuint shader_object);
 void alwaysShowDemo();
 #endif

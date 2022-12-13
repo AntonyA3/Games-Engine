@@ -121,6 +121,28 @@ std::string toString(Mesh& mesh){
     return ss.str();
 }
 
+GLuint makeShader(GLenum shader_type, const char * shader_text){
+    GLuint shader = glCreateShader(shader_type);
+    glShaderSource(shader, 1, &shader_text, NULL);
+    glCompileShader(shader);
+
+    return shader;
+}
+
+GLuint makeShader(GLenum shader_type, std::string filename){
+    std::string content = readFile(filename);
+    return makeShader(shader_type, content.c_str());
+}
+
+void displayShaderCompileStatus(GLuint shader_object){
+    GLint status;
+    GLchar info_log[1000];
+    glGetShaderiv(shader_object, GL_COMPILE_STATUS, &status);
+    glGetShaderInfoLog(shader_object, 1000, NULL, &info_log[0]);
+    if(!status){
+        std::cout << info_log << '\n';
+    }
+}
 
 void alwaysShowDemo(){
     bool show = true;
