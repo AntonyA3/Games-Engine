@@ -504,14 +504,20 @@ in breakout_engine.cpp
     - implement the valid file shader test it should print nothing if the shader successfully compiled, If the vertex shader fails to compile then fix the program based on what has been revielled in the compile status, this will test the polygon_related shaders **Done**
     - create compile_shader_unsucessfully_test make sure random text is not compiled to a shader I expect an error log to be printed  **Done**
 
-- commit **ToDo**
+- commit **Done**
 ---
 Task
 
 Organise my tests into seperate folders
 Based on some of the properties in the move the test to seperate folders
-- 
-
+- This will effect the makefile. Even though this is a diversion from the task comment out lines 26-32 & lines 14-20 since these file no longer exist, make sure that it is still possible to compile breakout_game_2.impl, the most important file **Done** **Reverted**
+- Try removing lines 18-20 see if breakout_game_2.impl.cpp still works **Done**
+- Try removing lines 15-16 clean all files see if breakout_game_2.impl.cpp still works then **Done**
+- Try removing lines 22-23 then 25-27 clean all files see if breakout_game_2.impl.cpp still works then **Done**
+- Remove catch2 line 24  check breakout_game_2.impl.cpp **ToDo**
+- Remove catch2 line 25-28  and retest breakout_game_2.impl **Done**
+- add then commit **ToDo**
+- I want to be able to build thing iteratively, 
 ---
 Task
 **Test Gap**
