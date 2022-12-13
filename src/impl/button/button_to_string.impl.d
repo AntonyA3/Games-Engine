@@ -1,5 +1,5 @@
-src\impl\button_to_string.impl.o: src\impl\button_to_string.impl.cpp \
- src/breakout_engine.hpp \
+src\impl\button\button_to_string.impl.o: \
+ src\impl\button\button_to_string.impl.cpp src/breakout_engine.hpp \
  C:/msys64/mingw64/x86_64-w64-mingw32/include/stdio.h \
  C:/msys64/mingw64/x86_64-w64-mingw32/include/corecrt_stdio_config.h \
  C:/msys64/mingw64/x86_64-w64-mingw32/include/corecrt.h \

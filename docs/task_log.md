@@ -516,8 +516,12 @@ Based on some of the properties in the move the test to seperate folders
 - Try removing lines 22-23 then 25-27 clean all files see if breakout_game_2.impl.cpp still works then **Done**
 - Remove catch2 line 24  check breakout_game_2.impl.cpp **ToDo**
 - Remove catch2 line 25-28  and retest breakout_game_2.impl **Done**
+- add then commit **Done**
+- I want to be able to build thing iteratively, therefore I should
+    - create a button folder and move the button to_string test to that folder try to build the file which has been moved to the folder **Done**
+
 - add then commit **ToDo**
-- I want to be able to build thing iteratively, 
+
 ---
 Task
 **Test Gap**
