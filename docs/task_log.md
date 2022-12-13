@@ -622,7 +622,16 @@ A constant for the Color3 Red **Done**
 Task 
 since polygon_batch_vetrticies, polygon_batch_indicies and polygon_index_offset are used together.
 
-Create an object called VertexIndexBatch to store the three values ** ToDo
+Declare an object called VertexIndexBatch to store the three values in the breakout_engine header file **ToDo**
+
+In the breakkout_game_2 file replace lines 64 to 68 with a polygon_batch variable to store the vertex batch and the index batch **ToDo**
+
+Modify variables 
+    - polygon_batch_verticies to polygon_batch.verticies **ToDo**
+    - polygon_batch_indicies to polygon_batch.indicies **ToDo**
+    - polygon_batch_index_offset to polygon_batch.index_offset **ToDo**
+
+Rerun breakout_game_2 to see if this worked **ToDo**
 
 <!-- ---
 Task
