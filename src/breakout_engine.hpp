@@ -87,6 +87,7 @@ void update(glm::mat4& matrix, int width, int height);
 ButtonState update(ButtonState state, bool down);
 void update(Button& button, const Uint8 * keyboard_state);
 void update(Cursor& cursor);
+void update(Mesh& mesh, VertexIndexBatch& batch);
 
 /*
 | value | string  |
@@ -97,9 +98,13 @@ std::string toString(bool value);
 /**/
 std::string toString(ButtonState value);
 /**/
-std::string toString(glm::ivec2& obj);
-/**/
-std::string toString(glm::vec2& obj);
+
+template<typename vector>
+std::string toString(vector& obj){
+    std::stringstream ss;
+    ss << "[x: " << obj.x << ", y: " << obj.y << "]";
+    return ss.str();
+}
 /**/
 std::string toString(Rect& rect);
 /**/

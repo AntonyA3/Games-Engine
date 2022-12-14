@@ -725,22 +725,55 @@ Delete empty test files
 - Delete src\impl\to_string_tests\to_string_cursor.impl.cpp **Done**
 - Delete src\impl\to_string_tests\to_string_ivec2.impl.cpp **Done**
 - Revert if a file is mistakely removed **Done**
-- Add then Commit **ToDo**
+- Add then Commit **Done**
 
 ---
 Task
 
-toSting(glm::ivec2) and toString(glm::vec2) is similar enough to be templated
+toString(glm::ivec2) and toString(glm::vec2) is similar enough to be templated in template engine hpp **Done**
+
+Remove any of the old toString function tests in the common_test file **Done**
+
+Test the new common toString function using both glm::ivec2 and glm::vec2 as inputs  **Done**
+
 
 ---
-
 Task
 **Test Gap**
 
 Consider testing the makeShader(const char *) function since it probably works correctly but it's not certain that it works correctly
 
+---
+Task
+
+Using the data in the polygon batch, set the Mesh to the content that is contained in the VertexIndexBatch
+
+Declare the function update(Mesh, VertexIndexBatch) after update(Cursor) in the file breakout_engine.hpp **Done**
+
+Implement the function update(Mesh, VertexIndexBatch) after update(Cursor) in the file breakout_game.cpp **Done**
+
+**Testing** 
+
+Implement BasicSDLOpenGLTest within common_test inline at the top of main with the cleanup step implemented at the bottom of main, verify that whis was able to work by running common_test, An Window should be visible for a very short amount of time **Done**
+
+After the ToString Test Vector Template Create a test that will use the function to set the dataFor the Mesh with sample data, then check whether the contents of the buffers match the data by using glGetBufferSubData **Done**
+
+Add file and make a commit for what has been done **ToDo**
 
 ---
+Task
+
+Figure out exactly what GL_DYNAMIC_DRAW does in glBuferData function
+--- 
+Task
+
+Given that I am able to make shaders based on a file that has been given, Create a function that is able to make a Program
+
+---
+Task
+
+Fully integrate the program into breakout_game_2 in order to render a red rectangle
+<!-- 
 Task
 
 Consider this, many executables use the breakout engine, since two shader files can be concatenated with each other, maybe it is possible to put common shader functions in a shader file that is appended to every other shader file
@@ -756,8 +789,8 @@ Task
 The verticies should have a matrix that scale the objects to be viewed on a screen that matches the current width and current height of the screen. 
 
 
----
-Task 
+--- -->
+<!-- Task 
 
 Implement a paddle based on the given requirements
 
@@ -792,15 +825,8 @@ Task
 
 Render a paddle
 
----
-
-
-Task
-
-Create a datatype called polygon renderer, it should have a variable for the program with a default value of 0 **ToDo**
-
----
-
+--- -->
+<!-- 
 Task
 
 Needs to see things within the game/editor
@@ -814,7 +840,7 @@ Task
 
 Formalise the idea of ticks that happen between the frames.
 
----
+--- -->
 
 Task
 

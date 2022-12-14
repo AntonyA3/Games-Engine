@@ -95,6 +95,13 @@ void update(Cursor& cursor){
     cursor.position = new_position;
 }
 
+void update(Mesh& mesh, VertexIndexBatch& batch){
+    glBindBuffer(GL_ARRAY_BUFFER, mesh.vertex_buffer);
+    glBufferData(GL_ARRAY_BUFFER, batch.verticies.size() * sizeof(float), &batch.verticies.front(), GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.index_buffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, batch.indicies.size() * sizeof(unsigned int), &batch.indicies.front(), GL_DYNAMIC_DRAW);
+}
+
 std::string toString(bool value){
     return (value) ? "true" : "false";
 }
@@ -114,17 +121,6 @@ std::string toString(ButtonState value){
         return "ButtonState_Released";    
     }
     return "";
-}
-
-std::string toString(glm::ivec2& obj){
-    std::stringstream ss;
-    ss << "[x: " << obj.x << ", y: " << obj.y << "]";
-    return ss.str();
-}
-std::string toString(glm::vec2& obj){
-    std::stringstream ss;
-    ss << "[x: " << obj.x << ", y: " << obj.y << "]";
-    return ss.str();
 }
 
 std::string toString(Rect& rect){

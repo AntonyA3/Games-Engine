@@ -144,35 +144,7 @@ int main(int argc, char const *argv[])
             Color3 color = red;
             addRect(polygon_batch, rect, color);
         }
-        // Assert previous
-        // assert(polygon_batch.verticies.size() == 24);
-        // {
-        //     float values[24] = {
-        //         0.0f, 128.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-        //         128.0f, 128.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-        //         128.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-        //         0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-        //     };
-        //     bool values_match = true;
-        //     for(size_t i = 0; i < 24; i++){
-        //         values_match = values_match && (polygon_batch.verticies.at(i) == values[i]);
-        //     }
-        //     assert(values_match);
-        // }
-        // assert(polygon_batch.indicies.size() == 6);
-        // {
-        //     bool values_match = true;
-        //     unsigned int values[6] = {
-        //         0, 1, 2,
-        //         0, 2, 3
-        //     };
-        //     for(size_t i = 0; i < 6; i++){
-        //         values_match = values_match && (polygon_batch.indicies.at(i) == values[i]);
-        //     }
-        //     assert(values_match);
-        // }
-        // assert(polygon_batch.index_offset == 4);
-
+       
         polygon_batch.clear();
         // Ending an imgui Frame
         ImGui::Render();
