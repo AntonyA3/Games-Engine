@@ -694,15 +694,32 @@ Test the addRect function **Done**
 Rerun the application to see if all the assertions pass **Done**
 **Done**
 
-Add then commit **ToDo**
+Add then commit **Done**
 --- 
 Task
 Move all the tests with no dependancies into the common test file
-- Move display table from update button state test into the common test file
-- Move 
-- Move update button state test to the file along with display table
+- Move display table from update button state test into the common test file before main **Done**
+- From update button state, for lines in main, move this to after common test 104 **Done**
+- Verify that this worked by running common test **Done**
+- From cursor contruction test lines 5-8, move this to the end of the main loop **Done**
+- Verify that this worked in commonTest **Done**
+- remove file reader function in file reader test, since there is already a file reader function in the breakout_engine file **Done**
+- Verify that this worked by running file reader test **Done**
+- Move the update matrix test to common test **Done**
+- verify that it worked **Done**
+- Move to string button to common test **Done**
+- Verify it worked **Done**
+- Move to string cursor to common test **Done**
+- Verify it worked **Done**
+- move to string ivec2 to common test **Done**
+- Verify it worked **Done**
+- Add then Commit **ToDo**
 
-**ToDo**
+--- 
+Task
+Delete empty test files **ToDo**
+
+
 ---
 Task
 

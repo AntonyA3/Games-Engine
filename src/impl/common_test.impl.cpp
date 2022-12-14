@@ -1,6 +1,13 @@
 #include <breakout_engine.hpp>
 #include <test_abstractions.hpp>
 
+void displayTable(ButtonState state, bool down){
+    std::string state_string = toString(state);
+    std::string bool_string = toString(down);
+    std::string new_state_string = toString(update(state, down));
+    std::cout << "state: " << state_string << "| down: " << bool_string << " | new state: " << new_state_string << "|\n";
+}
+
 int main(int argc, char const *argv[])
 {
     {
@@ -101,6 +108,54 @@ int main(int argc, char const *argv[])
         assert(test_vertex_index_batch.indicies.size() == 0);
         assert(test_vertex_index_batch.verticies.size() == 0);
         assert(test_vertex_index_batch.index_offset == 0);
+    }
+    {
+        std::cout << "========Update Button State========\n ";
+        std::cout << "| Previous State | down | new state|\n ";
+        displayTable(ButtonState_Pressed, true);
+        displayTable(ButtonState_Down, true);
+        displayTable(ButtonState_Up, true);
+        displayTable(ButtonState_Released, true);
+        displayTable(ButtonState_Pressed, false);
+        displayTable(ButtonState_Down, false);
+        displayTable(ButtonState_Up, false);
+        displayTable(ButtonState_Released, false);     
+
+    }
+    {
+        std::cout << "========Cursor Construction Test========\n ";
+
+        Cursor cursor = Cursor();
+        std::cout << toString(cursor) << std::endl;
+        Cursor cursor1;
+        std::cout << toString(cursor1) << std::endl;
+
+    }
+    {
+        std::cout << "========Update Matrix Test========\n ";
+        glm::mat4 test_matrix;
+        update(test_matrix, 640, 480);
+        std::cout << glm::to_string(test_matrix) << std::endl;
+    }
+    {
+        std::cout << "========Button To String Test========\n ";
+        Button a_button = Button(SDL_SCANCODE_A, "A Button");
+        std::cout << "Button Test:===========" << std::endl;
+        std::cout << toString(a_button) << std::endl;
+    }
+    {
+        std::cout << "========Cursor To String Test========\n ";
+
+        Cursor cursor;
+        cursor.position = glm::ivec2(40, 40);
+        cursor.delta = glm::ivec2(-80, -20);
+
+        std::cout << toString(cursor) << std::endl;
+    }
+    {
+        std::cout << "========glm::ivec2 To String Test========\n ";
+        glm::ivec2 vector = glm::ivec2(100, 40);
+        std::cout << toString(vector) << std::endl;
     }
     return 0;
 }

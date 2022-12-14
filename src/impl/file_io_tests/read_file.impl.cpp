@@ -3,26 +3,7 @@
 #include <sstream>
 #include <fstream>
 #include <assert.h>
-std::string readFile(std::string filename){
-    std::stringstream ss;
-    std::ifstream my_read_file;
-    my_read_file.open(filename);
-    char read_buffer[2048];
-    bool open = my_read_file.is_open();
-    assert(open);
-    if(open){
-        while (!my_read_file.eof())
-        {
-            my_read_file.getline(read_buffer, 2048);
-            ss << read_buffer;
-            if(!my_read_file.eof()){
-                ss << "\n";
-            }
-        }  
-        my_read_file.close();
-    }
-    return ss.str();
-} 
+#include <breakout_engine.hpp>
 
 int main(int argc, char const *argv[])
 {
