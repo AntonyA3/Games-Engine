@@ -713,12 +713,19 @@ Move all the tests with no dependancies into the common test file
 - Verify it worked **Done**
 - move to string ivec2 to common test **Done**
 - Verify it worked **Done**
-- Add then Commit **ToDo**
+- Add then Commit **Done**
 
 --- 
 Task
-Delete empty test files **ToDo**
-
+Delete empty test files
+- Delete src\impl\button_tests\update_button_state_test.impl.cpp **Done**
+- Delete src\impl\cursor_tests\cursor_constructor.impl.cpp **Done**
+- Delete src\impl\matrix_vector_test\transform_matrix_test.impl.cpp **Done**
+- Delete src\impl\to_string_tests\to_string_button.cpp **Done**
+- Delete src\impl\to_string_tests\to_string_cursor.impl.cpp **Done**
+- Delete src\impl\to_string_tests\to_string_ivec2.impl.cpp **Done**
+- Revert if a file is mistakely removed **Done**
+- Add then Commit **ToDo**
 
 ---
 Task
