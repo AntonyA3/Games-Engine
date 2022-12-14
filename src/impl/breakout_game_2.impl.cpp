@@ -61,13 +61,14 @@ int main(int argc, char const *argv[])
 
     SDL_GL_MakeCurrent(window, gl_context);
     Mesh polygon_batch_mesh; // The mesh that will be used in the polygon renderer
-    std::vector<float> polygon_batch_verticies; // New Line: Stores the verticies that will be used, by the polygon batch renderer
-    assert(polygon_batch_verticies.size() == 0); // assert a size of 0
-    std::vector<unsigned int> polygon_batch_indicies; //  New Line: Stores the indicies that will be used, by the polygon batch renderer
-    assert(polygon_batch_indicies.size() == 0); // assert indicies size of 0
-    unsigned int polygon_batch_index_offset = 0;
+    VertexIndexBatch polygon_batch;
+    // std::vector<float> polygon_batch.verticies; // New Line: Stores the verticies that will be used, by the polygon batch renderer
+    // assert(polygon_batch.verticies.size() == 0); // assert a size of 0
+    // std::vector<unsigned int> polygon_batch.indicies; //  New Line: Stores the indicies that will be used, by the polygon batch renderer
+    // assert(polygon_batch.indicies.size() == 0); // assert indicies size of 0
+    // unsigned int polygon_batch.index_offset = 0;
 
-    // Initialise Imgui
+    // // Initialise Imgui
     IMGUI_CHECKVERSION();
     ImGui::CreateContext(NULL);
     ImGuiIO * io = &ImGui::GetIO();
@@ -85,9 +86,9 @@ int main(int argc, char const *argv[])
     glClearColor(background_color.r, background_color.g, background_color.b, background_color.a);
     while (active) // app loop
     {
-        assert(polygon_batch_verticies.size() == 0);
-        assert(polygon_batch_indicies.size() == 0);
-        assert(polygon_batch_index_offset == 0);
+        assert(polygon_batch.verticies.size() == 0);
+        assert(polygon_batch.indicies.size() == 0);
+        assert(polygon_batch.index_offset == 0);
 
         SDL_Event event; // The current SDL event to process
         while (SDL_PollEvent(&event))
@@ -139,61 +140,44 @@ int main(int argc, char const *argv[])
 
         //  New Lines: Add a red rectangle
         {
-            Color3 red = Color3(1.0f, 0.0f, 0.0f);
-            polygon_batch_verticies.insert(polygon_batch_verticies.end(),{
-                0.0f, 128.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-                128.0f, 128.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-                128.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-                0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-            });
-
-            polygon_batch_indicies.insert(polygon_batch_indicies.end(), {
-                0, 1, 2,
-                0, 2, 3
-            });
-
-            polygon_batch_index_offset += 4;
+            Rect rect = Rect(glm::vec2(0,0), glm::vec2(128, 128));
+            Color3 color = red;
+            addRect(polygon_batch, rect, color);
         }
-
         // Assert previous
-        assert(polygon_batch_verticies.size() == 24);
-        {
-            float values[24] = {
-                0.0f, 128.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-                128.0f, 128.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-                128.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-                0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-            };
-            bool values_match = true;
-            for(size_t i = 0; i < 24; i++){
-                values_match = values_match && (polygon_batch_verticies.at(i) == values[i]);
-            }
-            assert(values_match);
-        }
-        assert(polygon_batch_indicies.size() == 6);
-        {
-            bool values_match = true;
-            unsigned int values[6] = {
-                0, 1, 2,
-                0, 2, 3
-            };
-            for(size_t i = 0; i < 6; i++){
-                values_match = values_match && (polygon_batch_indicies.at(i) == values[i]);
-            }
-            assert(values_match);
-        }
-        assert(polygon_batch_index_offset == 4);
+        // assert(polygon_batch.verticies.size() == 24);
+        // {
+        //     float values[24] = {
+        //         0.0f, 128.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+        //         128.0f, 128.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+        //         128.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+        //         0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+        //     };
+        //     bool values_match = true;
+        //     for(size_t i = 0; i < 24; i++){
+        //         values_match = values_match && (polygon_batch.verticies.at(i) == values[i]);
+        //     }
+        //     assert(values_match);
+        // }
+        // assert(polygon_batch.indicies.size() == 6);
+        // {
+        //     bool values_match = true;
+        //     unsigned int values[6] = {
+        //         0, 1, 2,
+        //         0, 2, 3
+        //     };
+        //     for(size_t i = 0; i < 6; i++){
+        //         values_match = values_match && (polygon_batch.indicies.at(i) == values[i]);
+        //     }
+        //     assert(values_match);
+        // }
+        // assert(polygon_batch.index_offset == 4);
 
-        polygon_batch_verticies.clear();
-        polygon_batch_indicies.clear();
-        polygon_batch_index_offset = 0;
+        polygon_batch.clear();
         // Ending an imgui Frame
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         SDL_GL_SwapWindow(window);
-
-    
-
     }
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();

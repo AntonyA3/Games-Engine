@@ -622,22 +622,91 @@ A constant for the Color3 Red **Done**
 Task 
 since polygon_batch_vetrticies, polygon_batch_indicies and polygon_index_offset are used together.
 
-Declare an object called VertexIndexBatch to store the three values in the breakout_engine header file **ToDo**
+Declare an object called VertexIndexBatch to store the three values in the breakout_engine header file before Mesh**Done**
 
-In the breakkout_game_2 file replace lines 64 to 68 with a polygon_batch variable to store the vertex batch and the index batch **ToDo**
+In the breakkout_game_2 file replace lines 64 to 68 with a polygon_batch variable to store the vertex batch and the index batch **Done**
 
 Modify variables 
-    - polygon_batch_verticies to polygon_batch.verticies **ToDo**
-    - polygon_batch_indicies to polygon_batch.indicies **ToDo**
-    - polygon_batch_index_offset to polygon_batch.index_offset **ToDo**
+    - polygon_batch_verticies to polygon_batch.verticies **Done**
+    - polygon_batch_indicies to polygon_batch.indicies **Done**
+    - polygon_batch_index_offset to polygon_batch.index_offset **Done**
 
-Rerun breakout_game_2 to see if this worked **ToDo**
+Rerun breakout_game_2 to see if this worked **Done**
 
-<!-- ---
+--- 
+Task 
+
+**Implementation**
+Create a function to add a rectangle to the VertexIndexBatch
+
+- define a rectangle an type with a position and a size, with the member functions to get the 
+    - a constructor with position and size
+    - topLeft
+    - topRight
+    - bottomLeft
+    - bottomRight
+these all returning the position
+in breakout_engine.hpp before Button **Done**
+
+Add a toString decleration for Rect after toString(vec2) **Done**
+
+Add a toString decleration for glm::vec2 **Done**
+
+Add a toString implementation for glm::vec2 **Done**
+
+Add a toString implementaion for Rect after toString(glm::vec2) implementation **Done**
+
+
+Implement the Rectangle in breakout_engine.cpp before any Button function, create a sample Rectangle in a test file that displays all the corners **Done**
+
+- in breakoutEngine.hpp create a free function after makeShader called addRect which takes a referecnce to a VertexIndexBatch, a rect and a color3 reference: **Done**
+
+- Declare a member function called clear for VertexIndexBatch **Done**
+
+- Implement the a member function called clear for VertexIndexBatch **Done**
+
+
+- in breakoutEngine.cpp after all makeShader implementation, implement the addRect function **Done**
+
+- Comment out the assertiond for the polygon_batch **Done**
+
+replace line 172-174 in breakout_game_2 with polygon_batch clear **Done**
+
+Before line 172 add a red rectangle of position (0, 0) size (128, 128) in breakout_engine.cpp **Done**
+
+**Testing**
+Test the member functions of rect **Done**
+
+test ToString for ect **Done**
+    Rect {</br>
+        position: [x: x, y: py]
+        size: [x: x, y: py]
+    }</br>
+
+
+Task Consider this what if future test should be added into a common testing file **Done**
+
+Test the member functions of VertexIndexBatch in the same file as the rect test **Done**
+    
+Test the addRect function **Done**
+    - Test if adding two rects produce the correct values for the VertexIndexBatch since the indicies need to have the correct values **Done**
+    
+Rerun the application to see if all the assertions pass **Done**
+**Done**
+
+Add then commit **ToDo**
+--- 
+Task
+Move all the tests with no dependancies into the common test file
+- Move display table from update button state test into the common test file
+- Move 
+- Move update button state test to the file along with display table
+
+**ToDo**
+---
 Task
 
-Encapsulate the previous task, into functions
- -->
+toSting(glm::ivec2) and toString(glm::vec2) is similar enough to be templated
 
 ---
 
@@ -662,15 +731,11 @@ Task
 
 The verticies should have a matrix that scale the objects to be viewed on a screen that matches the current width and current height of the screen. 
 
----
-Task 
-
-Render a triangle as a test of the polygon renderer
 
 ---
 Task 
 
-Define a paddle
+Implement a paddle based on the given requirements
 
 ---
 

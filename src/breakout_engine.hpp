@@ -32,6 +32,16 @@ enum ButtonState{
     ButtonState_Released
 };
 
+struct Rect{
+    glm::vec2 position;
+    glm::vec2 size;
+    Rect(glm::vec2 position, glm::vec2 size);
+    glm::vec2 topLeft();
+    glm::vec2 topRight();
+    glm::vec2 bottomLeft();
+    glm::vec2 bottomRight();
+};
+
 struct Button{
     bool state_change; // This bool detects whether the button state has changed after an update, which should occur every frame
     std::string tag;
@@ -44,6 +54,13 @@ struct Cursor{
     glm::ivec2 position;
     glm::ivec2 delta;
     Cursor();
+};
+
+struct VertexIndexBatch{
+    std::vector<float> verticies;
+    std::vector<unsigned int> indicies;
+    unsigned int index_offset = 0;
+    void clear();
 };
 
 struct Mesh{
@@ -82,6 +99,10 @@ std::string toString(ButtonState value);
 /**/
 std::string toString(glm::ivec2& obj);
 /**/
+std::string toString(glm::vec2& obj);
+/**/
+std::string toString(Rect& rect);
+/**/
 std::string toString(Button& button);
 /**/
 std::string toString(Cursor& mouse);
@@ -89,6 +110,7 @@ std::string toString(Cursor& mouse);
 std::string toString(Mesh& mesh);
 GLuint makeShader(GLenum shader_type, const char * shader_text);
 GLuint makeShader(GLenum shader_type, std::string filename);
+void addRect(VertexIndexBatch& vertex_index_batch, Rect& rect, Color3& color);
 void displayShaderCompileStatus(GLuint shader_object);
 void alwaysShowDemo();
 #endif

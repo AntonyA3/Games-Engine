@@ -1,5 +1,27 @@
 #include <breakout_engine.hpp>
 
+
+Rect::Rect(glm::vec2 position, glm::vec2 size){
+    this->position = position;
+    this->size = size;
+}
+
+glm::vec2 Rect::topLeft(){
+    return this->position;
+}
+
+glm::vec2 Rect::topRight(){
+    return glm::vec2(position.x + size.x, position.y);
+}
+
+glm::vec2 Rect::bottomLeft(){
+    return glm::vec2(position.x, position.y + size.y);
+}
+
+glm::vec2 Rect::bottomRight(){
+    return position + size;
+}
+
 Button::Button(SDL_Scancode scancode, std::string tag){
     this->state_change = true; // Presume that initialisation is a state change
     this->tag = tag;
@@ -10,6 +32,12 @@ Button::Button(SDL_Scancode scancode, std::string tag){
 Cursor::Cursor(){
     this->position = glm::ivec2(0, 0);
     this->delta = glm::ivec2(0, 0);
+}
+
+void VertexIndexBatch::clear(){
+    this->verticies.clear();
+    this->indicies.clear();
+    this->index_offset = 0;
 }
 
 Mesh::Mesh(){
@@ -71,6 +99,8 @@ std::string toString(bool value){
     return (value) ? "true" : "false";
 }
 
+
+
 std::string toString(ButtonState value){
     switch (value)
     {
@@ -91,6 +121,22 @@ std::string toString(glm::ivec2& obj){
     ss << "[x: " << obj.x << ", y: " << obj.y << "]";
     return ss.str();
 }
+std::string toString(glm::vec2& obj){
+    std::stringstream ss;
+    ss << "[x: " << obj.x << ", y: " << obj.y << "]";
+    return ss.str();
+}
+
+std::string toString(Rect& rect){
+    std::stringstream ss;
+    ss << "Rect: {\n";
+    ss << "   position: " << toString(rect.position) << "\n";
+    ss << "   size: " << toString(rect.size) << "\n";
+    ss << "}\n";
+    return ss.str();
+
+}
+
 
 std::string toString(Button& button){
     std::stringstream ss;
@@ -132,6 +178,34 @@ GLuint makeShader(GLenum shader_type, const char * shader_text){
 GLuint makeShader(GLenum shader_type, std::string filename){
     std::string content = readFile(filename);
     return makeShader(shader_type, content.c_str());
+}
+
+void addRect(VertexIndexBatch& vertex_index_batch, Rect& rect, Color3& color){
+    float r = color.r;
+    float g = color.g;
+    float b = color.b;
+    glm::vec2 bottom_left = rect.bottomLeft();
+    glm::vec2 bottom_right = rect.bottomRight();
+    glm::vec2 top_right = rect.topRight();
+    glm::vec2 top_left = rect.topLeft();
+
+    vertex_index_batch.verticies.insert(vertex_index_batch.verticies.end(),{
+        bottom_left.x, bottom_left.y, 0.0f, r, g, b,
+        bottom_right.x, bottom_right.y, 0.0f, r, g, b,
+        top_right.x, top_right.y, 0.0f, r, g, b,
+        top_left.x, top_left.y, 0.0f, r, g, b
+    });
+
+    unsigned int indicies[6] = {
+        0, 1, 2,
+        0, 2, 3
+    };
+    for(size_t i = 0; i < 6; i++){
+        indicies[i] += vertex_index_batch.index_offset;
+    }
+    
+    vertex_index_batch.indicies.insert(vertex_index_batch.indicies.end(), indicies, indicies + 6);
+    vertex_index_batch.index_offset += 4;
 }
 
 void displayShaderCompileStatus(GLuint shader_object){
