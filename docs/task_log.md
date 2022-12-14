@@ -758,21 +758,84 @@ Implement BasicSDLOpenGLTest within common_test inline at the top of main with t
 
 After the ToString Test Vector Template Create a test that will use the function to set the dataFor the Mesh with sample data, then check whether the contents of the buffers match the data by using glGetBufferSubData **Done**
 
-Add file and make a commit for what has been done **ToDo**
+Add file and make a commit for what has been done **Done**
 
+--- 
+Task
+
+Given that I am able to make shaders based on a file that has been given, Create a function that is able to make a Program and a function to check if the program has linked successfully then Fully integrate the program into breakout_game_2 in order to render a red rectangle
+
+
+**Implementation**
+
+
+After make shader Declare a function to make a program given a vertex_shader and a fragment shader file  **Done**
+
+Then Declare a function to make a program given a vertex_shader and a fragment shader GLuint **Done**
+
+Declare a function that displays whether a Program has been able to be linked successfully **Done**
+
+In the makeProgram Function that takes GLuint inputs, delete the shaders before returning the program **Done**
+
+Implement the two makeProgram functions after the makeShader functions **Done**
+
+
+In breaout_game_2 Have a variable called polygon program, declared after initialising SDL and Opengl **Done**
+
+After, declare a variable to for the uniform matrix id for the polygon program **Done**
+
+After imgui initialisation, assign the polygon program based on makeProgram, but given the files polygon_position_color.vert, polygon_position_color.frag **Done**
+
+After previous, get the uniform attribute loction by the name "uviewmat" **Done**
+
+After adding a red rectangle use addRect, update the polygon batch then update the polygon_batch_mesh based on the contents of the polygon_batch **Done**
+
+After updating the polygonBatch, bind the polygon batch mesh **Done**
+
+Then call useProgram **Done**
+
+Create a variable in the Mesh called index_count **Done**
+
+Change the update(Mesh, VertexIndexBatch function) so that inside the function the mesh index count is set **Done**
+
+Then Set the matrix of the rendering program to the render matrix **Done**
+
+Then bind the vertex attributes for a model of xyz, rgb **Done**
+
+
+Then call glDrawElements **Done**
+
+
+
+
+**Testing**
+
+At the end of common test, Test both makeProgram functions on whether it is able to make a program.
+Make sure that makeprogram is able to generate a program with a non zero gluint **Done**
+
+After, Make sure that a program that is valid displays nothing if compiling was successfull, otherwise print the error message if the shader program is incorrect **Done**
+
+Expect a red rectangle to be visible on the screen when running breakout_game_2 **Done**
+
+In the makeProgram function, assert that the two shaders have been deleted **Done**
+
+After getting the uniform location assert that the result is not equal to -1 **Done**'
+
+Run common test **Done**
+
+Check if the shader parts of the program have been deleted **ToDo**
+
+---
+Task 
+
+Find out if there is a major penalty when calling glUseProgram
 ---
 Task
 
 Figure out exactly what GL_DYNAMIC_DRAW does in glBuferData function
---- 
-Task
 
-Given that I am able to make shaders based on a file that has been given, Create a function that is able to make a Program
 
----
-Task
 
-Fully integrate the program into breakout_game_2 in order to render a red rectangle
 <!-- 
 Task
 

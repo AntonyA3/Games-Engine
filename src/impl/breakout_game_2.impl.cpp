@@ -62,6 +62,9 @@ int main(int argc, char const *argv[])
     SDL_GL_MakeCurrent(window, gl_context);
     Mesh polygon_batch_mesh; // The mesh that will be used in the polygon renderer
     VertexIndexBatch polygon_batch;
+    GLuint polygon_program;
+    GLint polygon_program_uniform_matrix_location;
+
     // std::vector<float> polygon_batch.verticies; // New Line: Stores the verticies that will be used, by the polygon batch renderer
     // assert(polygon_batch.verticies.size() == 0); // assert a size of 0
     // std::vector<unsigned int> polygon_batch.indicies; //  New Line: Stores the indicies that will be used, by the polygon batch renderer
@@ -79,7 +82,10 @@ int main(int argc, char const *argv[])
     ImGui::StyleColorsDark(NULL); // use default ciolor pallette
     ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
     ImGui_ImplOpenGL3_Init("#version 150");
-    // end the initialisation of opengl
+    // end the initialisation of opengl and imgui
+    polygon_program = makeProgram("data\\shaders\\polygon_position_color.vert", "data\\shaders\\polygon_position_color.frag");
+    glGetUniformLocation(polygon_program, "uviewmat");
+    assert(polygon_program_uniform_matrix_location != -1);
     glViewport(0, 0, width, height);
     update(render_matrix, width, height);
     background_color = grey;
@@ -144,7 +150,22 @@ int main(int argc, char const *argv[])
             Color3 color = red;
             addRect(polygon_batch, rect, color);
         }
-       
+
+        update(polygon_batch_mesh, polygon_batch);
+        
+        glBindBuffer(GL_ARRAY_BUFFER, polygon_batch_mesh.vertex_buffer);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, polygon_batch_mesh.index_buffer);
+        glUseProgram(polygon_program);
+        glUniformMatrix4fv(polygon_program_uniform_matrix_location, 1, GL_FALSE, &render_matrix[0][0]);
+
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(0 * sizeof(float)));
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+        glDrawElements(GL_TRIANGLES, polygon_batch_mesh.index_count, GL_UNSIGNED_INT, 0);
+
+        
+
         polygon_batch.clear();
         // Ending an imgui Frame
         ImGui::Render();

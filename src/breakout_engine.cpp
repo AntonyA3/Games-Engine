@@ -100,6 +100,7 @@ void update(Mesh& mesh, VertexIndexBatch& batch){
     glBufferData(GL_ARRAY_BUFFER, batch.verticies.size() * sizeof(float), &batch.verticies.front(), GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.index_buffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, batch.indicies.size() * sizeof(unsigned int), &batch.indicies.front(), GL_DYNAMIC_DRAW);
+    mesh.index_count = batch.indicies.size();
 }
 
 std::string toString(bool value){
@@ -174,6 +175,23 @@ GLuint makeShader(GLenum shader_type, const char * shader_text){
 GLuint makeShader(GLenum shader_type, std::string filename){
     std::string content = readFile(filename);
     return makeShader(shader_type, content.c_str());
+}
+
+// Make program and delete the shaders that were provided as inputs
+GLuint makeProgram(GLuint vertex_shader, GLuint fragment_shader){
+    GLuint program = glCreateProgram();
+    glAttachShader(program, vertex_shader);
+    glAttachShader(program, fragment_shader);
+    glLinkProgram(program);
+    glDeleteShader(vertex_shader);
+    glDeleteShader(fragment_shader);
+    return program;
+}
+
+GLuint makeProgram(std::string vertex_shader_file, std::string fragment_shader_file){
+    GLuint vertex_shader = makeShader(GL_VERTEX_SHADER, vertex_shader_file);
+    GLuint fragment_shader = makeShader(GL_FRAGMENT_SHADER, fragment_shader_file);
+    return makeProgram(vertex_shader, fragment_shader);
 }
 
 void addRect(VertexIndexBatch& vertex_index_batch, Rect& rect, Color3& color){

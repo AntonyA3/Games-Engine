@@ -231,8 +231,31 @@ int main(int argc, char const *argv[])
             std::cout << "i: " << i << " expected: " << expected_indicies[i] << " actual: " << index_read_data[i] << std::endl;
             assert(expected_indicies[i] == index_read_data[i]);
         }
-        
- 
+    
+    }
+    {
+        std::cout << "------Make Program test 1------"<< std::endl;
+        GLuint result_program = makeProgram("data\\shaders\\polygon_position_color.vert", "data\\shaders\\polygon_position_color.frag");
+        assert(result_program != 0);
+    }
+    {
+        std::cout << "------Make Program test 2------"<< std::endl;
+        GLuint vertex_shader = makeShader(GL_VERTEX_SHADER, "data\\shaders\\polygon_position_color.vert");
+        GLuint fragment_shader = makeShader(GL_FRAGMENT_SHADER, "data\\shaders\\polygon_position_color.frag");
+        GLuint result_program = makeProgram(vertex_shader, fragment_shader);
+        assert(result_program != 0);
+        {
+            GLint delete_status;
+            glGetShaderiv(vertex_shader, GL_DELETE_STATUS, &delete_status);
+            assert(delete_status ==  GL_TRUE);
+
+        }
+        {
+            GLint delete_status;
+            glGetShaderiv(fragment_shader, GL_DELETE_STATUS, &delete_status);
+            assert(delete_status ==  GL_TRUE);
+            
+        }
     }
     SDL_DestroyWindow(window);
     SDL_Quit();

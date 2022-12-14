@@ -64,7 +64,8 @@ struct VertexIndexBatch{
 };
 
 struct Mesh{
-    GLuint vertex_buffer, index_buffer;
+    GLuint vertex_buffer = 0, index_buffer = 0;
+    int index_count = 0;
     Mesh();
 };
 
@@ -115,6 +116,8 @@ std::string toString(Cursor& mouse);
 std::string toString(Mesh& mesh);
 GLuint makeShader(GLenum shader_type, const char * shader_text);
 GLuint makeShader(GLenum shader_type, std::string filename);
+GLuint makeProgram(GLuint vertex_shader, GLuint fragment_shader);
+GLuint makeProgram(std::string vertex_shader_file, std::string fragment_shader_file);
 void addRect(VertexIndexBatch& vertex_index_batch, Rect& rect, Color3& color);
 void displayShaderCompileStatus(GLuint shader_object);
 void alwaysShowDemo();
