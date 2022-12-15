@@ -823,8 +823,54 @@ After getting the uniform location assert that the result is not equal to -1 **D
 
 Run common test **Done**
 
-Check if the shader parts of the program have been deleted **ToDo**
+Check if the shader parts of the program have been deleted **Done**
 
+---
+Task 
+
+Create a new test file to use Catch2 for standard unit testing, making sure that the nessessary dependancies are accessible
+
+Make a file called breakout_engine_test.impl.cpp **ToDo**
+
+Include catch2 **Done**
+
+Delete catch2 dll file **Done**
+
+Add catch2 to src_header_files at line 23, then see if the breakout_engine_test file still works **Done**
+
+
+
+In the makefile to SRC_OBJECT_FILES add the catch_2 object file at line 18 **Done**
+
+There is a problem it says that a specific test has already been defined but both of the supposed redefinitions are in the same file and on the same line, Consider finding alternative c++ unit testing frameworks **Done**
+    - It will need mocking, in order to test things that involve the Mouse Function in SDL2 **Done**
+    - It will need mocking, in order to test things that involve the keyboard button states in SDL2 **Done**
+    - Consider CppUTest, libcester
+        - Try installing CppUTest and run an example test **Next**
+        - Instead lean from jwgrenning/cpputest-starter-project **Done**
+        - Build with cmake **Done**
+        - Try to learn cmakebut use an alternative unittesting framework **Done**
+        Use libcester instead /**Done**
+
+Incorporate libcester by adding libcester into vendors **Done**
+
+In makefile add libcester include into includepath **Done**
+
+Make sure that no impl.o file is included in SRC_OBJECT_FILES **ToDo**
+    - Comment out line 15 in makefile and relace with breakout_engine.o **Done**
+    - Comment out line 20 for catch2, rerun, seeif the sample test works **Done**
+
+Create a sample test, make sure the test runs **Done**
+
+Move rect test to breakout_game_test, that uses libcester **Done**
+
+Remove catch2 from Makefile **ToDo**
+
+Add BASEFile to the top of the breakout_engine_test file **Done**
+
+git add then git commit then push **ToDo**
+
+Move all common tests to the breakout_engine test filr **ToDo**
 ---
 Task 
 
@@ -834,7 +880,10 @@ Task
 
 Figure out exactly what GL_DYNAMIC_DRAW does in glBuferData function
 
+---
+Task 
 
+For creating a temporary visible object for a ball, generate a circle based on a number of division
 
 <!-- 
 Task

@@ -41,14 +41,14 @@ int main(int argc, char const *argv[])
     }
     SDL_GL_MakeCurrent(window, gl_context);
 
-    {
-        Rect rect = Rect(glm::vec2(0.0f, 0.0f), glm::vec2(128.0f, 128.0f));
-        assert(rect.topLeft() == glm::vec2(0.0f, 0.0f));
-        assert(rect.topRight() == glm::vec2(128.0f, 0.0f));
-        assert(rect.bottomLeft() == glm::vec2(0.0f, 128.0f));
-        assert(rect.bottomRight() == glm::vec2(128.0f, 128.0f));
-        std::cout << toString(rect) << std::endl;
-    }
+    // {
+    //     Rect rect = Rect(glm::vec2(0.0f, 0.0f), glm::vec2(128.0f, 128.0f));
+    //     assert(rect.topLeft() == glm::vec2(0.0f, 0.0f));
+    //     assert(rect.topRight() == glm::vec2(128.0f, 0.0f));
+    //     assert(rect.bottomLeft() == glm::vec2(0.0f, 128.0f));
+    //     assert(rect.bottomRight() == glm::vec2(128.0f, 128.0f));
+    //     std::cout << toString(rect) << std::endl;
+    // }
 
     
     {
