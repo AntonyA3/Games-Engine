@@ -49,6 +49,7 @@ Mesh::Mesh(){
 void CommonSDLTest::cleanup(){
     SDL_DestroyWindow(this->window);
     SDL_Quit();
+    this->window = NULL;
 }
 
 void BasicSDLApplicationLoopTest::initialise(){

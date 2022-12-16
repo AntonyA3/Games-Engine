@@ -13,7 +13,6 @@ INCLUDE_PATHS += -IC:\\msys64\\mingw64\\lib\\SDL2-2.24.1\\x86_64-w64-mingw32\\in
 LINKER_FLAGS = -lSDL2main -lSDL2 -lglu32 -lopengl32 -lglew32 
 
 SRC_OBJECT_FILES = ./src/breakout_engine.o
-SRC_OBJECT_FILES += ./src/test_abstractions.o
 
 SRC_OBJECT_FILES += $(patsubst %.cpp,%.o,$(wildcard ./vendors/imgui/*.cpp))
 SRC_OBJECT_FILES += ./vendors/imgui/backends/imgui_impl_opengl3.o 

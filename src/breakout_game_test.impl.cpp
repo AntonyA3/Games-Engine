@@ -43,28 +43,37 @@ CESTER_TEST(test_that_glew_init_works_in_this_environment, test_instance,
     SDL_Quit();
 )
 
-// CESTER_TEST(CommonSDLOpenGL_BasicSDLOpengl_cleanup_test, test_instance,
+CESTER_TEST(CommonSDLOpenGL_BasicSDLOpengl_cleanup_test, test_instance,
   
-    
-// )
+    BasicSDLOpenGLTest test_object;
+    test_object.initialise();
+    test_object.cleanup();
+    cester_assert_equal(NULL, test_object.window);
+
+)
 
 
-// CESTER_TEST(BasicSDLOpengl_initialise_test, test_instance,
+CESTER_TEST(BasicSDLOpengl_initialise_test, test_instance,
   
-//     BasicSDLOpenGLTest test_object;
-//     test_object.initialise();
-//     cester_assert_not_equal(NULL, test_object.window);
-//     cester_assert_not_equal(NULL, test_object.gl_context);
-//     int attrib;
-//     SDL_GL_GetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, &attrib);
-//     cester_assert_equal(SDL_GL_CONTEXT_PROFILE_COMPATIBILITY, attrib);
+    BasicSDLOpenGLTest test_object;
+    test_object.initialise();
+    cester_assert_not_equal(NULL, test_object.window);
+    cester_assert_not_equal(NULL, test_object.gl_context);
+    int attrib;
+    SDL_GL_GetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, &attrib);
+    cester_assert_equal(SDL_GL_CONTEXT_PROFILE_COMPATIBILITY, attrib);
 
-//     SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &attrib);
-//     cester_assert_equal(3, attrib);
+    SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &attrib);
+    cester_assert_equal(3, attrib);
 
-//     SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &attrib);
-//     cester_assert_equal(3, attrib);
-// )
+    SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &attrib);
+    cester_assert_equal(3, attrib);
+
+    int swap_interval = SDL_GL_GetSwapInterval();
+    cester_assert_equal(1, swap_interval);
+    test_object.cleanup();
+
+)
 
 CESTER_TEST(are_string_equality_tests_valid, test_instance,
     std::string s0 = "Hello World";
@@ -261,4 +270,113 @@ CESTER_TEST(to_string_vector_template_case_ivec2_test, test_instance,
 CESTER_TEST(to_string_vector_template_case_vec2_test, test_instance,
     glm::vec2 float_vec2 = glm::vec2(100.5f, 40.1f);
     cester_assert_equal(readFile("src\\test_data_to_string_vector_template_case_vec2_test.txt"), toString(float_vec2));
+)
+
+CESTER_TEST(make_vertex_shader_from_file, test_instance,
+    BasicSDLOpenGLTest test_object;
+    test_object.initialise();
+    std::string shader_content = readFile("data\\shaders\\polygon_position_color.vert");
+    GLuint shader = makeShader(GL_VERTEX_SHADER, shader_content.c_str());
+    cester_assert_not_equal(0, shader);
+    test_object.cleanup();
+)
+
+CESTER_TEST(make_vertex_shader_from_content_test, test_instance,
+    BasicSDLOpenGLTest test_object;
+    test_object.initialise();
+    GLuint shader = makeShader(GL_VERTEX_SHADER, "data\\shaders\\polygon_position_color.vert");
+    cester_assert_not_equal(0, shader);
+    test_object.cleanup();
+)
+
+CESTER_TEST(make_fragment_shader_from_file, test_instance,
+    BasicSDLOpenGLTest test_object;
+    test_object.initialise();
+    std::string shader_content = readFile("data\\shaders\\polygon_position_color.frag");
+    GLuint shader = makeShader(GL_FRAGMENT_SHADER, shader_content.c_str());
+    cester_assert_not_equal(0, shader);
+    test_object.cleanup();
+)
+
+CESTER_TEST(make_fragment_shader_from_content_test, test_instance,
+    BasicSDLOpenGLTest test_object;
+    test_object.initialise();
+    GLuint shader = makeShader(GL_FRAGMENT_SHADER, "data\\shaders\\polygon_position_color.frag");
+    cester_assert_not_equal(0, shader);
+    test_object.cleanup();
+)
+
+CESTER_TEST(update_mesh_data_for_2_rectangles_test, test_instance,
+    BasicSDLOpenGLTest test_object;
+    test_object.initialise();
+    std::cout << "========update MeshDataTest========\n";
+    Mesh test_mesh = Mesh();
+    VertexIndexBatch test_vertex_index_batch;
+    Rect test_rect = Rect(glm::vec2(0.0f, 0.0f), glm::vec2(128.0f, 128.0f));
+    glm::vec3 test_color = glm::vec3(1.0f, 0.0f, 0.0f);
+    addRect(test_vertex_index_batch, test_rect, test_color);
+    addRect(test_vertex_index_batch, test_rect, test_color);
+    update(test_mesh, test_vertex_index_batch);
+    size_t float_count = 24;
+    size_t unsigned_int_count = 6;
+    float expected_verticies[float_count] = {
+        0.0f, 128.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+        128.0f, 128.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+        128.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+    };
+
+    unsigned int expected_indicies[6] = {
+        0, 1, 2,
+        0, 2, 3
+    };
+
+    float vertex_read_data[float_count];
+    glBindBuffer(GL_ARRAY_BUFFER, test_mesh.vertex_buffer);
+    glGetBufferSubData(GL_ARRAY_BUFFER, 0, float_count * sizeof(float), vertex_read_data);
+    std::cout << "------For Verticies ------"<< std::endl;
+    for(size_t i = 0; i < float_count; i++){
+        cester_assert_equal(expected_verticies[i], vertex_read_data[i]);
+    }
+
+    unsigned int index_read_data[unsigned_int_count];
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, test_mesh.index_buffer);
+    glGetBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, unsigned_int_count * sizeof(unsigned int), index_read_data);
+    std::cout << "------For Indicies ------"<< std::endl;
+    for(size_t i = 0; i < unsigned_int_count; i++){
+        cester_assert_equal(expected_indicies[i], index_read_data[i]);
+    }
+    test_object.cleanup();
+
+)
+
+CESTER_TEST(make_program_test_from_files, test_instance,
+    BasicSDLOpenGLTest test_object;
+    test_object.initialise();
+    std::cout << "------Make Program test 1------"<< std::endl;
+    GLuint result_program = makeProgram("data\\shaders\\polygon_position_color.vert", "data\\shaders\\polygon_position_color.frag");
+    cester_assert_not_equal(0, result_program);
+    test_object.cleanup();
+)
+
+CESTER_TEST(make_program_test_from_shader, test_instance,
+    BasicSDLOpenGLTest test_object;
+    test_object.initialise();
+    std::cout << "------Make Program test 2------"<< std::endl;
+    GLuint vertex_shader = makeShader(GL_VERTEX_SHADER, "data\\shaders\\polygon_position_color.vert");
+    GLuint fragment_shader = makeShader(GL_FRAGMENT_SHADER, "data\\shaders\\polygon_position_color.frag");
+    GLuint result_program = makeProgram(vertex_shader, fragment_shader);
+    cester_assert_not_equal(0, result_program);
+    {
+        GLint delete_status;
+        glGetShaderiv(vertex_shader, GL_DELETE_STATUS, &delete_status);
+        cester_assert_equal(delete_status, GL_TRUE);
+    }
+    {
+        GLint delete_status;
+        glGetShaderiv(fragment_shader, GL_DELETE_STATUS, &delete_status);
+        cester_assert_equal(delete_status, GL_TRUE);
+    }
+    test_object.cleanup();
+
 )
