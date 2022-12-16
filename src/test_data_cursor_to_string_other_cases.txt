@@ -1,0 +1,4 @@
+Cursor: {
+   position: [x: 40, y: 40]
+   delta: [x: -80, y: -20]
+}

@@ -1,5 +1,4 @@
 #include <breakout_engine.hpp>
-#include <test_abstractions.hpp>
 #include <SDL2/SDL.h>
 
 int main(int argc, char const *argv[])

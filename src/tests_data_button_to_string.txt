@@ -1,0 +1,6 @@
+Button: {
+    state_change: true
+    tag: A Button
+    scancode: A
+    button_state: ButtonState_Up
+}

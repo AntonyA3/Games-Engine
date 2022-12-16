@@ -864,13 +864,57 @@ Create a sample test, make sure the test runs **Done**
 
 Move rect test to breakout_game_test, that uses libcester **Done**
 
-Remove catch2 from Makefile **ToDo**
+Remove catch2 from Makefile **Done**
 
 Add BASEFile to the top of the breakout_engine_test file **Done**
 
-git add then git commit then push **ToDo**
+git add then git commit then push **Done**
 
-Move all common tests to the breakout_engine test filr **ToDo**
+
+See if cester_is_able to detect string equality at the top of the test file **Done**
+
+Move all common tests to the breakout_engine test file, for every change, run the breakout_engine_test file to see if it succeeded, most modifications require replacing termination based assertions with cester_assertions
+    - Add a text file for test data, since the readfile has been tested, I should be able to use the readfile function un further tests **Done**
+    - Make to String cursor Test **Done**
+    - Move and modify updateMatric **Done**
+    - Move modify Button ToString test **Done**
+    - Move and Modify the ButtonState test **Done**
+    - Make second cursor to string case for non default case **Done**
+    - Test To String for vector templates **Done**
+    - Button ToString test moving **Done**
+    - Update vector toString test for both cases available **Done**
+    - Create a test to see if glew can initialise openGL in this environmant **Done**
+    - Add header guards to test_abstractions and breakout_engine .hpp and add test abstraction.o to makefile, to resolve undefined 
+    
+    reerence error **Done**
+    - There seems to be an error when I add tests_abstractuons to breakout_game_test.impl.cpp, includ the file then find the source of the but, then not the cause in bugs_resolved.md **Done**
+
+    - Append test_abstraction header file and implementation file to the end of breakout_engine related files, for the header file after the last struct, for the implementation file after the last member function implementation, as test_abstraction is dependant on something in breakout_engine, delete the test_abstraction files then commit **ToDo**
+
+    - Test the test_abstraction class for BasicSDLOpenGLTest **ToDo**
+        - The initialise function
+        - Assertions (window != Null) (gl_context != NULL) **Done**
+        - (Check the attributes for SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_MAJOR_VERSION, SDL_GL_CONTEXT_MINOR_VERSION) **ToDo**
+        - (Check the swap interval) **ToDo**
+    - Create a test for making a shader from shader contents that were read form a file **ToDo**
+    - Test the test_abstraction class for CommonSDLTest **ToDo**
+        - The cleanup function
+
+    - Create a test for making a shader from A file **ToDo**
+    - Add the make shader functions into the test
+    - Update Mesh Data test **ToDo**
+
+    - Move / modify make Shader Tests **ToDo**
+    - Move / modify make Program Tests **ToDo**
+
+- Organise the tests, to match the order of implementation **ToDo**
+
+
+---
+Task 
+
+Rename some files and alter the make file so that SRC_OBJECT_FILES can be automatically detected if it conforms to a standard format, put the new format into considerationd **ToDo**
+
 ---
 Task 
 
@@ -884,6 +928,11 @@ Figure out exactly what GL_DYNAMIC_DRAW does in glBuferData function
 Task 
 
 For creating a temporary visible object for a ball, generate a circle based on a number of division
+
+---
+Task 
+
+make sure all toString methods have 4 spaced tabs
 
 <!-- 
 Task
