@@ -1,4 +1,4 @@
 Cursor: {
-   position: [x: 0, y: 0]
-   delta: [x: 0, y: 0]
+    position: [x: 0, y: 0]
+    delta: [x: 0, y: 0]
 }

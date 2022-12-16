@@ -839,6 +839,8 @@ Delete catch2 dll file **Done**
 Add catch2 to src_header_files at line 23, then see if the breakout_engine_test file still works **Done**
 
 
+16/12/2022
+
 
 In the makefile to SRC_OBJECT_FILES add the catch_2 object file at line 18 **Done**
 
@@ -872,7 +874,6 @@ git add then git commit then push **Done**
 
 
 See if cester_is_able to detect string equality at the top of the test file **Done**
-
 Move all common tests to the breakout_engine test file, for every change, run the breakout_engine_test file to see if it succeeded, most modifications require replacing termination based assertions with cester_assertions
     - Add a text file for test data, since the readfile has been tested, I should be able to use the readfile function un further tests **Done**
     - Make to String cursor Test **Done**
@@ -909,13 +910,40 @@ Move all common tests to the breakout_engine test file, for every change, run th
 ---
 Task
 
-Organise the tests, to match the order of implementation **ToDo**
+Organise the tests, to match the order of implementation **Done**
 
 
 ---
 Task 
 
-Rename some files and alter the make file so that SRC_OBJECT_FILES can be automatically detected if it conforms to a standard format, put the new format into considerationd **ToDo**
+
+Rename some files and alter the make file so that SRC_OBJECT_FILES can be automatically detected if it conforms to a standard format, put the new format into consideration
+- Create a file for development standards **Done**
+- Based on the pattern described in the development standards file, modify the make file so that implementation files can be part of a seperate group to implementation files, make sure no files where it's cpp equivalent has a main is part of the files, remove test build pattern as it is not being used currently, check if libcester is part of SRC_HEADER_FILES **Done**
+- What needs to be done is to move all files from impl to source and all files from source to impl, then rename all files with .impl.cpp to .x.cpp, and the .impl rule should be changes, the wildcard should read from the impl folder to get the implementation files **Done**
+
+Remove SRC_HEADERS from make fileClear and rebuild some files to test the new build process and see if I can remove this rule `%.o: %.cpp`, I can't but duplicate this rule for `%.o: %.cpp %.hpp` to `%.o: %.cpp %.h` **Done**
+
+
+---
+Task 
+
+make sure all toString methods have 4 spaced tabs **Done**
+
+
+--- 
+Task 
+
+Implement the read_file test
+
+--- 
+Task
+
+Create the First iteration of the Paddle
+- It is a rectangle that is blue
+- the size is (32, 8)
+- 
+
 
 ---
 Task 
@@ -931,10 +959,7 @@ Task
 
 For creating a temporary visible object for a ball, generate a circle based on a number of division
 
----
-Task 
 
-make sure all toString methods have 4 spaced tabs
 
 <!-- 
 Task
